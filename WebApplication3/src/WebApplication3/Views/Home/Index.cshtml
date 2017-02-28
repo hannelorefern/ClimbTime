@@ -1,4 +1,7 @@
-﻿@{
+﻿@model IEnumerable<WebApplication3.Student>
+
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -23,10 +26,20 @@
                                 Swipe a Card
                                 <br />
                                 <input id="Text1" type="text" />
+                                <hr/>
                             </td>
                         </tr>
                     </table>
-                    <input id="Button1" type="button" value="Add Climber" />
+                    
+                    <form asp-controller="Home" asp-action="AddClimber">
+                        <p>
+                            <input type="text" name="NameToSearch" />
+                            <input type="submit" value="Search For Student" />
+
+                        </p>
+                    </form>
+
+                        
                     <br/>
 
                     <input id="Button2" type="button" value="Batch Add Climber" />
@@ -35,12 +48,22 @@
             </div>
 
             <div class="col-sm-6" id="logout-div">
-                <div id="scrollview" style="overflow:scroll;height:400px">
+                <form asp-controller="Home" asp-action="RemoveClimbers">
+                    <div id="scrollview" style="overflow:scroll;height:400px">
+                            @for (int i = 0; i < ((List<Student>)Model).Count; i++)
+                            {
+                                Student item = ((List<Student>)Model)[i];
+                               <div>
+                                        @Html.DisplayFor(ModelItem => item.Name)
+                                   
+                                        <input type="checkbox" name="signOutCheckBox"  value="@i"/>
+                                        @Html.HiddenFor(x => @item.ID)
+                               </div>    
+                            }
 
-
-
-                </div>
-                <input id="Button3" type="button" value="Log out selected climbers" />
+                    </div>
+                    <input id="Button3" type="submit" value="Log out selected climbers" />
+                </form>
             </div>
 
 
