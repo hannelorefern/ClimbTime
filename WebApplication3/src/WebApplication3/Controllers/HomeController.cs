@@ -20,19 +20,28 @@ namespace WebApplication3.Controllers
             return View(signedInStudents);
         }
 
-        public IActionResult About()
+        public IActionResult Reports()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Page for Reports";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Settings()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Page for Settings";
 
             return View();
         }
+
+        public IActionResult Users()
+        {
+            ViewData["Message"] = "Page for Users";
+
+            return View();
+        }
+
+
 
         public IActionResult Error()
         {

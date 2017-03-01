@@ -16,12 +16,7 @@ namespace WebApplication3.Controllers
             return View();
         }
 
-        public IActionResult AddClimber(string NameToSearch)
-        {
-            ViewData["NewName"] = NameToSearch;
-            HomeController hc = new HomeController();
-            return hc.Index();
-        }
+
 
 
     }
