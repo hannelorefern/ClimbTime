@@ -33,8 +33,11 @@
                     
                     <form asp-controller="Home" asp-action="AddClimber">
                         <p>
-                            <input type="text" name="NameToSearch" />
-                            <input type="submit" value="Search For Student" />
+                            Last Name:
+                            <input type="text" name="lastNameToSearch" />
+                            First Name:
+                            <input type="text" name="firstNameToSearch" />
+                            <input type="submit" value="Sign In Student" />
 
                         </p>
                     </form>
@@ -54,7 +57,7 @@
                             {
                                 Student item = ((List<Student>)Model)[i];
                                <div>
-                                        @Html.DisplayFor(ModelItem => item.Name)
+                                        @Html.DisplayFor(ModelItem => item.lastName)
                                    
                                         <input type="checkbox" name="signOutCheckBox"  value="@i"/>
                                         @Html.HiddenFor(x => @item.ID)

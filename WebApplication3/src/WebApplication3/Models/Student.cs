@@ -9,11 +9,13 @@ namespace WebApplication3
     {
         public int ID { get; set; }
         public Boolean Selected { get; set; }
-        public string Name { get; set; }
+        public string lastName { get; set; }
+        public string firstName { get; set; }
 
-        public Student(int ID, string Name) {
+        public Student(int ID, string lastName, string firstName) {
             this.ID = ID;
-            this.Name = Name;
+            this.lastName = lastName;
+            this.firstName = firstName;
             this.Selected = true;
         }
     }

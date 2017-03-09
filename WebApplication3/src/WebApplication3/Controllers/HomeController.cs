@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace WebApplication3.Controllers
 {
@@ -47,17 +49,41 @@ namespace WebApplication3.Controllers
         {
             return View();
         }
-        public IActionResult AddClimber(string NameToSearch)
+        public IActionResult AddClimber(string lastNametoSearch, string firstNameToSearch)
         {
             //replace this line with adding to the the signed-in Database
-            signedInStudents.Add(new Student(countForTesting++, NameToSearch));
-            
-            
+            int visitAdded;
+            SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
+            SqlCommand cmd = new SqlCommand("createVisit", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@userFirst", SqlDbType.VarChar).Value = firstNameToSearch;
+            cmd.Parameters.Add("@userLast", SqlDbType.VarChar).Value = lastNametoSearch;
+            cmd.Parameters.Add("@visitType", SqlDbType.VarChar).Value = "test type";
 
+ //           cmd.Parameters.AddWithValue("userFirst", firstNameToSearch);
+   //         cmd.Parameters.AddWithValue("userLast", lastNametoSearch);
+     //       cmd.Parameters.AddWithValue("visitType", "test type");
+            try
+            {
+                conn.Open();
+                visitAdded = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Execption creating visit. " + ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            signedInStudents.Add(new Student(countForTesting++, lastNametoSearch, firstNameToSearch));
+
+
+            Console.WriteLine(visitAdded);
             return View("Index",signedInStudents);
         }
 
-        public IActionResult RemoveClimbers(string signOutCheckBox)
+        public IActionResult RemoveClimbers()
         {
              
             string temp = this.Request.Form["signOutCheckBox"];
