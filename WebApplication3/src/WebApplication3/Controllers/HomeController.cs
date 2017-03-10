@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using System.Data;
+using System.Diagnostics;
 
 namespace WebApplication3.Controllers
 {
@@ -12,6 +13,7 @@ namespace WebApplication3.Controllers
     {
         static List<Student> signedInStudents = new List<Student>();
         static int countForTesting = 1;
+        SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
 
         public IActionResult Index()
         {
@@ -53,7 +55,6 @@ namespace WebApplication3.Controllers
         {
             //replace this line with adding to the the signed-in Database
             int visitAdded;
-            SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
             SqlCommand cmd = new SqlCommand("createVisit", conn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add("@userFirst", SqlDbType.VarChar).Value = firstNameToSearch;
@@ -79,7 +80,6 @@ namespace WebApplication3.Controllers
             signedInStudents.Add(new Student(countForTesting++, lastNametoSearch, firstNameToSearch));
 
 
-            Console.WriteLine(visitAdded);
             return View("Index",signedInStudents);
         }
 
@@ -92,6 +92,26 @@ namespace WebApplication3.Controllers
             for (int i = toRemoveIndex.Length - 1; i>=0; i--)
             {
                 int index = Int16.Parse(toRemoveIndex[i]);
+                Debug.WriteLine("signed in students: " + signedInStudents.Count);
+                Debug.WriteLine(index);
+                SqlCommand cmd = new SqlCommand("checkoutUser", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@firstName", SqlDbType.VarChar).Value = signedInStudents[index].firstName;
+                cmd.Parameters.Add("@lastName", SqlDbType.VarChar).Value = signedInStudents[index].lastName;
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Exeception checkout out user. " + ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
                 signedInStudents.Remove(signedInStudents[index]);
 
             }
