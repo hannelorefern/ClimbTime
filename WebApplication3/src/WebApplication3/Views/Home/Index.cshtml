@@ -57,10 +57,12 @@
                             {
                                 Student item = ((List<Student>)Model)[i];
                                <div>
-                                        @Html.DisplayFor(ModelItem => item.lastName)
+                                   <input type="checkbox" name="signOutCheckBox" value="@i" />
+                                   @Html.HiddenFor(x => @item.ID)
+                                   @Html.DisplayFor(ModeItem => item.firstName)
+                                   @Html.DisplayFor(ModelItem => item.lastName)
                                    
-                                        <input type="checkbox" name="signOutCheckBox"  value="@i"/>
-                                        @Html.HiddenFor(x => @item.ID)
+                                        
                                </div>    
                             }
 
