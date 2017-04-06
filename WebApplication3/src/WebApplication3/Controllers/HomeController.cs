@@ -77,7 +77,7 @@ namespace WebApplication3.Controllers
             {
                 conn.Close();
             }
-            signedInStudents.Add(new Student(countForTesting++, lastNametoSearch, firstNameToSearch));
+            signedInStudents.Add(new Student(countForTesting++, lastNametoSearch, firstNameToSearch, DateTime.Now.ToString("MMM d, yyyy H:mm:ss")));
 
 
             return View("Index",signedInStudents);
@@ -122,7 +122,18 @@ namespace WebApplication3.Controllers
             return View("Index", signedInStudents);
         }
 
+        public IActionResult getCheckoutPage() {
+            return View("unknownWireframe");
+        }
 
+        public void CheckoutShoes() {
+            //not implemented
+        }
+
+        public void CheckoutHarness()
+        {
+            //not implemented
+        }
     }
 
 }
