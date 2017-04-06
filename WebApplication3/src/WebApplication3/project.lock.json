@@ -3,9 +3,6 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.0": {
-      "EntityFramework/6.0.1": {
-        "type": "package"
-      },
       "Libuv/1.9.0": {
         "type": "package",
         "dependencies": {
@@ -1717,16 +1714,6 @@
             "assetType": "runtime",
             "rid": "win"
           }
-        }
-      },
-      "MySql.ConnectorNET.Data/6.8.3.2": {
-        "type": "package"
-      },
-      "MySql.ConnectorNET.Entity/6.8.3.2": {
-        "type": "package",
-        "dependencies": {
-          "EntityFramework": "6.0.1",
-          "MySql.ConnectorNET.Data": "6.8.3"
         }
       },
       "NETStandard.Library/1.6.1": {
@@ -4280,33 +4267,6 @@
     }
   },
   "libraries": {
-    "EntityFramework/6.0.1": {
-      "sha512": "MqMiAwnJM+fmi4b8RqwD8eIrPGeWBut8IPtLSD3qcQnxbgAATHAOaQ0d/ykJFGZgk4Jfdmswy+IFYEWIxxN8jA==",
-      "type": "package",
-      "path": "EntityFramework/6.0.1",
-      "files": [
-        "EntityFramework.6.0.1.nupkg.sha512",
-        "EntityFramework.nuspec",
-        "content/App.config.transform",
-        "content/Web.config.transform",
-        "lib/net40/EntityFramework.SqlServer.dll",
-        "lib/net40/EntityFramework.SqlServer.xml",
-        "lib/net40/EntityFramework.dll",
-        "lib/net40/EntityFramework.xml",
-        "lib/net45/EntityFramework.SqlServer.dll",
-        "lib/net45/EntityFramework.SqlServer.xml",
-        "lib/net45/EntityFramework.dll",
-        "lib/net45/EntityFramework.xml",
-        "tools/EntityFramework.PowerShell.Utility.dll",
-        "tools/EntityFramework.PowerShell.dll",
-        "tools/EntityFramework.psd1",
-        "tools/EntityFramework.psm1",
-        "tools/about_EntityFramework.help.txt",
-        "tools/init.ps1",
-        "tools/install.ps1",
-        "tools/migrate.exe"
-      ]
-    },
     "Libuv/1.9.0": {
       "sha512": "9Q7AaqtQhS8JDSIvRBt6ODSLWDBI4c8YxNxyCQemWebBFUtBbc6M5Vi5Gz1ZyIUlTW3rZK9bIr5gnVyv0z7a2Q==",
       "type": "package",
@@ -5732,34 +5692,6 @@
         "runtimes/win/lib/net46/Microsoft.Win32.Registry.dll",
         "runtimes/win/lib/netcore50/_._",
         "runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll"
-      ]
-    },
-    "MySql.ConnectorNET.Data/6.8.3.2": {
-      "sha512": "WQpgEwLWEOZ9BEOm7S8RoXfP+7Qc/jzlTkErJv3omyOWjQpElL9v5ubnnS9BmcfZR2RHyyg/T0/rwiW66EHBRA==",
-      "type": "package",
-      "path": "MySql.ConnectorNET.Data/6.8.3.2",
-      "files": [
-        "MySql.ConnectorNET.Data.6.8.3.2.nupkg.sha512",
-        "MySql.ConnectorNET.Data.nuspec",
-        "Readme.txt",
-        "content/app.config.transform",
-        "content/web.config.transform",
-        "lib/net20/MySql.Data.dll",
-        "lib/net40/MySql.Data.dll",
-        "lib/net45/MySql.Data.dll"
-      ]
-    },
-    "MySql.ConnectorNET.Entity/6.8.3.2": {
-      "sha512": "IrTpXLcmye3vAiGfrL0Vh4vkOY3R1i3ItbwHQoJGIypO500af749rsSnmQbRP0cAEjFYYVFlKZ/OGzNunZslNA==",
-      "type": "package",
-      "path": "MySql.ConnectorNET.Entity/6.8.3.2",
-      "files": [
-        "MySql.ConnectorNET.Entity.6.8.3.2.nupkg.sha512",
-        "MySql.ConnectorNET.Entity.nuspec",
-        "Readme.txt",
-        "content/app.config.transform",
-        "lib/net40/MySql.Data.Entity.EF6.dll",
-        "lib/net45/MySql.Data.Entity.EF6.dll"
       ]
     },
     "NETStandard.Library/1.6.1": {
@@ -10959,9 +10891,7 @@
       "Microsoft.Extensions.Logging.Debug >= 1.0.0",
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 1.0.0",
       "Microsoft.NETCore.App >= 1.0.1",
-      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0",
-      "MySql.ConnectorNET.Data >= 6.8.3.2",
-      "MySql.ConnectorNET.Entity >= 6.8.3.2"
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

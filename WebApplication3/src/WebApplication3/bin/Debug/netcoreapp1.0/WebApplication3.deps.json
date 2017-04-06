@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "33bde555f86f8d492c10b5d919c1fbb4d2b9721e"
+    "signature": "c88d1b3d5fd0d07c8bbfd96409cd8ed435c1a851"
   },
   "compilationOptions": {
     "defines": [
@@ -42,7 +42,6 @@
           "WebApplication3.dll": {}
         }
       },
-      "EntityFramework/6.0.1": {},
       "Microsoft.ApplicationInsights/2.1.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
@@ -1395,13 +1394,6 @@
         },
         "compile": {
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
-        }
-      },
-      "MySql.ConnectorNET.Data/6.8.3.2": {},
-      "MySql.ConnectorNET.Entity/6.8.3.2": {
-        "dependencies": {
-          "EntityFramework": "6.0.1",
-          "MySql.ConnectorNET.Data": "6.8.3.2"
         }
       },
       "NETStandard.Library/1.6.1": {
@@ -3799,11 +3791,6 @@
       "serviceable": false,
       "sha512": ""
     },
-    "EntityFramework/6.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-MqMiAwnJM+fmi4b8RqwD8eIrPGeWBut8IPtLSD3qcQnxbgAATHAOaQ0d/ykJFGZgk4Jfdmswy+IFYEWIxxN8jA=="
-    },
     "Microsoft.ApplicationInsights/2.1.0": {
       "type": "package",
       "serviceable": true,
@@ -4248,16 +4235,6 @@
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-9ZQKCWxH7Ijp9BfahvL2Zyf1cJIk8XYLF6Yjzr2yi0b2cOut/HQ31qf1ThHAgCc3WiZMdnWcfJCgN82/0UunxA=="
-    },
-    "MySql.ConnectorNET.Data/6.8.3.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-WQpgEwLWEOZ9BEOm7S8RoXfP+7Qc/jzlTkErJv3omyOWjQpElL9v5ubnnS9BmcfZR2RHyyg/T0/rwiW66EHBRA=="
-    },
-    "MySql.ConnectorNET.Entity/6.8.3.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-IrTpXLcmye3vAiGfrL0Vh4vkOY3R1i3ItbwHQoJGIypO500af749rsSnmQbRP0cAEjFYYVFlKZ/OGzNunZslNA=="
     },
     "NETStandard.Library/1.6.1": {
       "type": "package",

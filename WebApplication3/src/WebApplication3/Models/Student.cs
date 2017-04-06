@@ -8,15 +8,16 @@ namespace WebApplication3
     public class Student
     {
         public int ID { get; set; }
-        public Boolean Selected { get; set; }
         public string lastName { get; set; }
         public string firstName { get; set; }
+        public string time { get; set; }
 
-        public Student(int ID, string lastName, string firstName) {
+
+        public Student(int ID, string lastName, string firstName, string time) {
             this.ID = ID;
             this.lastName = lastName;
             this.firstName = firstName;
-            this.Selected = true;
+            this.time = time; 
         }
     }
 }

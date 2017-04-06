@@ -41,11 +41,12 @@
 
                         </p>
                     </form>
-
+                    
                         
                     <br/>
-
-                    <input id="Button2" type="button" value="Batch Add Climber" />
+                    <form asp-controller="Home" asp-action="getCheckoutPage">
+                    <input id="Button2" type="submit" value="Batch Add Climber"  />
+                        </form>
                 </div>
 
             </div>
@@ -55,14 +56,22 @@
                     <div id="scrollview" style="overflow:scroll;height:400px">
                             @for (int i = 0; i < ((List<Student>)Model).Count; i++)
                             {
+                                string identifier = "timer" + i;
                                 Student item = ((List<Student>)Model)[i];
                                <div>
+<<<<<<< HEAD
                                    <input type="checkbox" name="signOutCheckBox" value="@i" />
                                    @Html.HiddenFor(x => @item.ID)
                                    @Html.DisplayFor(ModeItem => item.firstName)
                                    @Html.DisplayFor(ModelItem => item.lastName)
                                    
                                         
+=======
+                                        @Html.DisplayFor(ModelItem => item.lastName)
+                                        <p id="@identifier"></p>
+                                        <input type="checkbox" name="signOutCheckBox"  value="@i"/>
+                                        @Html.HiddenFor(x => @item.ID)
+>>>>>>> 09228c1264a11c943509e819036314d05bf0ad2b
                                </div>    
                             }
 
@@ -74,8 +83,44 @@
 
         </div>
 
+    <script type="text/javascript">
+
+        function getTimes() {
+            var b = [];
+            @foreach (Student item in Model){
+                <text>b.push(@Json.Serialize(item.time));</text>
+               
+            }
+            return b;
+
+        }
+
+        function updateTimes(times) {
+            var now = new Date().getTime();
+            for (i = 0; i < times.length; i++) {
+                var loginDate = new Date(times[i]);
+                var distance = now - loginDate;
+
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("timer" + i).innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+            }
+
+         };
 
 
+        var x = setInterval(function () {
+            var times = getTimes();
+            var y = updateTimes(times);
+        }, 1000);
+
+
+        </script>
+        
 
 
 
