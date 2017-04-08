@@ -123,17 +123,63 @@ namespace WebApplication3.Controllers
         }
 
         public IActionResult getCheckoutPage() {
-            return View("unknownWireframe");
+            return View("SignInDetails");
+        }
+        //start of method stubs
+
+        public void SignInClimber() {
+            //This corresponds to item Homepage-1
+            // this method should take the card swipe and direct to the sign in page for the appropriate user
+            //Student toSignIn;
+
+            //return View("SignInDetails", toSignIn); //SignInDetails doesn't yet expect a student to build the page from
+        }
+
+        public void UserSearch()
+        {   //This corresponds to item Homepage-2
+
+            // this method is for implementing the search by name
+        }
+
+        public IActionResult AddUser() {
+            //This corresponds to item Homepage-3
+
+            //this method just passes to batch add user with a count of 1;
+            return BatchAddUser(1);
+        }
+
+        public IActionResult BatchAddUser(int count) {
+            //this corresponds to item Homepage-4
+
+            //this method should take us to the add users page, configured for the desired count of users
+
+            
+
+            return null;
         }
 
         public void CheckoutShoes() {
-            //not implemented
+            //This corresponds to item Homepage-9
+
+            //this should log in the data base that the shoes were used, and any assorted data
         }
 
         public void CheckoutHarness()
-        {
-            //not implemented
+        {   //This corresponds to item Homepage-9
+
+            //this should log in the data base that the harness was used, and any assorted data
         }
+
+        public IActionResult AddCertificationToUser() {
+
+            //I assume, but may be wrong that
+            //this should redirect to a page for adding certifications to users, 
+            //configured for the user and certification as chosen 
+            return null;
+        }
+
+        //Stubbed out methods for Add Users Page
+
     }
 
 }
