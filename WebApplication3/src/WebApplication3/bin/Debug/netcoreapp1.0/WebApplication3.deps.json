@@ -33,7 +33,8 @@
           "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
           "Microsoft.EntityFrameworkCore.Tools": "1.1.0-msbuild3-final",
-          "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.0"
+          "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.0",
+          "System.Data.SqlClient": "4.3.0"
         },
         "runtime": {
           "WebApplication3.dll": {}
