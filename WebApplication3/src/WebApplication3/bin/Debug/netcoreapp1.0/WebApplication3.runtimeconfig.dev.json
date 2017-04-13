@@ -1,7 +1,7 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\Gil\\.nuget\\packages"
+      "/home/hannelore/.nuget/packages"
     ]
   }
 }

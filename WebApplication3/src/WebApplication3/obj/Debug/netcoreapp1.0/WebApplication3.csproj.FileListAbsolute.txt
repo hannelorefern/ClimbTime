@@ -1,0 +1,8 @@
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/bin/Debug/netcoreapp1.0/WebApplication3.deps.json
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/bin/Debug/netcoreapp1.0/WebApplication3.runtimeconfig.json
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/bin/Debug/netcoreapp1.0/WebApplication3.runtimeconfig.dev.json
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/bin/Debug/netcoreapp1.0/WebApplication3.dll
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/bin/Debug/netcoreapp1.0/WebApplication3.pdb
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/obj/Debug/netcoreapp1.0/WebApplication3.AssemblyInfo.cs
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/obj/Debug/netcoreapp1.0/WebApplication3.dll
+/home/hannelore/Documents/Senior Project/ClimbTime/WebApplication3/src/WebApplication3/obj/Debug/netcoreapp1.0/WebApplication3.pdb
