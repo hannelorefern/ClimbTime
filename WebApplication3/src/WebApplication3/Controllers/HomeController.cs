@@ -19,9 +19,9 @@ namespace WebApplication3.Controllers
         DataAccesser db = new DataAccesser("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
 
         public IActionResult Index()
-        {   
-            
-            //Here, fill signed in students from the signed in table in the database
+        {
+
+            signedInStudents = db.getSignedIn();
             
 
 

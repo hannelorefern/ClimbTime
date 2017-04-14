@@ -177,6 +177,28 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        public List<Student> getSignedIn()
+        {
+            List<Student> ret = new List<Student>();
+            cmd = new SqlCommand("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Student temp = new Student();
+                    temp.firstName = (string)reader["firstName"];
+                    temp.lastName = (string)reader["lastName"];
+                    temp.ID = (int)reader["userID"];
+
+                    DateTime tempTime = (DateTime)reader["startDateTime"];
+
+                    temp.time = tempTime.ToString("MMM d, yyyy H:mm:ss");
+                    ret.Add(temp);
+                }
+            }
+            return ret;
+        }
+
         public bool certifyUser(Student student, Certification cert)
         {
             //TO DO: FIGURE OUT HOW TO GET ID OF CURRENTLY LOGGED IN USER
