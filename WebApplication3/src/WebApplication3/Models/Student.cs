@@ -12,6 +12,13 @@ namespace WebApplication3
         public string firstName { get; set; }
         public string time { get; set; }
 
+        public Student()
+        {
+            ID = 0;
+            lastName = null;
+            firstName = null;
+            time = null;
+        }
 
         public Student(int ID, string lastName, string firstName, string time) {
             this.ID = ID;

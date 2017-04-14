@@ -33,6 +33,7 @@
                     
                     <form asp-controller="Home" asp-action="AddClimber">
                         <p>
+                            <!-- TO DO: QUERY USER TABLE FOR ID, ADD TO STUDENT OBJECT-->
                             Last Name:
                             <input type="text" name="lastNameToSearch" />
                             First Name:
@@ -59,10 +60,11 @@
                                 string identifier = "timer" + i;
                                 Student item = ((List<Student>)Model)[i];
                                <div>
+                                   <input type="checkbox" name="signOutCheckBox" value="@i" />
+                                        @Html.HiddenFor(x => @item.ID)
+                                        @Html.DisplayFor(ModeItem => item.firstName)
                                         @Html.DisplayFor(ModelItem => item.lastName)
                                         <p id="@identifier"></p>
-                                        <input type="checkbox" name="signOutCheckBox"  value="@i"/>
-                                        @Html.HiddenFor(x => @item.ID)
                                </div>    
                             }
 
