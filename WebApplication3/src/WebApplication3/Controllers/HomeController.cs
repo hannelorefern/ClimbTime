@@ -94,12 +94,15 @@ namespace WebApplication3.Controllers
         }
         //start of method stubs
 
-        public void SignInClimber() {
+        public IActionResult SignInClimber() {
             //This corresponds to item Homepage-1
             // this method should take the card swipe and direct to the sign in page for the appropriate user
-            //Student toSignIn;
+
+            Student toSignIn;
 
             //return View("SignInDetails", toSignIn);
+        
+            return null;
         }
 
         public void UserSearch()
@@ -119,6 +122,8 @@ namespace WebApplication3.Controllers
             //this corresponds to item Homepage-4
 
             //this method should take us to the add users page, configured for the desired count of users
+            //uncertain, but I think a good way to do this would be to pass the model as a collection of null Students, and
+            //then fill them in from there
 
             
 
