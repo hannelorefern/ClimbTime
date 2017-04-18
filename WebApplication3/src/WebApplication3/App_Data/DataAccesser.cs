@@ -447,7 +447,27 @@ namespace WebApplication3.App_Data
             }
             return retFlag;
         }
+        public List<User> getSignedIn()
+        {
+            List<User> ret = new List<User>();
+            cmd = new SqlCommand("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    User temp = new User();
+                    temp.firstName = (string)reader["firstName"];
+                    temp.lastName = (string)reader["lastName"];
+                    temp.ID = (int)reader["userID"];
 
+                    DateTime tempTime = (DateTime)reader["startDateTime"];
+
+                    temp.time = tempTime.ToString("MMM d, yyyy H:mm:ss");
+                    ret.Add(temp);
+                }
+            }
+            return ret;
+        }
         //equipmentuse
         //add user/equipment pair, remove outdated records, maybe remove the check-in column? do we need it? who knows?
 

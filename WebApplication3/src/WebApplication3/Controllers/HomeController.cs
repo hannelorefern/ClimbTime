@@ -21,7 +21,7 @@ namespace WebApplication3.Controllers
         public IActionResult Index()
         {
 
-            signedInStudents = db.getSignedIn();
+            signedInUsers = db.getSignedIn();
             
 
             return View(signedInUsers);
