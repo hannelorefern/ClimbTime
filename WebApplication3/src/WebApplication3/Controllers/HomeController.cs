@@ -71,7 +71,8 @@ namespace WebApplication3.Controllers
         {//This corresponds to Homepage-7
              
             string temp = this.Request.Form["signOutCheckBox"];
-
+            if (temp==null) { }
+            else { 
             string[] toRemoveIndex = temp.Split(','); 
             for (int i = toRemoveIndex.Length - 1; i>=0; i--)
             {
@@ -83,9 +84,9 @@ namespace WebApplication3.Controllers
 
             }
 
-            
+            }
 
-            
+
             return View("Index", signedInStudents);
         }
 
