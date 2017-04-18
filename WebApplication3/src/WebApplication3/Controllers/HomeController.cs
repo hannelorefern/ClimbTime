@@ -13,7 +13,7 @@ namespace WebApplication3.Controllers
 {
     public class HomeController : Controller
     {
-        static List<Student> signedInStudents = new List<Student>();
+        static List<User> signedInUsers = new List<User>();
         static int countForTesting = 1;
         // SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
         DataAccesser db = new DataAccesser("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
@@ -24,8 +24,7 @@ namespace WebApplication3.Controllers
             signedInStudents = db.getSignedIn();
             
 
-
-            return View(signedInStudents);
+            return View(signedInUsers);
         }
 
         public IActionResult Reports()
@@ -57,14 +56,14 @@ namespace WebApplication3.Controllers
         }
         public IActionResult AddClimber(string lastNameToSearch, string firstNameToSearch)
         {
-            Student toAdd = db.findUser(firstNameToSearch, lastNameToSearch);
+            User toAdd = db.findUser(firstNameToSearch, lastNameToSearch);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
             db.addVisit(toAdd);
 
-            signedInStudents.Add(toAdd);
+            signedInUsers.Add(toAdd);
 
 
-            return View("Index",signedInStudents);
+            return View("Index",signedInUsers);
         }
 
         public IActionResult RemoveClimbers()
@@ -77,17 +76,18 @@ namespace WebApplication3.Controllers
             for (int i = toRemoveIndex.Length - 1; i>=0; i--)
             {
                 int index = Int16.Parse(toRemoveIndex[i]);
-                string firstNameToRemove = signedInStudents[index].firstName;
-                string lastNameToRemove = signedInStudents[index].lastName;
+                string firstNameToRemove = signedInUsers[index].firstName;
+                string lastNameToRemove = signedInUsers[index].lastName;
                 db.finishVisit(firstNameToRemove, lastNameToRemove);
-                signedInStudents.Remove(signedInStudents[index]);
+                signedInUsers.Remove(signedInUsers[index]);
 
             }
 
             }
 
 
-            return View("Index", signedInStudents);
+            
+            return View("Index", signedInUsers);
         }
 
         public IActionResult getCheckoutPage() {
