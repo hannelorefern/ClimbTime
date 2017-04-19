@@ -443,7 +443,7 @@ namespace WebApplication3.App_Data
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception removing equipment type. " + ex.Message);
+                throw new Exception("Exception removing equipment type. " + ex.Message);
             }
             return retFlag;
         }
@@ -452,6 +452,51 @@ namespace WebApplication3.App_Data
         //add user/equipment pair, remove outdated records, maybe remove the check-in column? do we need it? who knows?
 
         //visittype
+        public bool addVisitType(string visitTypeName, int certID, int courseID) {
+            bool retFlag = false;
+            
+            System.Diagnostics.Debug.WriteLine("you are inside addVisitType");
+            
+            cmd = new SqlCommand("INSERT INTO dbo.visittype (title, certID, courseID) VALUES(@title, @certID, @courseID)", conn);
+            cmd.Parameters.AddWithValue("@title", visitTypeName);
+            cmd.Parameters.AddWithValue("@certID", certID);
+            cmd.Parameters.AddWithValue("@courseID", courseID);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                retFlag = true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception adding visit type. " + ex.Message);
+            }
+
+
+
+            return retFlag;
+        }
+        public bool removeVisitType(string titleToRemove)
+        {
+            bool retFlag = false;
+            cmd = new SqlCommand("DELETE FROM dbo.visittype WHERE title = @title", conn);
+            cmd.Parameters.AddWithValue("@title", titleToRemove);
+            try
+            {
+                cmd.ExecuteNonQuery();
+                retFlag = true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception removing visit type. " + ex.Message);
+            }
+
+
+
+
+            return retFlag;
+        }
         //add, remove
     }
+
+   
 }

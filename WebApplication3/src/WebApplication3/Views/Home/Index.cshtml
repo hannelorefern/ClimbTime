@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication3.Student>
+﻿@model IEnumerable<WebApplication3.User>
 
 
 @{
@@ -55,10 +55,10 @@
             <div class="col-sm-6" id="logout-div">
                 <form asp-controller="Home" asp-action="RemoveClimbers">
                     <div id="scrollview" style="overflow:scroll;height:400px">
-                            @for (int i = 0; i < ((List<Student>)Model).Count; i++)
+                            @for (int i = 0; i < ((List<User>)Model).Count; i++)
                             {
                                 string identifier = "timer" + i;
-                                Student item = ((List<Student>)Model)[i];
+                                User item = ((List<User>)Model)[i];
                                <div>
                                    <input type="checkbox" name="signOutCheckBox" value="@i" />
                                         @Html.HiddenFor(x => @item.ID)
@@ -80,7 +80,7 @@
 
         function getTimes() {
             var b = [];
-            @foreach (Student item in Model){
+            @foreach (User item in Model){
                 <text>b.push(@Json.Serialize(item.time));</text>
                
             }
@@ -94,13 +94,12 @@
                 var loginDate = new Date(times[i]);
                 var distance = now - loginDate;
 
-                // Time calculations for days, hours, minutes and seconds
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                // Time calculations for hours, minutes, and seconds
                 var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                document.getElementById("timer" + i).innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                document.getElementById("timer" + i).innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
             }
 
          };
