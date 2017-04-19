@@ -447,10 +447,13 @@ namespace WebApplication3.App_Data
             }
             return retFlag;
         }
+
         public List<User> getSignedIn()
         {
             List<User> ret = new List<User>();
             cmd = new SqlCommand("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
+            // this SqlCommand will need to be edited so that it only cares about tracked visit types.
+
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
