@@ -26,5 +26,10 @@ namespace WebApplication3
             this.firstName = firstName;
             this.time = time; 
         }
+
+        public String Name()
+        {
+            return String.Format("%s, %s", this.lastName, this.firstName);
+        }
     }
 }

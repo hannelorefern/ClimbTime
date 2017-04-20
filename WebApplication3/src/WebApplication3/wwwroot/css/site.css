@@ -36,3 +36,16 @@ textarea {
     display: none
   }
 }
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.vert-offset-top-20{
+    margin-top: 20px;
+}
+
+.vert-offset-bottom-20{
+    margin-bottom: 20px;
+}

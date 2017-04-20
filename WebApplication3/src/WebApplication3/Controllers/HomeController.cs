@@ -99,7 +99,7 @@ namespace WebApplication3.Controllers
             //This corresponds to item Homepage-1
             // this method should take the card swipe and direct to the sign in page for the appropriate user
 
-            Student toSignIn;
+            User toSignIn;
 
             //return View("SignInDetails", toSignIn);
         
