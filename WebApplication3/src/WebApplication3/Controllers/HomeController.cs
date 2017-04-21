@@ -74,14 +74,14 @@ namespace WebApplication3.Controllers
             else { 
             string[] toRemoveIndex = temp.Split(','); 
             for (int i = toRemoveIndex.Length - 1; i>=0; i--)
-            {
+                {
                 int index = Int16.Parse(toRemoveIndex[i]);
                 string firstNameToRemove = signedInUsers[index].firstName;
                 string lastNameToRemove = signedInUsers[index].lastName;
                 db.finishVisit(firstNameToRemove, lastNameToRemove);
                 signedInUsers.Remove(signedInUsers[index]);
-
-            }
+    
+                }
 
             }
 
@@ -90,23 +90,33 @@ namespace WebApplication3.Controllers
             return View("Index", signedInUsers);
         }
 
-        public IActionResult getCheckoutPage() {
-            return View("SignInDetails");
-        }
+        
         //start of method stubs
 
-        public IActionResult SignInClimber() {
+        public IActionResult SignInClimber(string CardSwipe) {
             //This corresponds to item Homepage-1
             // this method should take the card swipe and direct to the sign in page for the appropriate user
-
+            System.Diagnostics.Debug.WriteLine("*************" + CardSwipe.First());
             User toSignIn;
+            if (CardSwipe != null)
+            {
+                if (char.IsLetter(CardSwipe.First()))
+                {
+                    //toSignIn = 'findByNID(CardSwipe)'
+                }
+                else
+                {
+                    //toSignIn = 'findBySID(CardSwipe)'
+                }
 
-            //return View("SignInDetails", toSignIn);
+                return View("SignInDetails", toSignIn);
+
+            }
         
-            return null;
+            return View("Index", signedInUsers);
         }
 
-        public void UserSearch()
+        public void UserSearch(string SearchTerm)
         {   //This corresponds to item Homepage-2
 
             // this method is for implementing the search by name
