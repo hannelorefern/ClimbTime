@@ -42,6 +42,31 @@ namespace WebApplication3.App_Data
             }
             return ret;
         }
+        public User findUser(string CardSwipe) {
+            User ret = new User();
+            if (char.IsLetter(CardSwipe.First()))
+            {
+                cmd = new SqlCommand("SELECT * FROM dbo.users WHERE @@INSERTCOLNAME@@ = @netID", conn);
+                cmd.Parameters.AddWithValue("@netID", CardSwipe);
+            }
+            else
+            {
+                cmd = new SqlCommand("SELECT * FROM dbo.users WHERE SID = @sid", conn);
+                cmd.Parameters.AddWithValue("@sid", CardSwipe);
+            }
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    ret.ID = (int)reader["userID"];
+                    ret.firstName = (string)reader["firstName"];
+                    ret.lastName = (string)reader["lastName"];
+
+                }
+            }
+            return ret;
+        }
+
 
         public int addUser(string[] args)
         {
