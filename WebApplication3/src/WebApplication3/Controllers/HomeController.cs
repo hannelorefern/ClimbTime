@@ -22,6 +22,7 @@ namespace WebApplication3.Controllers
         {
 
             signedInUsers = db.getSignedIn();
+            signedInUsers.Sort();
             
 
             return View(signedInUsers);
@@ -100,17 +101,10 @@ namespace WebApplication3.Controllers
             User toSignIn;
             if (CardSwipe != null)
             {
-                if (char.IsLetter(CardSwipe.First()))
-                {
-                    //toSignIn = 'findByNID(CardSwipe)'
-                }
-                else
-                {
-                    //toSignIn = 'findBySID(CardSwipe)'
-                }
+                toSignIn = db.findUser(CardSwipe);
 
-                return View("SignInDetails", toSignIn);
-
+                //return View("SignInDetails", toSignIn);
+                return AddClimber(toSignIn.lastName, toSignIn.firstName);
             }
         
             return View("Index", signedInUsers);
@@ -133,12 +127,14 @@ namespace WebApplication3.Controllers
             //this corresponds to item Homepage-4
 
             //this method should take us to the add users page, configured for the desired count of users
-            //uncertain, but I think a good way to do this would be to pass the model as a collection of null Students, and
-            //then fill them in from there
 
-            
+            List<User> group = new List<User>();
+            for (int i = 0; i<count; i++)
+            {
+                group[i] = new WebApplication3.User();
+            }
 
-            return null;
+            return View("AddUserStep1", group);
         }
 
         public void CheckoutShoes() {

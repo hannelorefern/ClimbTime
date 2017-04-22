@@ -59,11 +59,12 @@
             <form asp-controller="Home" asp-action="RemoveClimbers">
                 <div id="scrollview" style="overflow:scroll;height:400px">
                     @for (int i = 0; i < ((List<User>)Model).Count; i++)
-                    {   
-                        string identifier = "timer" + i;                
+                    {
+                        string identifier = "timer" + i;
                         User item = ((List<User>)Model)[i];
                         <div>
-                            @Html.DisplayFor(ModelItem => item.Name())
+                            @{string fullName = item.Name(); }
+                            @Html.DisplayFor(ModelItem => fullName)
                             <input type="checkbox" name="signOutCheckBox" value="@i" />
                             @Html.HiddenFor(x => @item.ID)
                             <p id="@identifier"></p>
