@@ -49,3 +49,7 @@ textarea {
 .vert-offset-bottom-20{
     margin-bottom: 20px;
 }
+
+.input-append .btn.dropdown-toggle {
+    float: none;
+}

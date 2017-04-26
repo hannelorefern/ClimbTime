@@ -3,3 +3,175 @@
 *@
 @{
 }
+
+
+<head>
+
+</head>
+
+<body>
+    <div class="container col-md-5 col-md-offset-1 panel panel-default">
+        <form>
+            <div class="col-md-8 col-centered vert-offset-top-20">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="last, first" id="UserSearchText" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-5 col-md-offset-1 panel panel-default" id="login-div">
+        <div class="panel-body">
+            <div class="row">
+                <form>
+                    <div class="form-inline">
+                        <label for="NameField"><strong>Name:     </strong></label>
+                        <input type="text" class="form-control" id="NameFieldText" placeholder="name" readonly name="NameField" />
+                    </div>
+                    <div class="form-inline">
+                        <label for="SIDField"><strong>SID:</strong></label>
+                        <input type="text" class="form-control" id="NameFieldText" placeholder="00xxxxxx" readonly name="SIDField" />
+                    </div>
+                    <div class="form-inline">
+                        <label for="ShoeField"><strong>Shoe Size:</strong></label>
+                        <input type="text" class="form-control" id="NameFieldText" placeholder="x" readonly name="ShoeField" />
+                    </div>
+                    <div class="form-inline">
+                        <label for="HarnessField"><strong>Harness Size:</strong></label>
+                        <input type="text" class="form-control" id="NameFieldText" placeholder="x" readonly name="HarnessField" />
+                    </div>
+                    <div class="form-inline">
+                        <label for="PhoneField"><strong>Phone Number:</strong></label>
+                        <input type="text" class="form-control" id="NameFieldText" placeholder="(xxx)xxx-xxxx" readonly name="PhoneField" />
+                    </div>
+                    <div class="form-inline">
+                        <label for="EmailField"><strong>Email:</strong></label>
+                        <input type="text" class="form-control" id="NameFieldText" placeholder="x@x.x" readonly name="EmailField" />
+                    </div>
+                    <div class="form-inline">
+                        <label for="UserTypeField"><strong>User Type:</strong></label>
+                        <input type="text" class="form-control" id="NameFieldText" placeholder="x" readonly name="UserTypeField" />
+                    </div>
+                    <button class="btn btn-lg btn-primary" value="Edit" name="EditButton">Edit/Save</button>
+                </form>
+            </div>
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="col-md-5">
+                            <div class="panel-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="Meter Display"><strong>Meters:</strong></label>
+                                        <input type="text" name="MeterDisplay" readonly/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="FeetAddText"> Mile High Climb</label>
+                                        <input type="text" class="form-control pull-left" name="FeetAddText">
+                                    </div>
+                                    <div class="btn-group">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle pull-right" type="button" data-toggle="dropdown">
+                                                Dropdown Example
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Boulder</a></li>
+                                                <li><a href="#">Top Rope</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <button class="btn btn-primary form-control" value="Add" name="FeetAddButton">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+@*<body>
+    <div class="container">
+        <div class="col-mid-5 col-md-offset-1 panel panel-default">
+            <form>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="last, first" id="UserSearchText" />
+                </div>
+            </form>
+        </div>
+        <div class="col-mid-5 col-md-offset-1 panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <form>
+                        <div class="form-inline">
+                            <label for="NameField"><strong>Name:</strong></label>
+                            <input type="text" class="form-control" id="NameFieldText" placeholder="name" readonly name="NameField"/>
+                        </div>
+                        <div class="form-inline">
+                            <label for="SIDField"><strong>SID:</strong></label>
+                            <input type="text" class="form-control" id="NameFieldText" placeholder="00xxxxxx" readonly name="SIDField"/>
+                        </div>
+                        <div class="form-inline">
+                            <label for="ShoeField"><strong>Shoe Size:</strong></label>
+                            <input type="text" class="form-control" id="NameFieldText" placeholder="x" readonly name="ShoeField"/>
+                        </div>
+                        <div class="form-inline">
+                            <label for="HarnessField"><strong>Harness Size:</strong></label>
+                            <input type="text" class="form-control" id="NameFieldText" placeholder="x" readonly name="HarnessField"/>
+                        </div>
+                        <div class="form-inline">
+                            <label for="PhoneField"><strong>Phone Number:</strong></label>
+                            <input type="text" class="form-control" id="NameFieldText" placeholder="(xxx)xxx-xxxx" readonly name="PhoneField"/>
+                        </div>
+                        <div class="form-inline">
+                            <label for="EmailField"><strong>Email:</strong></label>
+                            <input type="text" class="form-control" id="NameFieldText" placeholder="x@x.x" readonly name="EmailField"/>
+                        </div>
+                        <div class="form-inline">
+                            <label for="UserTypeField"><strong>User Type:</strong></label>
+                            <input type="text" class="form-control" id="NameFieldText" placeholder="x" readonly name="UserTypeField"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <form>
+                        <button class="btn btn-lg form-control" value="Edit" name="EditButton" />
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Mile High Club
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <form>
+                                    <label for="FeetMileHighClub"><strong>Feet:</strong></label>
+                                    <input type="text" class="form-control" name="FeetMileHighClub" placeholder="0" />
+                                </form>
+                            </div>
+                            <div class="row">
+                                <div class="form-inline">
+                                    <button class="btn btn-primary btn-lg form-control" value="Add" name="FeetAddButton"></button>
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                            Lap Type
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Boulder</a></li>
+                                            <li><a href="#">Top Rope</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>*@
