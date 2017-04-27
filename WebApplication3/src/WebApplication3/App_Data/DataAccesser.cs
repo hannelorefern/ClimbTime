@@ -45,7 +45,7 @@ namespace WebApplication3.App_Data
         public User findUser(string CardSwipe) {
             User ret = new User();
             if (char.IsLetter(CardSwipe.First()))
-            {
+            {   //TO DO: Ensure the below command is updated for the net ID collname
                 cmd = new SqlCommand("SELECT * FROM dbo.users WHERE @@INSERTCOLNAME@@ = @netID", conn);
                 cmd.Parameters.AddWithValue("@netID", CardSwipe);
             }
@@ -112,6 +112,47 @@ namespace WebApplication3.App_Data
                 throw new Exception("Exeception creating user. " + ex.Message);
             }
             return ret;
+        }
+
+
+        public List<User> searchForUsers(string firstName, string lastName)
+        {
+            List<User> Users = new List<User>();
+            string commandText = "SELECT * FROM dbo.users WHERE";
+            if (firstName != "")
+            {
+                commandText += "firstName LIKE @firstName";
+                if (lastName != "") { commandText += " AND ";}
+
+            }
+            if (lastName != "")
+            {
+                commandText += "lastName like @lastName";
+            }
+            cmd = new SqlCommand(commandText, conn);
+            if (firstName != "")
+            { cmd.Parameters.AddWithValue("@firstName", firstName + '%'); }
+            if (lastName != "")
+            { cmd.Parameters.AddWithValue("@lastName", lastName + '%'); }
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    User temp = new User();
+                    temp.firstName = (string)reader["firstName"];
+                    temp.lastName = (string)reader["lastName"];
+                    temp.ID = (int)reader["userID"];
+
+                    DateTime tempTime = (DateTime)reader["startDateTime"];
+
+                    temp.time = tempTime.ToString("MMM d, yyyy H:mm:ss");
+                    Users.Add(temp);
+                }
+            }
+
+
+            return Users;
         }
 
         //visits
@@ -544,6 +585,7 @@ namespace WebApplication3.App_Data
             return retFlag;
         }
         //add, remove
+
     }
 
    

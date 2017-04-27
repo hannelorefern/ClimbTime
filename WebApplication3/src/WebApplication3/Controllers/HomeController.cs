@@ -91,7 +91,25 @@ namespace WebApplication3.Controllers
             return View("Index", signedInUsers);
         }
 
-        
+        public string[ , ] GetMatches(string SearchTerm) {
+            string[] names = SearchTerm.Split(' ');
+            List<User> searchResults = db.searchForUsers(names[0], names[1]);
+            string[ , ] ret = new string[searchResults.Count+1,3];
+            ret[0, 0] = "First Name";
+            ret[0, 1] = "Last Name";
+            ret[0, 2] = "Student ID";
+
+            int i = 1;
+            foreach(User user in searchResults)
+            {
+                ret[i, 0] = user.firstName;
+                ret[i, 1] = user.lastName;
+                ret[i, 2] =""+user.ID;
+            }
+            
+            return ret;
+
+        }
         //start of method stubs
 
         public IActionResult SignInClimber(string CardSwipe) {
