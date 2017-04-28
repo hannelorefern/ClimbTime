@@ -118,7 +118,7 @@ namespace WebApplication3.App_Data
         public List<User> searchForUsers(string firstName, string lastName)
         {
             List<User> Users = new List<User>();
-            string commandText = "SELECT * FROM dbo.users WHERE";
+            string commandText = "SELECT * FROM dbo.users WHERE ";
             if (firstName != "")
             {
                 commandText += "firstName LIKE @firstName";
@@ -142,11 +142,8 @@ namespace WebApplication3.App_Data
                     User temp = new User();
                     temp.firstName = (string)reader["firstName"];
                     temp.lastName = (string)reader["lastName"];
-                    temp.ID = (int)reader["userID"];
-
-                    DateTime tempTime = (DateTime)reader["startDateTime"];
-
-                    temp.time = tempTime.ToString("MMM d, yyyy H:mm:ss");
+                    temp.ID = (int)reader["SID"];
+                    
                     Users.Add(temp);
                 }
             }
