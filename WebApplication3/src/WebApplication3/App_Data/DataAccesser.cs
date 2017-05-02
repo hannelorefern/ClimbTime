@@ -58,9 +58,39 @@ namespace WebApplication3.App_Data
             {
                 if (reader.Read())
                 {
-                    ret.ID = (int)reader["userID"];
+
+                    ret.ID = (int)reader["SID"];
+                    ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
+
+
+                    if (!DBNull.Value.Equals(reader["shoeSize"]))
+                    { ret.ShoeSize = (string)reader["shoeSize"]; }
+                    else
+                    {
+                        ret.ShoeSize = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["harnessSize"]))
+                    { ret.HarnessSize = (string)reader["harnessSize"]; }
+                    else
+                    {
+                        ret.HarnessSize = "Information not found";
+                    }
+                    if (! DBNull.Value.Equals(reader["phone"]))
+                    { ret.phoneNumber = (string)reader["phone"]; }
+                    else
+                    {
+                        ret.phoneNumber = "Information not found";
+                    }
+                    if (! DBNull.Value.Equals(reader["email"]))
+                    { ret.email = (string)reader["email"]; }
+                    else
+                    {
+                        ret.email = "Information not found";
+                    }
+                    
+
 
                 }
             }

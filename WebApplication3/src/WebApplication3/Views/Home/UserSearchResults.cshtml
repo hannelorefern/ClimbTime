@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<User>
+<div>
+    <div>
+        <div class="row">
+            <div class="col-xs-3 col-sm-3">First Name</div>
+            <div class="col-xs-3 col-sm-3">Last Name</div>
+            <div class="col-xs-3 col-sm-3">Student ID</div>
+            <div class="col-xs-3 col-sm-3">View All Details</div>
+        </div>
+    </div>
+    <div>
+        @foreach (User user in Model)
+            {
+            <form asp-controller="Home" asp-action="ShowUserDetails">
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3">@user.firstName</div>
+                    <div class="col-xs-3 col-sm-3">@user.lastName</div>
+                    @{}
+                    <div class="col-xs-3 col-sm-3">@user.ID</div>
+                    <div class="col-xs-3 col-sm-3" align="center">
+                        <button type="submit" value="@user.ID" name="IDToShow">Show User</button>
+                    </div>
+
+                </div>
+            </form>
+        }
+    </div>
+</div>

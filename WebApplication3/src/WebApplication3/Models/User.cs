@@ -8,9 +8,15 @@ namespace WebApplication3
     public class User : IComparable
     {
         public int ID { get; set; }
+        public string ShoeSize { get; set; }
+        public string HarnessSize { get; set; }
+        public string phoneNumber { get; set; }
+        public string email { get; set; }
+        public string userType { get; set; }
         public string lastName { get; set; }
         public string firstName { get; set; }
         public string time { get; set; }
+
 
         public User()
         {
@@ -26,6 +32,21 @@ namespace WebApplication3
             this.firstName = firstName;
             this.time = time; 
         }
+
+        public User(int ID, string ShoeSize, string HarnessSize, string phoneNumber, string email, string userType, string lastName, string firstName, string time)
+        {
+            this.ID = ID;
+            this.ShoeSize = ShoeSize;
+            this.HarnessSize = HarnessSize;
+
+            this.phoneNumber = phoneNumber;
+            this.email = email;
+            this.userType = userType;
+            this.lastName = lastName;
+            this.firstName = firstName;
+            this.time = time;
+        }
+        
 
         public String Name()
         {//note to Hannelore: Parker changed this method because I guess String.Format doesn't work like formatting in C.

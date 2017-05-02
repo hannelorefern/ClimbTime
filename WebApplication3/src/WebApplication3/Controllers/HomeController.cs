@@ -44,8 +44,6 @@ namespace WebApplication3.Controllers
 
         public IActionResult Users()
         {
-            ViewData["Message"] = "Page for Users";
-
             return View();
         }
 
@@ -107,14 +105,16 @@ namespace WebApplication3.Controllers
 
         public async Task<ActionResult> GetMatchesForUserPage(string searchTerm)
         {
-            string[] names = searchTerm.Split(' ');
-            if (names.Length == 1)
+            string[] names = new string[] { "" };
+            if (searchTerm != null)
+            { names = searchTerm.Split(' '); }
+            if (names.Length <= 1)
             {
                 names = new string[] { names[0], "" };
             }
             List<User> searchResults = db.searchForUsers(names[0], names[1]);
 
-            return PartialView("UserPageSearch", searchResults);
+            return PartialView("UserSearchResults", searchResults);
 
         }
 
@@ -122,8 +122,11 @@ namespace WebApplication3.Controllers
         //start of method stubs
 
         public IActionResult SignInClimber(string CardSwipe) {
-            //This corresponds to item Homepage-1
-            // this method should take the card swipe and direct to the sign in page for the appropriate user
+
+            //To Do: re route this method to the sign in details page, instead of the temp sign in action
+            if (CardSwipe == null) {
+                return View("Index", signedInUsers);
+            }
             System.Diagnostics.Debug.WriteLine("*************" + CardSwipe.First());
             User toSignIn;
             if (CardSwipe != null)
@@ -137,11 +140,12 @@ namespace WebApplication3.Controllers
             return View("Index", signedInUsers);
         }
 
-        public void UserSearch(string SearchTerm)
-        {   //This corresponds to item Homepage-2
+        public IActionResult ShowUserDetails(string IDToShow) {
+            User toShow = db.findUser(IDToShow);
 
-            // this method is for implementing the search by name
+            return View("Users", toShow);
         }
+
 
         public IActionResult AddUser() {
             //This corresponds to item Homepage-3
