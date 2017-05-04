@@ -52,7 +52,7 @@ namespace WebApplication3.App_Data
             if (char.IsLetter(CardSwipe.First()))
             {
                 //TO DO: FIX THIS SHIT.
-                cmd.reinitialize("SELECT * FROM dbo.users WHERE @@INSERTCOLNAME@@ = @netID", conn);
+                cmd.reinitialize("SELECT * FROM dbo.users WHERE netID = @netID", conn);
                 cmd.addParameter("@netID", CardSwipe);
             }
             else
@@ -525,6 +525,37 @@ namespace WebApplication3.App_Data
 
             return retFlag;
         }
+
+        public void updateName(string firstName, string lastName, int userID)
+        {
+
+        }
+
+        public void updateStudentID(string studentID, int userID)
+        {
+
+        }
+        public void updateShoeSize(string shoeSize, int userID)
+        {
+
+        }
+        public void updateHarnessSize(string harnessSize, int userID)
+        {
+
+        }
+        public void updatePhone(string phoneNum, int userID)
+        {
+
+        }
+        public void updateEmail(string email, int userID)
+        {
+
+        }
+        public void updateUserType(string userType, int userID)
+        {
+
+        }
+
 
         //add, remove
     }
