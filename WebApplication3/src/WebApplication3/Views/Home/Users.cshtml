@@ -30,7 +30,7 @@
     <div class="col-md-5 col-md-offset-1 panel panel-default" id="login-div">
         <div class="panel-body">
             <div class="row">
-                <form>
+                
                     @{User user = Model;
                         string fullName;
                         string IDfield;
@@ -39,6 +39,7 @@
                         string phoneNum;
                         string email;
                         string userType;
+                        string SystemIDField;
 
                         if (user == null){
                             fullName = "FirstName LastName";
@@ -48,25 +49,34 @@
                             phoneNum = "(xxx)xxx-xxxx";
                             email = "name@place.co";
                             userType = "X";
+                            SystemIDField = "-1";
                         }
                         else {
                             fullName = user.firstName + " " + user.lastName;
-                            IDfield = ""+user.ID;
+                            IDfield = ""+user.studentID;
                             shoeSize = user.ShoeSize;
                             harnessSize = user.HarnessSize;
                             phoneNum = user.phoneNumber;
                             email = user.email;
                             userType = user.userType;
-                        }
+                            SystemIDField = ""+user.systemID;
+                                }
                     }
+                <form asp-controller="Home" asp-action="SaveData">
                     <div class="form-inline">
                         <label for="NameField"><strong>Name:     </strong></label>
-                        
                         <input type="text" class="form-control" id="NameFieldText" placeholder="@fullName" readonly name="NameField" />
+                        <button type="button" class="btn btn-sm btn-primary" name="EditNameButton" id="EditNameButton" onclick="toggleEditName()" style="display:none">
+                            Edit Name
+                        </button>
                     </div>
                     <div class="form-inline">
                         <label for="SIDField"><strong>SID:</strong></label>
-                        <input type="text" class="form-control" id="NameFieldText" placeholder="@IDfield" readonly name="SIDField" />
+                        <input type="text" class="form-control" id="SystemIDField" value="@SystemIDField" readonly style="display:none" name="SystemIDField" />
+                        <input type="text" class="form-control" id="SIDField" placeholder="@IDfield" readonly name="SIDField" />
+                        <button type="button" class="btn btn-sm btn-primary" name="EditIDButton" id="EditIDButton" onclick="toggleEditID()" style="display:none">
+                            Edit ID
+                        </button>
                     </div>
                     <div class="form-inline">
                         <label for="ShoeField"><strong>Shoe Size:</strong></label>
@@ -74,22 +84,25 @@
                     </div>
                     <div class="form-inline">
                         <label for="HarnessField"><strong>Harness Size:</strong></label>
-                        <input type="text" class="form-control" id="NameFieldText" placeholder="@harnessSize" readonly name="HarnessField" />
+                        <input type="text" class="form-control" id="HarnessField" placeholder="@harnessSize" readonly name="HarnessField" />
                     </div>
                     <div class="form-inline">
                         <label for="PhoneField"><strong>Phone Number:</strong></label>
-                        <input type="text" class="form-control" id="NameFieldText" placeholder="@phoneNum" readonly name="PhoneField" />
+                        <input type="text" class="form-control" id="PhoneField" placeholder="@phoneNum" readonly name="PhoneField" />
                     </div>
                     <div class="form-inline">
                         <label for="EmailField"><strong>Email:</strong></label>
-                        <input type="text" class="form-control" id="NameFieldText" placeholder="@email" readonly name="EmailField" />
+                        <input type="text" class="form-control" id="EmailField" placeholder="@email" readonly name="EmailField" />
                     </div>
                     <div class="form-inline">
                         <label for="UserTypeField"><strong>User Type:</strong></label>
-                        <input type="text" class="form-control" id="NameFieldText" placeholder="@userType" readonly name="UserTypeField" />
+                        <input type="text" class="form-control" id="UserTypeField" placeholder="@userType" readonly name="UserTypeField" />
                     </div>
+                
+                <button type="button" class="btn btn-lg btn-primary" value="Edit" name="EditButton" id="EditButton" onclick="toggleEditable()">Edit</button>
+                
+                <button class="btn btn-lg btn-primary" value="Save" name="SaveButton" id="SaveButton"  style="display:none">Save Changes</button>
                 </form>
-                <button class="btn btn-lg btn-primary" value="Edit" name="EditButton" onclick="toggleEditable()">Edit</button>
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -141,15 +154,57 @@
     }
 
 
+    function toggleEditName() {
+        var field = $("#NameFieldText");
+        ro = field.prop('readonly');
+        field.prop('readonly', !ro);
 
+    }
     
+    function toggleEditID() {
+        var field = $("#SIDField");
+        ro = field.prop('readonly');
+        field.prop('readonly', !ro);
+
+
+    }
+
     function toggleEditable(){
-   
-        var prev = $("#ShoeField");
-        ro = prev.prop('readonly');
-        prev.prop('readonly', !ro).focus();
-        $(this).val(ro ? 'Save' : 'Edit');
-   }
+        var fields = [];
+        fields.push($("#ShoeField"));
+        fields.push($("#HarnessField"));
+        fields.push($("#PhoneField"));
+        fields.push($("#EmailField"));
+        fields.push($("#UserTypeField"));
+        ro = fields[0].prop('readonly');
+        fields.forEach(function (element) {
+            element.prop('readonly', !ro);
+
+        });
+        toggleDisplayed();
+
+
+    }
+    function toggleDisplayed() {
+        $("#EditButton").toggle();
+        $("#SaveButton").toggle();
+        $("#EditNameButton").toggle();
+        $("#EditIDButton").toggle();
+        
+
+    }
+    function saveFields() {
+        toggleEditable();
+        var field = $("#SIDField");
+        field.prop('readonly', true);
+        field = $("#NameFieldText");
+        field.prop('readonly', true);
+
+        @* TO DO: Save Changed Fields*@
+
+        
+    }
+
 </script>
 
 

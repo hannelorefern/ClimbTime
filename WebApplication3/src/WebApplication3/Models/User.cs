@@ -7,7 +7,8 @@ namespace WebApplication3
 {
     public class User : IComparable
     {
-        public int ID { get; set; }
+        public string studentID { get; set; }
+        public int systemID { get; set; }
         public string ShoeSize { get; set; }
         public string HarnessSize { get; set; }
         public string phoneNumber { get; set; }
@@ -20,22 +21,22 @@ namespace WebApplication3
 
         public User()
         {
-            ID = 0;
+            studentID =""+ 0;
             lastName = null;
             firstName = null;
             time = null;
         }
 
-        public User(int ID, string lastName, string firstName, string time) {
-            this.ID = ID;
+        public User(string ID, string lastName, string firstName, string time) {
+            this.studentID = ID;
             this.lastName = lastName;
             this.firstName = firstName;
             this.time = time; 
         }
 
-        public User(int ID, string ShoeSize, string HarnessSize, string phoneNumber, string email, string userType, string lastName, string firstName, string time)
+        public User(string ID, string ShoeSize, string HarnessSize, string phoneNumber, string email, string userType, string lastName, string firstName, string time, int systemID)
         {
-            this.ID = ID;
+            this.studentID = ID;
             this.ShoeSize = ShoeSize;
             this.HarnessSize = HarnessSize;
 
@@ -45,6 +46,8 @@ namespace WebApplication3
             this.lastName = lastName;
             this.firstName = firstName;
             this.time = time;
+
+            this.systemID = systemID;
         }
         
 

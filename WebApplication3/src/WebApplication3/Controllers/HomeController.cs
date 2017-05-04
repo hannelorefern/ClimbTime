@@ -168,6 +168,46 @@ namespace WebApplication3.Controllers
             return View("AddUserStep1", group);
         }
 
+        public IActionResult SaveData(string NameField, string SystemIDField,
+                                      string SIDField, string ShoeField,
+                                      string HarnessField, string PhoneField,
+                                      string EmailField, string UserTypeField)
+        {
+            int systemID = Convert.ToInt32(SIDField);
+            if (NameField != null)
+            {
+                //db.updateName
+            }
+            if (SIDField != null)
+            {
+                //db.updateSID
+            }
+            if (ShoeField != null)
+            {
+                //db.updateShoeSize
+            }
+            if(HarnessField!= null)
+            {
+                //db.updateHarnessSize
+            }
+            if(PhoneField!=null)
+            {
+                //db.updatePhoneNumber
+            }
+            if(EmailField!=null)
+            {
+                //db.updateEmail
+            }
+            if(UserTypeField!=null)
+            {
+                //db.updateUserType
+            }
+
+                //new User(SIDField, ShoeField, HarnessField, PhoneField, EmailField, UserTypeField, names[names.Length-1], names[0], " ", systemID);
+            Debug.WriteLine(NameField + " " + SystemIDField);
+            return View("Users");
+        }
+
         public void CheckoutShoes() {
             //This corresponds to item Homepage-9
 

@@ -35,7 +35,7 @@ namespace WebApplication3.App_Data
             {
                 if (reader.Read())
                 {
-                    ret.ID = (int)reader["userID"];
+                    ret.studentID = (string)reader["userID"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
                 }
@@ -58,8 +58,8 @@ namespace WebApplication3.App_Data
             {
                 if (reader.Read())
                 {
-
-                    ret.ID = (int)reader["SID"];
+                    ret.systemID = (int)reader["userID"];
+                    ret.studentID = (string)reader["SID"];
                     ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
@@ -172,7 +172,7 @@ namespace WebApplication3.App_Data
                     User temp = new User();
                     temp.firstName = (string)reader["firstName"];
                     temp.lastName = (string)reader["lastName"];
-                    temp.ID = (int)reader["SID"];
+                    temp.studentID = (string)reader["SID"];
                     
                     Users.Add(temp);
                 }
@@ -189,7 +189,7 @@ namespace WebApplication3.App_Data
             bool retFlag = false;
             cmd = new SqlCommand("createVisit", conn);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@userID", climber.ID);
+            cmd.Parameters.AddWithValue("@userID", climber.studentID);
             cmd.Parameters.AddWithValue("@visitType", "test type");
 
             try
@@ -284,7 +284,7 @@ namespace WebApplication3.App_Data
             bool retFlag = false;
             DateTime today = DateTime.Today;
             cmd = new SqlCommand("INSERT INTO dbo.usercertifications (userID, certID, datePosted, postedBy, expDate) VALUES (@uID, @cID, @now, 0, @dateExp", conn);
-            cmd.Parameters.AddWithValue("@uID", student.ID);
+            cmd.Parameters.AddWithValue("@uID", student.studentID);
             cmd.Parameters.AddWithValue("@cID", cert.ID);
             cmd.Parameters.AddWithValue("@now", today);
             cmd.Parameters.AddWithValue("@dateExp", today.AddYears(cert.yearsBeforeExp));
@@ -419,7 +419,7 @@ namespace WebApplication3.App_Data
         {
             int ret = -1;
             cmd = new SqlCommand("INSERT INTO dbo.enrolled (userID, courseID, dateTimeEnrolled) output INSERTED.ID VALUES (@uid, @cid, @now)", conn);
-            cmd.Parameters.AddWithValue("@uid", u.ID);
+            cmd.Parameters.AddWithValue("@uid", u.studentID);
             cmd.Parameters.AddWithValue("@cid", c.ID);
             cmd.Parameters.AddWithValue("@now", DateTime.Now);
             try
@@ -437,7 +437,7 @@ namespace WebApplication3.App_Data
         {
             bool retFlag = false;
             cmd = new SqlCommand("DELETE FROM dbo.enrolled WHERE userID = @uid AND courseID = @cid", conn);
-            cmd.Parameters.AddWithValue("@uid", u.ID);
+            cmd.Parameters.AddWithValue("@uid", u.studentID);
             cmd.Parameters.AddWithValue("@cid", c.ID);
             try
             {
@@ -554,7 +554,7 @@ namespace WebApplication3.App_Data
                     User temp = new User();
                     temp.firstName = (string)reader["firstName"];
                     temp.lastName = (string)reader["lastName"];
-                    temp.ID = (int)reader["userID"];
+                    temp.studentID = (string)reader["userID"];
 
                     DateTime tempTime = (DateTime)reader["startDateTime"];
 

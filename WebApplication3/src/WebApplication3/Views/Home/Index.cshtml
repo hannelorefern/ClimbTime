@@ -71,7 +71,7 @@
                             @{string fullName = item.Name(); }
                             @Html.DisplayFor(ModelItem => fullName)
                             <input type="checkbox" name="signOutCheckBox" value="@i" />
-                            @Html.HiddenFor(x => @item.ID)
+                            @Html.HiddenFor(x => @item.studentID)
                             <p id="@identifier"></p>
                         </div>
                     }
