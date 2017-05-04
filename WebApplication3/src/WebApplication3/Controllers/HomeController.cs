@@ -19,9 +19,10 @@ namespace WebApplication3.Controllers
 
         public IActionResult Index()
         {
-            //Here, fill signed in students from the signed in table in the database
-            
 
+            signedInUsers = db.getSignedIn();
+            signedInUsers.Sort();
+            
 
             return View(signedInUsers);
         }
@@ -42,8 +43,6 @@ namespace WebApplication3.Controllers
 
         public IActionResult Users()
         {
-            ViewData["Message"] = "Page for Users";
-
             return View();
         }
 
@@ -66,39 +65,208 @@ namespace WebApplication3.Controllers
         }
 
         public IActionResult RemoveClimbers()
-        {
+        {//This corresponds to Homepage-7
              
             string temp = this.Request.Form["signOutCheckBox"];
-
+            if (temp==null) { }
+            else { 
             string[] toRemoveIndex = temp.Split(','); 
             for (int i = toRemoveIndex.Length - 1; i>=0; i--)
-            {
+                {
                 int index = Int16.Parse(toRemoveIndex[i]);
                 string firstNameToRemove = signedInUsers[index].firstName;
                 string lastNameToRemove = signedInUsers[index].lastName;
                 db.finishVisit(firstNameToRemove, lastNameToRemove);
                 signedInUsers.Remove(signedInUsers[index]);
+    
+                }
 
             }
 
-            
 
             
             return View("Index", signedInUsers);
         }
 
-        public IActionResult getCheckoutPage() {
-            return View("unknownWireframe");
+
+        public async Task<ActionResult> GetMatchesForSignIn(string searchTerm)
+        {
+            
+            string[] names = searchTerm.Split(' ');
+            if (names.Length == 1)
+            {
+                names = new string[]{names[0], ""};
+            }
+            List<User> searchResults = db.searchForUsers(names[0], names[1]);
+
+            return PartialView("SearchResults", searchResults);
+        }
+
+        public async Task<ActionResult> GetMatchesForUserPage(string searchTerm)
+        {
+            string[] names = new string[] { "" };
+            if (searchTerm != null)
+            { names = searchTerm.Split(' '); }
+            if (names.Length <= 1)
+            {
+                names = new string[] { names[0], "" };
+            }
+            List<User> searchResults = db.searchForUsers(names[0], names[1]);
+
+            return PartialView("UserSearchResults", searchResults);
+
+        }
+
+        
+        //start of method stubs
+
+        public IActionResult SignInClimber(string CardSwipe) {
+
+            //To Do: re route this method to the sign in details page, instead of the temp sign in action
+            if (CardSwipe == null) {
+                return View("Index", signedInUsers);
+            }
+            System.Diagnostics.Debug.WriteLine("*************" + CardSwipe.First());
+            User toSignIn;
+            if (CardSwipe != null)
+            {
+                toSignIn = db.findUser(CardSwipe);
+
+                //return View("SignInDetails", toSignIn);
+                return AddClimber(toSignIn.lastName, toSignIn.firstName);
+            }
+        
+            return View("Index", signedInUsers);
+        }
+
+        public IActionResult ShowUserDetails(string IDToShow) {
+            User toShow = db.findUser(IDToShow);
+
+            return View("Users", toShow);
+        }
+
+
+        public IActionResult AddUser() {
+            //This corresponds to item Homepage-3
+
+            //this method just passes to batch add user with a count of 1;
+            return BatchAddUser(1);
+        }
+
+        public IActionResult BatchAddUser(int count) {
+            //this corresponds to item Homepage-4
+
+            //this method should take us to the add users page, configured for the desired count of users
+
+            List<User> group = new List<User>();
+            for (int i = 0; i<count; i++)
+            {
+                group[i] = new WebApplication3.User();
+            }
+
+            return View("AddUserStep1", group);
+        }
+
+        public IActionResult SaveData(string NameField, string SystemIDField,
+                                      string SIDField, string ShoeField,
+                                      string HarnessField, string PhoneField,
+                                      string EmailField, string UserTypeField)
+        {
+            int systemID = Convert.ToInt32(SIDField);
+            if (NameField != null)
+            {
+                //db.updateName
+            }
+            if (SIDField != null)
+            {
+                //db.updateSID
+            }
+            if (ShoeField != null)
+            {
+                //db.updateShoeSize
+            }
+            if(HarnessField!= null)
+            {
+                //db.updateHarnessSize
+            }
+            if(PhoneField!=null)
+            {
+                //db.updatePhoneNumber
+            }
+            if(EmailField!=null)
+            {
+                //db.updateEmail
+            }
+            if(UserTypeField!=null)
+            {
+                //db.updateUserType
+            }
+
+                //new User(SIDField, ShoeField, HarnessField, PhoneField, EmailField, UserTypeField, names[names.Length-1], names[0], " ", systemID);
+            Debug.WriteLine(NameField + " " + SystemIDField);
+            return View("Users");
         }
 
         public void CheckoutShoes() {
-            //not implemented
+            //This corresponds to item Homepage-9
+
+            //this should log in the data base that the shoes were used, and any assorted data
         }
 
         public void CheckoutHarness()
-        {
-            //not implemented
+        {   //This corresponds to item Homepage-9
+
+            //this should log in the data base that the harness was used, and any assorted data
         }
+
+        public IActionResult AddCertificationToUser() {
+            //This corresponds to item Homepage-13
+
+            //I assume, but may be wrong that
+            //this should redirect to a page for adding certifications to users, 
+            //configured for the user and certification as chosen 
+            return null;
+        }
+
+
+        //Stubbed out methods for Add Users Page
+        public void TemporaryUserStore() {
+            //This corresponds to item BatchAddUsers-2, when there are more users to add in the current batch
+            //this should hold on to the data to be comitted to the database until it's ready, and
+            //this should reset the page for the next user to be added
+        }
+
+        public IActionResult GroupInfoFinished() {
+            //this corresponds to item BatchAddUsers-2, when on the final user for the current batch
+            //this should hold on to the data to be comitted to the database until it's ready, and
+            //this should redirect to (I think) the page with the appropriate training video
+
+            return null;
+
+
+        }
+
+        public IActionResult InstructionalVideoFinished()
+        {   //this corresponds to item BatchAddUsers-5, the call should be restricted on the JS/HTML side of things (I think)
+            //this should retrieve the data for the current group watching, and
+            //this should return the waiver signing page for this group
+            return null;
+        }
+
+        public void RegisterUser() {
+            //this corresponds to item BatchAddUsers-7, when there are more users to add in the current batch
+            //this should commit user data and the waiver to the database, and
+            //this should prepare the page for the next user
+        }
+
+        public void RegisterFinalUser(){
+            //this corresponds to item BatchAddUsers-7, when on the final user
+            //this should commit user data and the waiver to the database and
+            //return to which page? this is currently unknown by Parker.
+
+        }
+
+
     }
 
 }

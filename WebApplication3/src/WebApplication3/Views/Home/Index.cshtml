@@ -14,75 +14,93 @@
 </head>
 
 <body>
-    <!--class="jumbotron" -->
-        <div  id="body">
-            <div class="col-sm-6" id="login-div">
-                <div class="col-sm-4" id="subLogin">
-                    <table>
-                        <tr>
-                            <td>
-                                Sign in Climber
-                                <hr />
-                                Swipe a Card
-                                <br />
-                                <input id="Text1" type="text" />
-                                <hr/>
-                            </td>
-                        </tr>
-                    </table>
-                    
-                    <form asp-controller="Home" asp-action="AddClimber">
-                        <p>
-                            <!-- TO DO: QUERY USER TABLE FOR ID, ADD TO STUDENT OBJECT-->
-                            Last Name:
-                            <input type="text" name="lastNameToSearch" />
-                            First Name:
-                            <input type="text" name="firstNameToSearch" />
-                            <input type="submit" value="Sign In Student" />
-
-                        </p>
-                    </form>
-                    
-                        
-                    <br/>
-                    <form asp-controller="Home" asp-action="getCheckoutPage">
-                    <input id="Button2" type="submit" value="Batch Add Climber"  />
+    <div class="container col-md-5 col-md-offset-1 panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="panel panel-default col-md-8 col-md-offset-2" id="cardSwipeBox">
+                    <div class="panel-heading">User Login</div>
+                    <div class="panel-body">
+                        <form asp-controller="Home" asp-action="SignInClimber">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Card Swipe" name="CardSwipe" id="Text1" >
+                            </div>
                         </form>
-                </div>
 
-            </div>
-
-            <div class="col-sm-6" id="logout-div">
-                <form asp-controller="Home" asp-action="RemoveClimbers">
-                    <div id="scrollview" style="overflow:scroll;height:400px">
-                            @for (int i = 0; i < ((List<User>)Model).Count; i++)
-                            {
-                                string identifier = "timer" + i;
-                                User item = ((List<User>)Model)[i];
-                               <div>
-                                   <input type="checkbox" name="signOutCheckBox" value="@i" />
-                                        @Html.HiddenFor(x => @item.ID)
-                                        @Html.DisplayFor(ModeItem => item.firstName)
-                                        @Html.DisplayFor(ModelItem => item.lastName)
-                                        <p id="@identifier"></p>
-                               </div>    
-                            }
-
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search" name="SearchTerm" id="Text2"><div class="input-group-btn">
+                                    <div class="btn-group" role="group">
+                                        <div class="dropdown dropdown-lg">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="updateSearchResults()" aria-expanded="false"><span class="caret"></span></button>
+                                            <div class="dropdown-menu dropdown-menu-right" role="menu" style="width:600px;" id="partial">
+                                                    @Html.Partial("SearchResults") 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
-                    <input id="Button3" type="submit" value="Log out selected climbers" />
+                </div>
+            </div>
+            <div class="row">
+                <form asp-controller="Home" asp-action="AddUser">
+                    <div class="form-group">
+
+                        <button type="button" class="btn btn-primary btn-lg center-block vert-offset-top-20" id="addClimber" title="Add Climber">Add Climber</button>
+                    </div>
+                </form>
+                <form asp-controller="Home" asp-action="BatchAddUser">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary btn-lg center-block vert-offset-top-20 vert-offset-bottom-20">Batch Add Climber</button>
+                    </div>
                 </form>
             </div>
-
-
         </div>
+    </div>
+    <div class="col-md-5 col-md-offset-1 panel panel-default" id="login-div">
+        <div class="panel-heading">
+            Climb Time Students
+        </div>
+        <div class="panel-body">
+            <form asp-controller="Home" asp-action="RemoveClimbers">
+                <div id="scrollview" style="overflow:scroll;height:400px">
+                    @for (int i = 0; i < ((List<User>)Model).Count; i++)
+                    {
+                        string identifier = "timer" + i;
+                        User item = ((List<User>)Model)[i];
+                        <div>
+                            @{string fullName = item.Name(); }
+                            @Html.DisplayFor(ModelItem => fullName)
+                            <input type="checkbox" name="signOutCheckBox" value="@i" />
+                            @Html.HiddenFor(x => @item.studentID)
+                            <p id="@identifier"></p>
+                        </div>
+                    }
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-lg vert-offset-top-20" id="Button3" type="submit">Log out selected climbers</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    </div>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-        function getTimes() {
-            var b = [];
-            @foreach (User item in Model){
+            function updateSearchResults() {
+                
+                var url = '@Url.Action("GetMatchesForSignIn")'
+                url += '?searchTerm=' + Text2.value;
+                var partial = $("#partial");
+                partial.load(url);
+            }
+
+
+            function getTimes() {
+                    var b = [];
+                    @foreach (User item in Model){
                 <text>b.push(@Json.Serialize(item.time));</text>
-               
+
             }
             return b;
 
@@ -105,6 +123,7 @@
          };
 
 
+
         var x = setInterval(function () {
             var times = getTimes();
             var y = updateTimes(times);
@@ -112,13 +131,12 @@
 
 
         </script>
+
         
-
-
 
 </body>
 
-
+   
 
 
 <!--

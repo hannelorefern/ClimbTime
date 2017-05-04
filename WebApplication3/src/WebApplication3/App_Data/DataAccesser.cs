@@ -39,7 +39,7 @@ namespace WebApplication3.App_Data
             {
                 if (reader.Read())
                 {
-                    ret.ID = (int)reader["userID"];
+                    ret.studentID = (string)reader["userID"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
                 }
@@ -64,9 +64,39 @@ namespace WebApplication3.App_Data
             {
                 if (reader.Read())
                 {
-                    ret.ID = (int)reader["userID"];
+                    ret.systemID = (int)reader["userID"];
+                    ret.studentID = (string)reader["SID"];
+                    ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
+
+
+                    if (!DBNull.Value.Equals(reader["shoeSize"]))
+                    { ret.ShoeSize = (string)reader["shoeSize"]; }
+                    else
+                    {
+                        ret.ShoeSize = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["harnessSize"]))
+                    { ret.HarnessSize = (string)reader["harnessSize"]; }
+                    else
+                    {
+                        ret.HarnessSize = "Information not found";
+                    }
+                    if (! DBNull.Value.Equals(reader["phone"]))
+                    { ret.phoneNumber = (string)reader["phone"]; }
+                    else
+                    {
+                        ret.phoneNumber = "Information not found";
+                    }
+                    if (! DBNull.Value.Equals(reader["email"]))
+                    { ret.email = (string)reader["email"]; }
+                    else
+                    {
+                        ret.email = "Information not found";
+                    }
+                    
+
 
                 }
             }
@@ -116,6 +146,44 @@ namespace WebApplication3.App_Data
                 throw new Exception("Exeception creating user. " + ex.Message);
             }
             return ret;
+        }
+
+
+        public List<User> searchForUsers(string firstName, string lastName)
+        {
+            List<User> Users = new List<User>();
+            string commandText = "SELECT * FROM dbo.users WHERE ";
+            if (firstName != "")
+            {
+                commandText += "firstName LIKE @firstName";
+                if (lastName != "") { commandText += " AND ";}
+
+            }
+            if (lastName != "")
+            {
+                commandText += "lastName like @lastName";
+            }
+            cmd = new SqlCommand(commandText, conn);
+            if (firstName != "")
+            { cmd.Parameters.AddWithValue("@firstName", firstName + '%'); }
+            if (lastName != "")
+            { cmd.Parameters.AddWithValue("@lastName", lastName + '%'); }
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    User temp = new User();
+                    temp.firstName = (string)reader["firstName"];
+                    temp.lastName = (string)reader["lastName"];
+                    temp.studentID = (string)reader["SID"];
+                    
+                    Users.Add(temp);
+                }
+            }
+
+
+            return Users;
         }
 
         //visits
@@ -477,6 +545,29 @@ namespace WebApplication3.App_Data
             return retFlag;
         }
 
+        public List<User> getSignedIn()
+        {
+            List<User> ret = new List<User>();
+            cmd = new SqlCommand("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
+            // this SqlCommand will need to be edited so that it only cares about tracked visit types.
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    User temp = new User();
+                    temp.firstName = (string)reader["firstName"];
+                    temp.lastName = (string)reader["lastName"];
+                    temp.studentID = (string)reader["userID"];
+
+                    DateTime tempTime = (DateTime)reader["startDateTime"];
+
+                    temp.time = tempTime.ToString("MMM d, yyyy H:mm:ss");
+                    ret.Add(temp);
+                }
+            }
+            return ret;
+        }
         //equipmentuse
         //add user/equipment pair, remove outdated records, maybe remove the check-in column? do we need it? who knows?
 
@@ -527,6 +618,7 @@ namespace WebApplication3.App_Data
         }
 
         //add, remove
+
     }
 
    
