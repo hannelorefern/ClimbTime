@@ -11,12 +11,16 @@ namespace WebApplication3.App_Data
     public class DataAccesser
     {
         private SqlConnection conn { get; set; }
-        private SqlCommand cmd;
+        private SqlCommandInterface cmd;
 
-        public DataAccesser(string connString)
+        public DataAccesser(string connString, bool testMode)
         {
             conn = new SqlConnection(connString);
             conn.Open();
+            if (testMode)
+                cmd = new TestCommand();
+            else
+                cmd = new SqlCommandWrapper();
         }
 
         ~DataAccesser()
@@ -28,10 +32,10 @@ namespace WebApplication3.App_Data
         public User findUser(string firstName, string lastName)
         {
             User ret = new User();
-            cmd = new SqlCommand("SELECT * FROM dbo.users WHERE firstName = @firstName AND lastName = @lastName", conn);
-            cmd.Parameters.AddWithValue("@firstName", firstName);
-            cmd.Parameters.AddWithValue("@lastName", lastName);
-            using (SqlDataReader reader = cmd.ExecuteReader())
+            cmd.reinitialize("SELECT * FROM dbo.users WHERE firstName = @firstName AND lastName = @lastName", conn);
+            cmd.addParameter("@firstName", firstName);
+            cmd.addParameter("@lastName", lastName);
+            using (SqlDataReader reader = cmd.executeReader())
             {
                 if (reader.Read())
                 {
@@ -42,19 +46,21 @@ namespace WebApplication3.App_Data
             }
             return ret;
         }
+
         public User findUser(string CardSwipe) {
             User ret = new User();
             if (char.IsLetter(CardSwipe.First()))
             {
-                cmd = new SqlCommand("SELECT * FROM dbo.users WHERE @@INSERTCOLNAME@@ = @netID", conn);
-                cmd.Parameters.AddWithValue("@netID", CardSwipe);
+                //TO DO: FIX THIS SHIT.
+                cmd.reinitialize("SELECT * FROM dbo.users WHERE @@INSERTCOLNAME@@ = @netID", conn);
+                cmd.addParameter("@netID", CardSwipe);
             }
             else
             {
-                cmd = new SqlCommand("SELECT * FROM dbo.users WHERE SID = @sid", conn);
-                cmd.Parameters.AddWithValue("@sid", CardSwipe);
+                cmd.reinitialize("SELECT * FROM dbo.users WHERE SID = @sid", conn);
+                cmd.addParameter("@sid", CardSwipe);
             }
-            using (SqlDataReader reader = cmd.ExecuteReader())
+            using (SqlDataReader reader = cmd.executeReader())
             {
                 if (reader.Read())
                 {
@@ -66,7 +72,6 @@ namespace WebApplication3.App_Data
             }
             return ret;
         }
-
 
         public int addUser(string[] args)
         {
@@ -89,23 +94,22 @@ namespace WebApplication3.App_Data
             if (flag) { miles = num; } else { miles = -1; }
             int ret = -1;
 
-            cmd = new SqlCommand("INSERT INTO dbo.users (userType, firstName, lastName, SID, phone, email, shoeSize, harnessSize, mile) " +
+            cmd.reinitialize("INSERT INTO dbo.users (userType, firstName, lastName, SID, phone, email, shoeSize, harnessSize, mile) " +
                 "output INSERTED.ID VALUES(@userType, @firstName, @lastName, @sid, @phoneNumber, @email, @shoeSize, @harnessSize, @miles)", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@userType", utype);
-            cmd.Parameters.AddWithValue("@firstName", firstName);
-            cmd.Parameters.AddWithValue("@lastName", lastName);
-            cmd.Parameters.AddWithValue("@sid", sid);
-            cmd.Parameters.AddWithValue("@phone", phone);
-            cmd.Parameters.AddWithValue("@email", email);
-            cmd.Parameters.AddWithValue("@shoeSize", shoeSize);
-            cmd.Parameters.AddWithValue("@harnessSize", harnessSize);
+            cmd.addParameter("@userType", utype);
+            cmd.addParameter("@firstName", firstName);
+            cmd.addParameter("@lastName", lastName);
+            cmd.addParameter("@sid", sid);
+            cmd.addParameter("@phone", phone);
+            cmd.addParameter("@email", email);
+            cmd.addParameter("@shoeSize", shoeSize);
+            cmd.addParameter("@harnessSize", harnessSize);
             if (miles >= 0)
-                cmd.Parameters.AddWithValue("@miles", miles);
+                cmd.addParameter("@miles", miles);
 
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -119,14 +123,14 @@ namespace WebApplication3.App_Data
         {
             //TO DO: IMPLEMENT SEPARATE VISIT TYPES
             bool retFlag = false;
-            cmd = new SqlCommand("createVisit", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@userID", climber.ID);
-            cmd.Parameters.AddWithValue("@visitType", "test type");
+            cmd.reinitialize("createVisit", conn);
+            cmd.isStoredProcedure();
+            cmd.addParameter("@userID", climber.ID);
+            cmd.addParameter("@visitType", "test type");
 
             try
             {
-                cmd.ExecuteScalar();
+                cmd.executeScalar();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -139,14 +143,14 @@ namespace WebApplication3.App_Data
         public bool finishVisit(string firstName, string lastName)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("finishVisit", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@firstName", firstName);
-            cmd.Parameters.AddWithValue("@lastName",  lastName);
+            cmd.reinitialize("finishVisit", conn);
+            cmd.isStoredProcedure();
+            cmd.addParameter("@firstName", firstName);
+            cmd.addParameter("@lastName",  lastName);
 
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -160,12 +164,12 @@ namespace WebApplication3.App_Data
         public int addCertification(string title, int yearsBeforeExp)
         {
             int ret = -1;
-            cmd = new SqlCommand("INSERT INTO dbo.certifications (title, yearsBeforeExp) output INSERTED.ID VALUES (@title, @years)");
-            cmd.Parameters.AddWithValue("@title", title);
-            cmd.Parameters.AddWithValue("@years", yearsBeforeExp);
+            cmd.reinitialize("INSERT INTO dbo.certifications (title, yearsBeforeExp) output INSERTED.ID VALUES (@title, @years)", conn);
+            cmd.addParameter("@title", title);
+            cmd.addParameter("@years", yearsBeforeExp);
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -177,11 +181,11 @@ namespace WebApplication3.App_Data
         public bool removeCertification(Certification cert)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("DELETE FROM dbo.certifications WHERE certID = @id");
-            cmd.Parameters.AddWithValue("@id", cert.ID);
+            cmd.reinitialize("DELETE FROM dbo.certifications WHERE certID = @id", conn);
+            cmd.addParameter("@id", cert.ID);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -194,8 +198,8 @@ namespace WebApplication3.App_Data
         public List<Certification> getCerts()
         {
             List<Certification> ret = new List<Certification>();
-            cmd = new SqlCommand("SELECT * FROM dbo.certifications", conn);
-            using (SqlDataReader reader = cmd.ExecuteReader())
+            cmd.reinitialize("SELECT * FROM dbo.certifications", conn);
+            using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
                 {
@@ -215,14 +219,14 @@ namespace WebApplication3.App_Data
             //TO DO: FIGURE OUT HOW TO GET ID OF CURRENTLY LOGGED IN USER
             bool retFlag = false;
             DateTime today = DateTime.Today;
-            cmd = new SqlCommand("INSERT INTO dbo.usercertifications (userID, certID, datePosted, postedBy, expDate) VALUES (@uID, @cID, @now, 0, @dateExp", conn);
-            cmd.Parameters.AddWithValue("@uID", student.ID);
-            cmd.Parameters.AddWithValue("@cID", cert.ID);
-            cmd.Parameters.AddWithValue("@now", today);
-            cmd.Parameters.AddWithValue("@dateExp", today.AddYears(cert.yearsBeforeExp));
+            cmd.reinitialize("INSERT INTO dbo.usercertifications (userID, certID, datePosted, postedBy, expDate) VALUES (@uID, @cID, @now, 0, @dateExp", conn);
+            cmd.addParameter("@uID", student.ID);
+            cmd.addParameter("@cID", cert.ID);
+            cmd.addParameter("@now", today);
+            cmd.addParameter("@dateExp", today.AddYears(cert.yearsBeforeExp));
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -236,11 +240,11 @@ namespace WebApplication3.App_Data
         {
             bool retFlag = false;
             //TO DO: FIGURE THIS SHIT OUT
-            cmd = new SqlCommand("DELETE FROM dbo.usercertifications WHERE year(@today) - year(expDate) >= 6", conn);
-            cmd.Parameters.AddWithValue("@today", DateTime.Today);
+            cmd.reinitialize("DELETE FROM dbo.usercertifications WHERE year(@today) - year(expDate) >= 6", conn);
+            cmd.addParameter("@today", DateTime.Today);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -254,14 +258,14 @@ namespace WebApplication3.App_Data
         public int addTerm(string quarter, int year, DateTime startDate, DateTime endDate)
         {
             int ret = -1;
-            cmd = new SqlCommand("INSERT INTO dbo.term (quarter, year, startDate, endDate) output INSERTED.ID VALUES (@q, @y, @s, @e", conn);
-            cmd.Parameters.AddWithValue("@q", quarter);
-            cmd.Parameters.AddWithValue("@y", year);
-            cmd.Parameters.AddWithValue("@s", startDate);
-            cmd.Parameters.AddWithValue("@e", endDate);
+            cmd.reinitialize("INSERT INTO dbo.term (quarter, year, startDate, endDate) output INSERTED.ID VALUES (@q, @y, @s, @e", conn);
+            cmd.addParameter("@q", quarter);
+            cmd.addParameter("@y", year);
+            cmd.addParameter("@s", startDate);
+            cmd.addParameter("@e", endDate);
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -273,11 +277,11 @@ namespace WebApplication3.App_Data
         public bool removeTerm(int termID)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("DELETE FROM dbo.term WHERE termID = @id", conn);
-            cmd.Parameters.AddWithValue("@id", termID);
+            cmd.reinitialize("DELETE FROM dbo.term WHERE termID = @id", conn);
+            cmd.addParameter("@id", termID);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -305,22 +309,22 @@ namespace WebApplication3.App_Data
             if (result) { cert = num; } else { cert = -1; }
             
             int ret = -1;
-            cmd = new SqlCommand("INSERT INTO dbo.course (title, code, daysOfWeek, startTime, endTime, term, checkout, certification) " +
+            cmd.reinitialize("INSERT INTO dbo.course (title, code, daysOfWeek, startTime, endTime, term, checkout, certification) " +
                 "output INSERTED.ID VALUES (@title, @code, @days, @start, @end, @term, @equip, @cert)", conn);
-            cmd.Parameters.AddWithValue("@title", title);
-            cmd.Parameters.AddWithValue("@code", code);
-            cmd.Parameters.AddWithValue("@days", days);
-            cmd.Parameters.AddWithValue("@start", start);
-            cmd.Parameters.AddWithValue("@end", end);
-            cmd.Parameters.AddWithValue("@term", term);
+            cmd.addParameter("@title", title);
+            cmd.addParameter("@code", code);
+            cmd.addParameter("@days", days);
+            cmd.addParameter("@start", start);
+            cmd.addParameter("@end", end);
+            cmd.addParameter("@term", term);
             if(equip >= 0)
-                cmd.Parameters.AddWithValue("@equip", equip);
+                cmd.addParameter("@equip", equip);
             if(cert >= 0)
-                cmd.Parameters.AddWithValue("@cert", cert);
+                cmd.addParameter("@cert", cert);
 
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -332,11 +336,11 @@ namespace WebApplication3.App_Data
         public bool removeCourse(int courseID)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("DELETE FROM dbo.course WHERE courseID = @id", conn);
-            cmd.Parameters.AddWithValue("@id", courseID);
+            cmd.reinitialize("DELETE FROM dbo.course WHERE courseID = @id", conn);
+            cmd.addParameter("@id", courseID);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -350,13 +354,13 @@ namespace WebApplication3.App_Data
         public int enrollUser(User u, Course c)
         {
             int ret = -1;
-            cmd = new SqlCommand("INSERT INTO dbo.enrolled (userID, courseID, dateTimeEnrolled) output INSERTED.ID VALUES (@uid, @cid, @now)", conn);
-            cmd.Parameters.AddWithValue("@uid", u.ID);
-            cmd.Parameters.AddWithValue("@cid", c.ID);
-            cmd.Parameters.AddWithValue("@now", DateTime.Now);
+            cmd.reinitialize("INSERT INTO dbo.enrolled (userID, courseID, dateTimeEnrolled) output INSERTED.ID VALUES (@uid, @cid, @now)", conn);
+            cmd.addParameter("@uid", u.ID);
+            cmd.addParameter("@cid", c.ID);
+            cmd.addParameter("@now", DateTime.Now);
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -368,12 +372,12 @@ namespace WebApplication3.App_Data
         public bool unenrollUser(User u, Course c)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("DELETE FROM dbo.enrolled WHERE userID = @uid AND courseID = @cid", conn);
-            cmd.Parameters.AddWithValue("@uid", u.ID);
-            cmd.Parameters.AddWithValue("@cid", c.ID);
+            cmd.reinitialize("DELETE FROM dbo.enrolled WHERE userID = @uid AND courseID = @cid", conn);
+            cmd.addParameter("@uid", u.ID);
+            cmd.addParameter("@cid", c.ID);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -387,12 +391,12 @@ namespace WebApplication3.App_Data
         public bool addEquipType(string name, string size)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("INSERT INTO dbo.equipment (name, size) VALUES (@name, @size)", conn);
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@size", size);
+            cmd.reinitialize("INSERT INTO dbo.equipment (name, size) VALUES (@name, @size)", conn);
+            cmd.addParameter("@name", name);
+            cmd.addParameter("@size", size);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -406,12 +410,12 @@ namespace WebApplication3.App_Data
         public int addEquip(string name, string size)
         {
             int ret = -1;
-            cmd = new SqlCommand("UPDATE dbo.equipment SET count = count + 1 WHERE name = @name AND size = @size", conn);
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@size", size);
+            cmd.reinitialize("UPDATE dbo.equipment SET count = count + 1 WHERE name = @name AND size = @size", conn);
+            cmd.addParameter("@name", name);
+            cmd.addParameter("@size", size);
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -423,13 +427,13 @@ namespace WebApplication3.App_Data
         public int setEquipCount(string name, string size, int count)
         {
             int ret = -1;
-            cmd = new SqlCommand("UPDATE dbo.equipment SET count = @newCount WHERE name = @name AND size = @size", conn);
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@size", size);
-            cmd.Parameters.AddWithValue("@newCount", count);
+            cmd.reinitialize("UPDATE dbo.equipment SET count = @newCount WHERE name = @name AND size = @size", conn);
+            cmd.addParameter("@name", name);
+            cmd.addParameter("@size", size);
+            cmd.addParameter("@newCount", count);
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -441,12 +445,12 @@ namespace WebApplication3.App_Data
         public int removeEquip(string name, string size)
         {
             int ret = -1;
-            cmd = new SqlCommand("UPDATE dbo.equipment SET count = count - 1 WHERE name = @name AND size = @size", conn);
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@size", size);
+            cmd.reinitialize("UPDATE dbo.equipment SET count = count - 1 WHERE name = @name AND size = @size", conn);
+            cmd.addParameter("@name", name);
+            cmd.addParameter("@size", size);
             try
             {
-                ret = (int)cmd.ExecuteScalar();
+                ret = (int)cmd.executeScalar();
             }
             catch (Exception ex)
             {
@@ -458,12 +462,12 @@ namespace WebApplication3.App_Data
         public bool removeEquipType(string name, string size)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("DELETE FROM dbo.equipment (name, size) WHERE name = @name AND size = @size", conn);
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@size", size);
+            cmd.reinitialize("DELETE FROM dbo.equipment (name, size) WHERE name = @name AND size = @size", conn);
+            cmd.addParameter("@name", name);
+            cmd.addParameter("@size", size);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -482,13 +486,13 @@ namespace WebApplication3.App_Data
             
             System.Diagnostics.Debug.WriteLine("you are inside addVisitType");
             
-            cmd = new SqlCommand("INSERT INTO dbo.visittype (title, certID, courseID) VALUES(@title, @certID, @courseID)", conn);
-            cmd.Parameters.AddWithValue("@title", visitTypeName);
-            cmd.Parameters.AddWithValue("@certID", certID);
-            cmd.Parameters.AddWithValue("@courseID", courseID);
+            cmd.reinitialize("INSERT INTO dbo.visittype (title, certID, courseID) VALUES(@title, @certID, @courseID)", conn);
+            cmd.addParameter("@title", visitTypeName);
+            cmd.addParameter("@certID", certID);
+            cmd.addParameter("@courseID", courseID);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -500,14 +504,15 @@ namespace WebApplication3.App_Data
 
             return retFlag;
         }
+
         public bool removeVisitType(string titleToRemove)
         {
             bool retFlag = false;
-            cmd = new SqlCommand("DELETE FROM dbo.visittype WHERE title = @title", conn);
-            cmd.Parameters.AddWithValue("@title", titleToRemove);
+            cmd.reinitialize("DELETE FROM dbo.visittype WHERE title = @title", conn);
+            cmd.addParameter("@title", titleToRemove);
             try
             {
-                cmd.ExecuteNonQuery();
+                cmd.execute();
                 retFlag = true;
             }
             catch (Exception ex)
@@ -520,6 +525,7 @@ namespace WebApplication3.App_Data
 
             return retFlag;
         }
+
         //add, remove
     }
 
