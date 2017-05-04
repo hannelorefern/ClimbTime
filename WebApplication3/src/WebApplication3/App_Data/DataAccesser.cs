@@ -39,7 +39,8 @@ namespace WebApplication3.App_Data
             {
                 if (reader.Read())
                 {
-                    ret.studentID = (string)reader["userID"];
+                    ret.systemID = (int)reader["userID"];
+                    ret.studentID = (string)reader["SID"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
                 }
@@ -163,13 +164,13 @@ namespace WebApplication3.App_Data
             {
                 commandText += "lastName like @lastName";
             }
-            cmd = new SqlCommand(commandText, conn);
+            cmd.reinitialize(commandText, conn);
             if (firstName != "")
-            { cmd.Parameters.AddWithValue("@firstName", firstName + '%'); }
+            { cmd.addParameter("@firstName", firstName + '%'); }
             if (lastName != "")
-            { cmd.Parameters.AddWithValue("@lastName", lastName + '%'); }
+            { cmd.addParameter("@lastName", lastName + '%'); }
 
-            using (SqlDataReader reader = cmd.ExecuteReader())
+            using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
                 {
@@ -193,7 +194,7 @@ namespace WebApplication3.App_Data
             bool retFlag = false;
             cmd.reinitialize("createVisit", conn);
             cmd.isStoredProcedure();
-            cmd.addParameter("@userID", climber.ID);
+            cmd.addParameter("@userID", climber.systemID);
             cmd.addParameter("@visitType", "test type");
 
             try
@@ -288,7 +289,7 @@ namespace WebApplication3.App_Data
             bool retFlag = false;
             DateTime today = DateTime.Today;
             cmd.reinitialize("INSERT INTO dbo.usercertifications (userID, certID, datePosted, postedBy, expDate) VALUES (@uID, @cID, @now, 0, @dateExp", conn);
-            cmd.addParameter("@uID", student.ID);
+            cmd.addParameter("@uID", student.systemID);
             cmd.addParameter("@cID", cert.ID);
             cmd.addParameter("@now", today);
             cmd.addParameter("@dateExp", today.AddYears(cert.yearsBeforeExp));
@@ -423,7 +424,7 @@ namespace WebApplication3.App_Data
         {
             int ret = -1;
             cmd.reinitialize("INSERT INTO dbo.enrolled (userID, courseID, dateTimeEnrolled) output INSERTED.ID VALUES (@uid, @cid, @now)", conn);
-            cmd.addParameter("@uid", u.ID);
+            cmd.addParameter("@uid", u.systemID);
             cmd.addParameter("@cid", c.ID);
             cmd.addParameter("@now", DateTime.Now);
             try
@@ -441,7 +442,7 @@ namespace WebApplication3.App_Data
         {
             bool retFlag = false;
             cmd.reinitialize("DELETE FROM dbo.enrolled WHERE userID = @uid AND courseID = @cid", conn);
-            cmd.addParameter("@uid", u.ID);
+            cmd.addParameter("@uid", u.systemID);
             cmd.addParameter("@cid", c.ID);
             try
             {
@@ -548,10 +549,10 @@ namespace WebApplication3.App_Data
         public List<User> getSignedIn()
         {
             List<User> ret = new List<User>();
-            cmd = new SqlCommand("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
+            cmd.reinitialize("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
             // this SqlCommand will need to be edited so that it only cares about tracked visit types.
 
-            using (SqlDataReader reader = cmd.ExecuteReader())
+            using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
                 {
@@ -619,33 +620,89 @@ namespace WebApplication3.App_Data
 
         public void updateName(string firstName, string lastName, int userID)
         {
-
+            cmd.reinitialize("UPDATE dbo.users SET firstName = @firstName, lastName = @lastName WHERE userID = @userID", conn);
+            cmd.addParameter("@firstName", firstName);
+            cmd.addParameter("@lastName", lastName);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch(Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
         }
 
         public void updateStudentID(string studentID, int userID)
         {
-
+            cmd.reinitialize("UPDATE dbo.users SET SID = @studentID WHERE userID = @userID", conn);
+            cmd.addParameter("@studentID", studentID);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
         }
         public void updateShoeSize(string shoeSize, int userID)
         {
-
+            cmd.reinitialize("UPDATE dbo.users SET shoeSize = @shoeSize WHERE userID = @userID", conn);
+            cmd.addParameter("@shoeSize",shoeSize);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
         }
         public void updateHarnessSize(string harnessSize, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET harnessSize = @harnessSize WHERE userID = @userID", conn);
+            cmd.addParameter("@harnessSize", harnessSize);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
         public void updatePhone(string phoneNum, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET phone = @phoneNum WHERE userID = @userID", conn);
+            cmd.addParameter("@phoneNum",phoneNum);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
         public void updateEmail(string email, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET email = @email WHERE userID = @userID", conn);
+            cmd.addParameter("@email",email);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
         public void updateUserType(string userType, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET userType = @userType WHERE userID = @userID", conn);
+            cmd.addParameter("@userType",userType);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
+
+
 
 
         //add, remove
