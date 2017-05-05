@@ -181,32 +181,33 @@ namespace WebApplication3.Controllers
             }
             if (SIDField != null)
             {
-                //db.updateSID
+                db.updateStudentID(SIDField, systemID);
             }
             if (ShoeField != null)
             {
-                //db.updateShoeSize
+                db.updateShoeSize(ShoeField, systemID);
+           
             }
             if(HarnessField!= null)
             {
-                //db.updateHarnessSize
+                db.updateHarnessSize(HarnessField, systemID);
             }
             if(PhoneField!=null)
             {
-                //db.updatePhoneNumber
+                db.updatePhone(PhoneField, systemID);
             }
             if(EmailField!=null)
             {
-                //db.updateEmail
+                db.updateEmail(EmailField, systemID);
             }
             if(UserTypeField!=null)
             {
-                //db.updateUserType
+                db.updateUserType(UserTypeField, systemID);
             }
 
-                //new User(SIDField, ShoeField, HarnessField, PhoneField, EmailField, UserTypeField, names[names.Length-1], names[0], " ", systemID);
+            User toDisplay = db.findUser(SIDField);
             Debug.WriteLine(NameField + " " + SystemIDField);
-            return View("Users");
+            return View("Users",toDisplay);
         }
 
         public void CheckoutShoes() {
