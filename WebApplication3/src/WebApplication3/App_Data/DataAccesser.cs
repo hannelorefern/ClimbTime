@@ -157,9 +157,16 @@ namespace WebApplication3.App_Data
             if (firstName != "")
             {
                 commandText += "firstName LIKE @firstName";
-                if (lastName != "") { commandText += " AND ";}
-
             }
+
+            if (lastName.Equals(firstName)) {
+                commandText += " OR ";
+            }
+            else
+            {
+                commandText += " AND ";
+            }
+
             if (lastName != "")
             {
                 commandText += "lastName like @lastName";

@@ -91,11 +91,15 @@ namespace WebApplication3.Controllers
 
         public async Task<ActionResult> GetMatchesForSignIn(string searchTerm)
         {
-            
-            string[] names = searchTerm.Split(' ');
+            string[] names = new string[] { "" };
+            if (searchTerm != null)
+            {
+                names = searchTerm.Split(' ');
+            }
+           
             if (names.Length == 1)
             {
-                names = new string[]{names[0], ""};
+                names = new string[]{names[0], names[0]};
             }
             List<User> searchResults = db.searchForUsers(names[0], names[1]);
 
@@ -106,10 +110,12 @@ namespace WebApplication3.Controllers
         {
             string[] names = new string[] { "" };
             if (searchTerm != null)
-            { names = searchTerm.Split(' '); }
+            {
+                names = searchTerm.Split(' ');
+            }
             if (names.Length <= 1)
             {
-                names = new string[] { names[0], "" };
+                names = new string[] { names[0], names[0] };
             }
             List<User> searchResults = db.searchForUsers(names[0], names[1]);
 
@@ -204,10 +210,9 @@ namespace WebApplication3.Controllers
             {
                 db.updateUserType(UserTypeField, systemID);
             }
-
-            User toDisplay = db.findUser(SIDField);
+            
             Debug.WriteLine(NameField + " " + SystemIDField);
-            return View("Users",toDisplay);
+            return View("Users");
         }
 
         public void CheckoutShoes() {
