@@ -3,17 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+using System.Data;
+using System.Diagnostics;
+using WebApplication3.App_Data;
+using WebApplication3.Models;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace WebApplication3.Controllers
+
 {
-    public class HomeController1 : Controller
+
+    public partial class Signature : Controller
+
     {
-        // GET: /<controller>/
-        public IActionResult Index()
+
+        protected void Page_Load(object sender, EventArgs e)
+
         {
-            return View();
+
+
+
         }
+
+
+
+        protected void Button1_Click(object sender, EventArgs e)
+
+        {
+
+            //save the imageurl of the signature to a hiddenfield,
+
+            // save this string to database
+
+
+
+        }
+
     }
+
 }
