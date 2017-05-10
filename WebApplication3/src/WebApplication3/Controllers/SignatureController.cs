@@ -23,8 +23,6 @@ namespace WebApplication3.Controllers
 
         {
 
-
-
         }
 
 
@@ -36,8 +34,6 @@ namespace WebApplication3.Controllers
             //save the imageurl of the signature to a hiddenfield,
 
             // save this string to database
-
-
 
         }
 

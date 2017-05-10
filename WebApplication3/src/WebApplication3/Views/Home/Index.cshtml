@@ -1,70 +1,91 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-<head>
-
-</head>
-    <script type="text/javascript">
-    //
-    // Disable workers to avoid yet another cross-origin issue (workers need the URL of
-    // the script to be loaded, and dynamically loading a cross-origin script does
-    // not work)
-    //
-    PDFJS.disableWorker = true;
-    //
-        // Asynchronous download PDF as an ArrayBuffer
+﻿
+<!DOCTYPE HTML>
+<!-- saved from url=(0038)http://szimek.github.io/signature_pad/ -->
+<HEAD>
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
 
 
-    // This needs to get from the server instead of the element 
-    var pdf = document.getElementById('pdf');
-    pdf.onchange = function(ev) {
-      if (file = document.getElementById('pdf').files[0]) { //This defines an actual file object
-        fileReader = new FileReader();
-        fileReader.onload = function(ev) {
-          console.log(ev);
-          PDFJS.getDocument(fileReader.result).then(function getPdfHelloWorld(pdf) {
-            //
-            // Fetch the first page
-            //
-            console.log(pdf)
-            pdf.getPage(1).then(function getPageHelloWorld(page) {
-              var scale = 1.5;
-              var viewport = page.getViewport(scale);
-              //
-              // Prepare canvas using PDF page dimensions
-              //
-              var canvas = document.getElementById('the-canvas');
-              var context = canvas.getContext('2d');
-              canvas.height = viewport.height;
-              canvas.width = viewport.width;
-              //
-              // Render PDF page into canvas context
-              //
-              var task = page.render({canvasContext: context, viewport: viewport})
-              task.promise.then(function(){
-                console.log(canvas.toDataURL('image/jpeg'));
-              });
-            });
-          }, function(error){
-            console.log(error);
-          });
-        };
-        fileReader.readAsArrayBuffer(file);
-      }
-    }
-    </script>
-    <body onload="init()">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <canvas id="can" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
-                <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
-            </div>
-        </div>
-        <input type="button" value="save" id="btn" size="30" onclick="save()" style="position:absolute;top:55%;left:10%;">
-        <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:55%;left:15%;">
-        <input type="file" />
 
-    </body>
+    <META charset="utf-8">
+    <TITLE>Signature Pad demo</TITLE>
+
+    <META name="description" content="Signature Pad - HTML5 canvas based smooth signature drawing using variable width spline interpolation.">
+
+
+
+    <META name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+
+
+    <META name="apple-mobile-web-app-capable" content="yes">
+
+    <META name="apple-mobile-web-app-status-bar-style" content="black">
+    <LINK href="css/signature-pad.css" rel="stylesheet">
+
+    <script src="Scripts/jquery-1.8.2.min.js"></script>
+
+    <SCRIPT type="text/javascript">
+
+    var _gaq = _gaq || [];
+
+    _gaq.push(['_setAccount', 'UA-39365077-1']);
+
+    _gaq.push(['_trackPageview']);
+
+
+
+    (function () {
+
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+    })();
+
+    </SCRIPT>
+
+
+
+    <META name="GENERATOR" content="MSHTML 11.00.10240.16445">
+</HEAD>
+<form id="form1" runat="server">
+
+    <BODY onselectstart="return false">
+        <A id="github" href="https://github.com/szimek/signature_pad">
+            <IMG style="border: 0px currentColor; border-image: none; top: 0px; right: 0px; position: absolute;"
+                 alt="Fork me on GitHub" src="css/forkme_right_gray_6d6d6d.png">
+
+        </A>
+
+        <DIV class="m-signature-pad" id="signature-pad">
+
+            <DIV class="m-signature-pad--body"><CANVAS></CANVAS>     </DIV>
+
+            <DIV class="m-signature-pad--footer">
+
+
+
+                <DIV class="description">Sign above</DIV>
+
+                <BUTTON class="button clear" data-action="clear">Clear</BUTTON>
+
+                <asp:Button ID="Button1" runat="server" Text="Button" CssClass="button save" data-action="save" OnClick="Button1_Click" />
+
+            </DIV>
+
+        </DIV>
+
+        <asp:HiddenField ID="ImgInformation" runat="server" />
+
+        <SCRIPT src="js/signature_pad.js"></SCRIPT>
+
+
+
+        <SCRIPT src="js/app.js"></SCRIPT>
+
+    </BODY>
+
+</form>
