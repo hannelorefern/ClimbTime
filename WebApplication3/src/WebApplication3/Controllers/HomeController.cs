@@ -180,6 +180,8 @@ namespace WebApplication3.Controllers
 
         public IActionResult MoveGroupToVideo()
         {
+            //TO DO: assign a default user type to new users
+
             string temp = this.Request.Form["nameField"];
             string[] names = temp.Split(',');
             temp = this.Request.Form["phoneField"];
@@ -198,6 +200,8 @@ namespace WebApplication3.Controllers
                 toAdd.phoneNumber = phones[i];
                 toAdd.email = addresses[i];
                 toAdd.studentID = cardswipes[i];
+                //toAdd.userType = **default VALUE**
+
 
                 users.Add(toAdd);
 

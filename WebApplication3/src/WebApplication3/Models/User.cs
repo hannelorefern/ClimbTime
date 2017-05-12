@@ -56,6 +56,23 @@ namespace WebApplication3
             return String.Format("{0}, {1}", this.lastName, this.firstName);
         }
 
+        public string[] convertToStringArray()
+        {
+            string[] result = new string[8];
+            result[0] = this.userType;
+            result[1] = this.firstName;
+            result[2] = this.lastName;
+            result[3] = this.studentID;
+            result[4] = this.phoneNumber;
+            result[5] = this.email;
+            result[6] = this.ShoeSize;
+            result[7] = this.HarnessSize;
+            
+
+                return result;
+        }
+
+
         public int CompareTo(object obj)
         {
             int ret = 0;
