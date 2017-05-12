@@ -147,7 +147,6 @@
 
 <script>
     function updateSearchResults() {
-
         var url = '@Url.Action("GetMatchesForUserPage")';
         url += '?searchTerm=' + Text2.value;
         var partial = $("#partial");
@@ -194,17 +193,7 @@
         
 
     }
-    function saveFields() {
-        toggleEditable();
-        var field = $("#SIDField");
-        field.prop('readonly', true);
-        field = $("#NameFieldText");
-        field.prop('readonly', true);
-
-        @* TO DO: Save Changed Fields*@
-
-        
-    }
+   
 
 </script>
 

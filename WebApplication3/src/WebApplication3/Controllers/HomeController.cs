@@ -124,7 +124,7 @@ namespace WebApplication3.Controllers
         }
 
         
-        //start of method stubs
+       
 
         public IActionResult SignInClimber(string CardSwipe) {
 
@@ -156,22 +156,57 @@ namespace WebApplication3.Controllers
             //This corresponds to item Homepage-3
 
             //this method just passes to batch add user with a count of 1;
-            return BatchAddUser(1);
+            return BatchAddUser("1");
         }
 
-        public IActionResult BatchAddUser(int count) {
+        public IActionResult BatchAddUser(string batchAddField) {
             //this corresponds to item Homepage-4
-
-            //this method should take us to the add users page, configured for the desired count of users
-
-            List<User> group = new List<User>();
-            for (int i = 0; i<count; i++)
+            if (batchAddField != null)
             {
-                group[i] = new WebApplication3.User();
+                int count = int.Parse(batchAddField);
+                //this method should take us to the add users page, configured for the desired count of users
+
+                List<User> group = new List<User>();
+                for (int i = 0; i < count; i++)
+                {
+                    group.Add(new WebApplication3.User());
+                }
+
+                return View("AddUserStep1", group);
+            }
+            else
+            { return View("Index", signedInUsers); }
+        }
+
+        public IActionResult MoveGroupToVideo()
+        {
+            string temp = this.Request.Form["nameField"];
+            string[] names = temp.Split(',');
+            temp = this.Request.Form["phoneField"];
+            string[] phones = temp.Split(',');
+            temp = this.Request.Form["addressField"];
+            string[] addresses = temp.Split(',');
+            temp = this.Request.Form["cardswipeField"];
+            string[] cardswipes = temp.Split(',');
+            List<User> users = new List<User>();
+            for(int i = 0; i < names.Length; i++)
+            {
+                string[] firstLast = names[i].Split(' ');
+                User toAdd = new WebApplication3.User();
+                toAdd.firstName = firstLast[0];
+                toAdd.lastName = firstLast[firstLast.Length - 1];
+                toAdd.phoneNumber = phones[i];
+                toAdd.email = addresses[i];
+                toAdd.studentID = cardswipes[i];
+
+                users.Add(toAdd);
+
             }
 
-            return View("AddUserStep1", group);
+
+            return View("EmbeddedVideo",users);
         }
+
 
         public IActionResult SaveData(string NameField, string SystemIDField,
                                       string SIDField, string ShoeField,

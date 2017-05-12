@@ -3,8 +3,10 @@
 *@
 @{
 }
+@model IEnumerable<User>
 
-<body>
+
+<body id="body">
     @*
         First Panel
     *@
@@ -16,7 +18,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="AddName"><strong>Name:</strong></label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="first last">
+                            <input type="text" class="form-control" placeholder="first last" id="nameField">
                         </div>
                     </div>
                 </div>
@@ -24,55 +26,82 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="AddPhone"><strong>Phone:</strong></label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="***-***-****">
+                            <input type="text" class="form-control" placeholder="***-***-****" id="phoneField">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group">
-                        <label class="col-md-2 control-label" for="AddAddress"><strong>Address:</strong></label>
+                        <label class="col-md-2 control-label" for="AddAddress"><strong>Email Address:</strong></label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="123 n st cheney wa 99004">
+                            <input type="text" class="form-control" placeholder="name@place.co" id="addressField">
                         </div>
                     </div>
                 </div>
-                </form>
-                <div class="panel panel-default col-md-5 col-md-offset-2" id="cardSwipeBox">
-                    <div class="panel-heading">Initial Card Swipe</div>
-                    <div class="panel-body">
-                        <form>
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Card Swipe" id="Text1">
-                            </div>
-                        </form>
-                    </div>
+
+            <div class="panel panel-default col-md-5 col-md-offset-2" id="cardSwipeBox">
+                <div class="panel-heading">Initial Card Swipe</div>
+                <div class="panel-body">
+                    
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Card Swipe" id="cardSwipeField">
+                        </div>
+                    
                 </div>
-            <form>
-                <button class="btn btn-primary">Next</button>
+            </div>
+                <button type="button" class="btn btn-primary" onclick="nextButton()">Next</button>
             </form>
         </div>
 
+    </div>
         @*
             Second panel
         *@
-        <div class="panel panel-default col-md-5 col-md-offset-2" id="cardSwipeBox">
-            <div class="panel-heading">Initial Card Swipe</div>
-            <div class="panel-body">
-                <form>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Card Swipe" id="Text1">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+        
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
         <div class="panel-body">
-            <form asp-controller="BatchAddClimbers" asp-action="x">
+            <form asp-controller="Home" asp-action="MoveGroupToVideo" id="progressForm">
                 <div id="scrollview" style="overflow:scroll;height:400px">
                     @*Code for users who have signed up in batch group*@
+                    <div></div>
                 </div>
             </form>
         </div>
     </div>
 </body>
+<script>
+    var iter = 0;
+    @{ List < User > outputList = new List<User>();}
+    function nextButton() {
+        var name = this.document.getElementById("nameField");
+        var phone = this.document.getElementById("phoneField");
+        var address = this.document.getElementById("addressField");
+        var cardSwipe = this.document.getElementById("cardSwipeField");
+        if (name.value!="" || cardSwipe.value!=""){
+            var count = @Model.Count();
+            var scrollView = this.document.getElementById("scrollview");
+            scrollView.innerHTML+="<div>"+name.value+"</div>"+
+                "<input type=\"text\" name=\"nameField\" value="+name.value+" hidden />"+
+                "<input type=\"text\" name=\"phoneField\" value="+phone.value+" hidden />"+
+                "<input type=\"text\" name=\"addressField\" value="+address.value+" hidden />"+
+                "<input type=\"text\" name=\"cardSwipeField\" value="+cardSwipe.value+" hidden />";
+
+            name.value="";
+            phone.value="";
+            address.value="";
+            cardSwipe.value="";
+            
+            
+            iter = iter+1;
+            if(iter>= count){
+
+                this.document.getElementById("progressForm").submit();
+
+
+            }
+        }
+
+    }
+
+
+</script>

@@ -45,12 +45,13 @@
                 <form asp-controller="Home" asp-action="AddUser">
                     <div class="form-group">
 
-                        <button type="button" class="btn btn-primary btn-lg center-block vert-offset-top-20" id="addClimber" title="Add Climber">Add Climber</button>
+                        <button type="submit" class="btn btn-primary btn-lg center-block vert-offset-top-20" id="addClimber" title="Add Climber">Add Climber</button>
                     </div>
                 </form>
-                <form asp-controller="Home" asp-action="BatchAddUser">
+                <form asp-controller="Home" asp-action="BatchAddUser" id="batchAddForm">
                     <div class="form-group">
-                        <button type="button" class="btn btn-primary btn-lg center-block vert-offset-top-20 vert-offset-bottom-20">Batch Add Climber</button>
+                        <button type="button" class="btn btn-primary btn-lg center-block vert-offset-top-20 vert-offset-bottom-20" id="batchAdd" onclick="getCount()">Batch Add Climber</button>
+                        <input type="text" id="batchAddField" name="batchAddField" style="display:none" />
                     </div>
                 </form>
             </div>
@@ -122,7 +123,12 @@
 
          };
 
+        function getCount() {
+            var x = prompt("How many users are in this batch?", "0");
+            this.document.getElementById("batchAddField").value = x;
+            this.document.getElementById("batchAddForm").submit();
 
+        }
 
         var x = setInterval(function () {
             var times = getTimes();
