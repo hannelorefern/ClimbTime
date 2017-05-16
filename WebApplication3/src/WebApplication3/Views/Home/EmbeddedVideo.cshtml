@@ -6,9 +6,40 @@
 }
 <body>
     <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="This is where the video link goes"></iframe>
+        <iframe class="embed-responsive-item" src="This is where the video link goes" >  </iframe>
     </div>
-    <form>
-        <button class="btn btn-primary">Next</button>
-    </form>
+    <div id="fieldStorage">
+        
+        <button type="button" class="btn btn-primary" onclick="passToNextPage()" >Next</button>
+        <form asp-controller="Home" asp-action="TestMethod" id="progress-form">
+            @{ foreach (User user in Model)
+                {
+                    <div>
+
+                        <input type="text" name="firstNameField" value="@user.firstName" hidden />
+                        <input type="text" name="lastNameField" value="@user.lastName" hidden />
+                        <input type="text" name="phoneField" value="@user.phoneNumber" hidden />
+                        <input type="text" name="addressField" value="@user.email" hidden />
+                        <input type="text" name="cardSwipeField" value="@user.studentID" hidden />
+
+                    </div>
+                }
+            }
+        </form>
+    </div>
 </body>
+
+<script>
+    
+    function passToNextPage() {
+    
+        var videoFinished = true;
+        if (videoFinished) {
+            this.document.getElementById("progress-form").submit();
+
+        }
+        
+
+    }
+
+</script>
