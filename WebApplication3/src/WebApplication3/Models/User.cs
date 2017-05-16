@@ -17,6 +17,7 @@ namespace WebApplication3
         public string lastName { get; set; }
         public string firstName { get; set; }
         public string time { get; set; }
+        public string netID { get; set; }
 
 
         public User()
@@ -29,6 +30,7 @@ namespace WebApplication3
 
         public User(string ID, string lastName, string firstName, string time) {
             this.studentID = ID;
+            
             this.lastName = lastName;
             this.firstName = firstName;
             this.time = time; 
@@ -63,10 +65,11 @@ namespace WebApplication3
             result[1] = this.firstName;
             result[2] = this.lastName;
             result[3] = this.studentID;
-            result[4] = this.phoneNumber;
-            result[5] = this.email;
-            result[6] = this.ShoeSize;
-            result[7] = this.HarnessSize;
+            result[4] = this.netID;
+            result[5] = this.phoneNumber;
+            result[6] = this.email;
+            result[7] = this.ShoeSize;
+            result[8] = this.HarnessSize;
             
 
                 return result;

@@ -210,7 +210,7 @@
 --resource:"C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\obj\Debug\netcoreapp1.0\WebApplication3dotnet-compile.deps.json",WebApplication3.deps.json
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Program.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Startup.cs
-C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\App_Data\DataAccesser.cs
+C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\App_Data\DataAccessor.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\App_Data\SqlCommandInterface.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\App_Data\SqlCommandWrapper.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\App_Data\TestCommand.cs
@@ -219,5 +219,6 @@ C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Cont
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Controllers\SignatureController.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Controllers\TestController.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Models\Certification.cs
+C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Models\Contact.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Models\Course.cs
 C:\Users\Gil\Documents\GitHub\ClimbTime\WebApplication3\src\WebApplication3\Models\User.cs

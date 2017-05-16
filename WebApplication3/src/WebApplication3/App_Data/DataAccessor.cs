@@ -263,7 +263,8 @@ namespace WebApplication3.App_Data
                     User temp = new User();
                     temp.firstName = (string)reader["firstName"];
                     temp.lastName = (string)reader["lastName"];
-                    temp.studentID = (string)reader["userID"];
+                    temp.studentID = (string)reader["SID"];
+                    temp.systemID = (int)reader["userID"];
 
                     DateTime tempTime = (DateTime)reader["startDateTime"];
 
