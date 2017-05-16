@@ -14,14 +14,14 @@ namespace WebApplication3.Controllers
     public class HomeController : Controller
     {
         static List<User> signedInUsers = new List<User>();
-        static int countForTesting = 1;
         // SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
-        DataAccesser db = new DataAccesser("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
+        DataAccessor db = new DataAccessor("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
 
         public IActionResult Index()
         {
 
             signedInUsers = db.getSignedIn();
+            signedInUsers.Sort();
             
 
             return View(signedInUsers);
@@ -43,8 +43,6 @@ namespace WebApplication3.Controllers
 
         public IActionResult Users()
         {
-            ViewData["Message"] = "Page for Users";
-
             return View();
         }
 
@@ -56,7 +54,7 @@ namespace WebApplication3.Controllers
         }
         public IActionResult AddClimber(string lastNameToSearch, string firstNameToSearch)
         {
-            User toAdd = db.findUser(firstNameToSearch, lastNameToSearch);
+            User toAdd = db.getUser(firstNameToSearch, lastNameToSearch);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
             db.addVisit(toAdd);
 
@@ -74,14 +72,12 @@ namespace WebApplication3.Controllers
             else { 
             string[] toRemoveIndex = temp.Split(','); 
             for (int i = toRemoveIndex.Length - 1; i>=0; i--)
-            {
+                {
                 int index = Int16.Parse(toRemoveIndex[i]);
-                string firstNameToRemove = signedInUsers[index].firstName;
-                string lastNameToRemove = signedInUsers[index].lastName;
-                db.finishVisit(firstNameToRemove, lastNameToRemove);
+                db.finishVisit(signedInUsers[index]);
                 signedInUsers.Remove(signedInUsers[index]);
-
-            }
+    
+                }
 
             }
 
@@ -90,27 +86,63 @@ namespace WebApplication3.Controllers
             return View("Index", signedInUsers);
         }
 
-        public IActionResult getCheckoutPage() {
-            return View("SignInDetails");
+
+        public async Task<ActionResult> GetMatchesForSignIn(string searchTerm)
+        {
+            
+            string[] names = searchTerm.Split(' ');
+            if (names.Length == 1)
+            {
+                names = new string[]{names[0], ""};
+            }
+            List<User> searchResults = db.searchForUsers(names[0], names[1]);
+
+            return PartialView("SearchResults", searchResults);
         }
+
+        public async Task<ActionResult> GetMatchesForUserPage(string searchTerm)
+        {
+            string[] names = new string[] { "" };
+            if (searchTerm != null)
+            { names = searchTerm.Split(' '); }
+            if (names.Length <= 1)
+            {
+                names = new string[] { names[0], "" };
+            }
+            List<User> searchResults = db.searchForUsers(names[0], names[1]);
+
+            return PartialView("UserSearchResults", searchResults);
+
+        }
+
+        
         //start of method stubs
 
-        public IActionResult SignInClimber() {
-            //This corresponds to item Homepage-1
-            // this method should take the card swipe and direct to the sign in page for the appropriate user
+        public IActionResult SignInClimber(string CardSwipe) {
 
+            //To Do: re route this method to the sign in details page, instead of the temp sign in action
+            if (CardSwipe == null) {
+                return View("Index", signedInUsers);
+            }
+            System.Diagnostics.Debug.WriteLine("*************" + CardSwipe.First());
             User toSignIn;
+            if (CardSwipe != null)
+            {
+                toSignIn = db.getUser(CardSwipe);
 
-            //return View("SignInDetails", toSignIn);
+                //return View("SignInDetails", toSignIn);
+                return AddClimber(toSignIn.lastName, toSignIn.firstName);
+            }
         
-            return null;
+            return View("Index", signedInUsers);
         }
 
-        public void UserSearch()
-        {   //This corresponds to item Homepage-2
+        public IActionResult ShowUserDetails(string IDToShow) {
+            User toShow = db.getUser(IDToShow);
 
-            // this method is for implementing the search by name
+            return View("Users", toShow);
         }
+
 
         public IActionResult AddUser() {
             //This corresponds to item Homepage-3
@@ -123,12 +155,56 @@ namespace WebApplication3.Controllers
             //this corresponds to item Homepage-4
 
             //this method should take us to the add users page, configured for the desired count of users
-            //uncertain, but I think a good way to do this would be to pass the model as a collection of null Students, and
-            //then fill them in from there
 
-            
+            List<User> group = new List<User>();
+            for (int i = 0; i<count; i++)
+            {
+                group[i] = new WebApplication3.User();
+            }
 
-            return null;
+            return View("AddUserStep1", group);
+        }
+
+        public IActionResult SaveData(string NameField, string SystemIDField,
+                                      string SIDField, string ShoeField,
+                                      string HarnessField, string PhoneField,
+                                      string EmailField, string UserTypeField)
+        {
+            int systemID = Convert.ToInt32(SystemIDField);
+            if (NameField != null)
+            {
+                string[] names = NameField.Split(' ');
+                db.updateName(names[0], names[names.Length - 1], systemID);
+                //db.updateName
+            }
+            if (SIDField != null)
+            {
+                //db.updateSID
+            }
+            if (ShoeField != null)
+            {
+                //db.updateShoeSize
+            }
+            if(HarnessField!= null)
+            {
+                //db.updateHarnessSize
+            }
+            if(PhoneField!=null)
+            {
+                //db.updatePhoneNumber
+            }
+            if(EmailField!=null)
+            {
+                //db.updateEmail
+            }
+            if(UserTypeField!=null)
+            {
+                //db.updateUserType
+            }
+
+                //new User(SIDField, ShoeField, HarnessField, PhoneField, EmailField, UserTypeField, names[names.Length-1], names[0], " ", systemID);
+            Debug.WriteLine(NameField + " " + SystemIDField);
+            return View("Users");
         }
 
         public void CheckoutShoes() {
