@@ -170,9 +170,11 @@ namespace WebApplication3.Controllers
                                       string HarnessField, string PhoneField,
                                       string EmailField, string UserTypeField)
         {
-            int systemID = Convert.ToInt32(SIDField);
+            int systemID = Convert.ToInt32(SystemIDField);
             if (NameField != null)
             {
+                string[] names = NameField.Split(' ');
+                db.updateName(names[0], names[names.Length - 1], systemID);
                 //db.updateName
             }
             if (SIDField != null)
