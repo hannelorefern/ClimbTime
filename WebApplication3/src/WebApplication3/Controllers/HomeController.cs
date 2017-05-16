@@ -15,7 +15,7 @@ namespace WebApplication3.Controllers
     {
         static List<User> signedInUsers = new List<User>();
         // SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
-        DataAccesser db = new DataAccesser("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
+        DataAccessor db = new DataAccessor("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
 
         public IActionResult Index()
         {
@@ -54,7 +54,7 @@ namespace WebApplication3.Controllers
         }
         public IActionResult AddClimber(string lastNameToSearch, string firstNameToSearch)
         {
-            User toAdd = db.findUser(firstNameToSearch, lastNameToSearch);
+            User toAdd = db.getUser(firstNameToSearch, lastNameToSearch);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
             db.addVisit(toAdd);
 
@@ -74,9 +74,7 @@ namespace WebApplication3.Controllers
             for (int i = toRemoveIndex.Length - 1; i>=0; i--)
                 {
                 int index = Int16.Parse(toRemoveIndex[i]);
-                string firstNameToRemove = signedInUsers[index].firstName;
-                string lastNameToRemove = signedInUsers[index].lastName;
-                db.finishVisit(firstNameToRemove, lastNameToRemove);
+                db.finishVisit(signedInUsers[index]);
                 signedInUsers.Remove(signedInUsers[index]);
     
                 }
@@ -130,7 +128,7 @@ namespace WebApplication3.Controllers
             User toSignIn;
             if (CardSwipe != null)
             {
-                toSignIn = db.findUser(CardSwipe);
+                toSignIn = db.getUser(CardSwipe);
 
                 //return View("SignInDetails", toSignIn);
                 return AddClimber(toSignIn.lastName, toSignIn.firstName);
@@ -140,7 +138,7 @@ namespace WebApplication3.Controllers
         }
 
         public IActionResult ShowUserDetails(string IDToShow) {
-            User toShow = db.findUser(IDToShow);
+            User toShow = db.getUser(IDToShow);
 
             return View("Users", toShow);
         }

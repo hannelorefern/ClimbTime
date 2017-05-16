@@ -68,20 +68,13 @@ namespace WebApplication3.App_Data
 
         public object executeScalar()
         {
-            SqlCommand com = new SqlCommand(commandString, conn);
-            foreach (KeyValuePair<string, Object> kvp in parameters)
-            {
-                com.Parameters.AddWithValue(kvp.Key, kvp.Value);
-            }
-            object ret = null;
             Debug.WriteLine("EXECUTE " + commandString + " WITH PARAMETERS {");
             foreach (KeyValuePair<string, Object> kvp in parameters)
             {
                 Debug.Write(kvp.Key + " = " + kvp.Value + "; ");
             }
             Debug.WriteLine("}\n");
-            Debug.WriteLine("RESULT: " + com.ExecuteScalar());
-            return ret;
+            return 1;
         }
 
         public void reinitialize(string newCommand, SqlConnection con)
