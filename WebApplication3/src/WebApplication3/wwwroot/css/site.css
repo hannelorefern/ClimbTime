@@ -62,3 +62,8 @@ textarea {
 .text-left-align{
     text-align: left;
 }
+
+.vertical-center {
+  display: flex;
+  align-items: center;
+}
