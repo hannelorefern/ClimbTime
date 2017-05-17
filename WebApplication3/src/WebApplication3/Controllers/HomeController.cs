@@ -304,44 +304,29 @@ namespace WebApplication3.Controllers
             return null;
         }
 
-
-        //Stubbed out methods for Add Users Page
-        public void TemporaryUserStore() {
-            //This corresponds to item BatchAddUsers-2, when there are more users to add in the current batch
-            //this should hold on to the data to be comitted to the database until it's ready, and
-            //this should reset the page for the next user to be added
+        public string getHarnessCount(string harnessSize)
+        {
+            string count = ""+0;
+            //count = databaseRead
+            return count;
         }
-
-        public IActionResult GroupInfoFinished() {
-            //this corresponds to item BatchAddUsers-2, when on the final user for the current batch
-            //this should hold on to the data to be comitted to the database until it's ready, and
-            //this should redirect to (I think) the page with the appropriate training video
-
-            return null;
-
-
+        public string getShoeCount(string shoeSize)
+        {
+            string count = "" + 0;
+            //count = databaseRead
+            return count;
         }
-
-        public IActionResult InstructionalVideoFinished()
-        {   //this corresponds to item BatchAddUsers-5, the call should be restricted on the JS/HTML side of things (I think)
-            //this should retrieve the data for the current group watching, and
-            //this should return the waiver signing page for this group
-            return null;
+        public IActionResult saveInventoryEdits(string shoebox, string shoeboxsize, string harnessbox, string harnessboxsize) {
+            if (shoebox != null)
+            {
+                //databaseWrite
+            }
+            if (harnessbox!= null)
+            {
+                //databaseWrite
+            }
+            return View("Settings");
         }
-
-        public void RegisterUser() {
-            //this corresponds to item BatchAddUsers-7, when there are more users to add in the current batch
-            //this should commit user data and the waiver to the database, and
-            //this should prepare the page for the next user
-        }
-
-        public void RegisterFinalUser(){
-            //this corresponds to item BatchAddUsers-7, when on the final user
-            //this should commit user data and the waiver to the database and
-            //return to which page? this is currently unknown by Parker.
-
-        }
-
 
     }
 
