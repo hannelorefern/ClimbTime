@@ -17,6 +17,7 @@ namespace WebApplication3
         public string lastName { get; set; }
         public string firstName { get; set; }
         public string time { get; set; }
+        public string netID { get; set; }
 
 
         public User()
@@ -29,6 +30,7 @@ namespace WebApplication3
 
         public User(string ID, string lastName, string firstName, string time) {
             this.studentID = ID;
+            
             this.lastName = lastName;
             this.firstName = firstName;
             this.time = time; 
@@ -55,6 +57,24 @@ namespace WebApplication3
         {//note to Hannelore: Parker changed this method because I guess String.Format doesn't work like formatting in C.
             return String.Format("{0}, {1}", this.lastName, this.firstName);
         }
+
+        public string[] convertToStringArray()
+        {
+            string[] result = new string[8];
+            result[0] = this.userType;
+            result[1] = this.firstName;
+            result[2] = this.lastName;
+            result[3] = this.studentID;
+            result[4] = this.netID;
+            result[5] = this.phoneNumber;
+            result[6] = this.email;
+            result[7] = this.ShoeSize;
+            result[8] = this.HarnessSize;
+            
+
+                return result;
+        }
+
 
         public int CompareTo(object obj)
         {

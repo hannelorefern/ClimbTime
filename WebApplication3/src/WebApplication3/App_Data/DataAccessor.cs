@@ -45,7 +45,8 @@ namespace WebApplication3.App_Data
             {
                 if (reader.Read())
                 {
-                    ret.studentID = (string)reader["userID"];
+                    ret.systemID = (int)reader["userID"];
+                    ret.studentID = (string)reader["SID"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
                 }
@@ -170,9 +171,16 @@ namespace WebApplication3.App_Data
             if (firstName != "")
             {
                 commandText += "firstName LIKE @firstName";
-                if (lastName != "") { commandText += " AND ";}
-
             }
+
+            if (lastName.Equals(firstName)) {
+                commandText += " OR ";
+            }
+            else
+            {
+                commandText += " AND ";
+            }
+
             if (lastName != "")
             {
                 commandText += "lastName like @lastName";
@@ -255,7 +263,8 @@ namespace WebApplication3.App_Data
                     User temp = new User();
                     temp.firstName = (string)reader["firstName"];
                     temp.lastName = (string)reader["lastName"];
-                    temp.studentID = (string)reader["userID"];
+                    temp.studentID = (string)reader["SID"];
+                    temp.systemID = (int)reader["userID"];
 
                     DateTime tempTime = (DateTime)reader["startDateTime"];
 
