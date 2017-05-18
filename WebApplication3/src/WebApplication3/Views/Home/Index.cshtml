@@ -68,12 +68,19 @@
                     {
                         string identifier = "timer" + i;
                         User item = ((List<User>)Model)[i];
-                        <div>
-                            @{string fullName = item.Name(); }
-                            @Html.DisplayFor(ModelItem => fullName)
-                            <input type="checkbox" name="signOutCheckBox" value="@i" />
-                            @Html.HiddenFor(x => @item.studentID)
-                            <p id="@identifier"></p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                @{string fullName = item.Name(); }
+                                @Html.DisplayFor(ModelItem => fullName)
+                            </div>
+                            <div class="col-md-4">
+                                <p id="@identifier"></p>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="checkbox" name="signOutCheckBox" value="@i" />
+                                @Html.HiddenFor(x => @item.studentID)
+
+                            </div>
                         </div>
                     }
                 </div>
@@ -82,8 +89,6 @@
                 </div>
             </form>
         </div>
-    </div>
-    </div>
     </div>
 
         <script type="text/javascript">
