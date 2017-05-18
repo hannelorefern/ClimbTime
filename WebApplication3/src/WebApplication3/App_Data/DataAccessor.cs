@@ -54,11 +54,56 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        public User getUser(int systemID)
+        { User ret = new User();
+            
+                cmd.reinitialize("SELECT * FROM dbo.users WHERE userID = @systemID", conn);
+                cmd.addParameter("@systemID", systemID);
+
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                if (reader.Read())
+                {
+                    ret.systemID = (int)reader["userID"];
+                    ret.studentID = (string)reader["SID"];
+                    ret.userType = (string)reader["userType"];
+                    ret.firstName = (string)reader["firstName"];
+                    ret.lastName = (string)reader["lastName"];
+
+
+                    if (!DBNull.Value.Equals(reader["shoeSize"]))
+                    { ret.ShoeSize = (string)reader["shoeSize"]; }
+                    else
+                    {
+                        ret.ShoeSize = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["harnessSize"]))
+                    { ret.HarnessSize = (string)reader["harnessSize"]; }
+                    else
+                    {
+                        ret.HarnessSize = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["phone"]))
+                    { ret.phoneNumber = (string)reader["phone"]; }
+                    else
+                    {
+                        ret.phoneNumber = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["email"]))
+                    { ret.email = (string)reader["email"]; }
+                    else
+                    {
+                        ret.email = "Information not found";
+                    }
+                }
+            }
+            return ret;
+        }
+
         public User getUser(string CardSwipe) {
             User ret = new User();
             if (char.IsLetter(CardSwipe.First()))
             {
-                //TO DO: FIX THIS SHIT.
                 cmd.reinitialize("SELECT * FROM dbo.users WHERE netID = @netID", conn);
                 cmd.addParameter("@netID", CardSwipe);
             }
@@ -699,7 +744,6 @@ namespace WebApplication3.App_Data
                 throw new Exception("Exception updating user. " + ex.Message);
             }
         }
-
         public void updateStudentID(string studentID, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET SID = @studentID WHERE userID = @userID", conn);

@@ -61,7 +61,19 @@ namespace WebApplication3.Controllers
             signedInUsers.Add(toAdd);
 
 
-            return View("Index",signedInUsers);
+            return View("Index", signedInUsers);
+        }
+        public IActionResult AddClimberBySystemID(string systemID)
+        {
+            int sysID = int.Parse(systemID);
+            User toAdd = db.getUser(sysID);
+            toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
+            db.addVisit(toAdd);
+
+            signedInUsers.Add(toAdd);
+
+
+            return View("Index", signedInUsers);
         }
 
         public IActionResult RemoveClimbers()
@@ -167,8 +179,8 @@ namespace WebApplication3.Controllers
             {
                 toSignIn = db.getUser(CardSwipe);
 
-                //return View("SignInDetails", toSignIn);
-                return AddClimber(toSignIn.lastName, toSignIn.firstName);
+                return View("SignInDetails", toSignIn);
+                //return AddClimber(toSignIn.lastName, toSignIn.firstName);
             }
         
             return View("Index", signedInUsers);
