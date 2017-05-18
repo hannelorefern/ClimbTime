@@ -697,25 +697,197 @@ namespace WebApplication3.App_Data
         {
 
         }
+
         public void updateShoeSize(string shoeSize, int userID)
         {
 
         }
+
         public void updateHarnessSize(string harnessSize, int userID)
         {
 
         }
+
         public void updatePhone(string phoneNum, int userID)
         {
 
         }
+
         public void updateEmail(string email, int userID)
         {
 
         }
+
         public void updateUserType(string userType, int userID)
         {
 
+        }
+
+        //reports
+        public List<string[]> courseReport(Course c)
+        {
+            List <string[]> ret = new List<string[]>();
+            string[] temp = { "User Type", "First Name", "Last Name" };
+            ret.Add(temp);
+            cmd.reinitialize("SELECT firstName, lastName, userType FROM dbo.enrolled INNER JOIN dbo.users ON dbo.users.userID = dbo.enrolled.userID WHERE courseID = @cID", conn);
+            cmd.addParameter("@cID", c.ID);
+            try
+            {
+                using (SqlDataReader reader = cmd.executeReader())
+                {
+                    while (reader.Read())
+                    {
+                        temp[0] = (string)reader["userType"];
+                        temp[1] = (string)reader["firstName"];
+                        temp[2] = (string)reader["lastName"];
+                        ret.Add(temp);
+                    }
+                }
+            } catch(Exception ex)
+            {
+                throw new Exception("Exception generating course report." + ex.Message);
+            }
+            return ret;
+        }
+
+        public List<string[]> allCourseReport()
+        {
+            List<string[]> ret = new List<string[]>();
+            string[] temp = { "User Type", "First Name", "Last Name", "Course"};
+            ret.Add(temp);
+            cmd.reinitialize("SELECT firstName, lastName, userType, code FROM dbo.enrolled AS e INNER JOIN dbo.users AS u ON e.userID = u.userID INNER JOIN dbo.course AS c ON c.courseID = e.courseID GROUP BY c.code", conn);
+            try
+            {
+                using (SqlDataReader reader = cmd.executeReader())
+                {
+                    while (reader.Read())
+                    {
+                        temp[0] = (string)reader["userType"];
+                        temp[1] = (string)reader["firstName"];
+                        temp[2] = (string)reader["lastName"];
+                        temp[3] = (string)reader["code"];
+                        ret.Add(temp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception generating course report." + ex.Message);
+            }
+            return ret;
+        }
+
+        public List<string[]> visitReport(DateTime start, DateTime end)
+        {
+            List<string[]> ret = new List<string[]>();
+            string[] temp = { "SID", "Last Name", "First Name", "Visit Type", "Duration" };
+            ret.Add(temp);
+            cmd.reinitialize("SELECT SID, lastName, First Name, title, duration FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID INNER JOIN dbo.visittype AS t ON v.visitTypeID = t.visitTypeID WHERE startDateTime >= @s AND startDateTime <= @e", conn);
+            cmd.addParameter("@s", start);
+            cmd.addParameter("@e", end);
+            try
+            {
+                using (SqlDataReader reader = cmd.executeReader())
+                {
+                    while (reader.Read())
+                    {
+                        temp[0] = (string)reader["SID"];
+                        temp[1] = (string)reader["lastName"];
+                        temp[2] = (string)reader["firstName"];
+                        temp[3] = (string)reader["title"];
+                        temp[4] = (string)reader["duration"];
+                        ret.Add(temp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception generating visit report." + ex.Message);
+            }
+            return ret;
+        }
+
+        public List<string[]> allVisitReport()
+        {
+            List<string[]> ret = new List<string[]>();
+            string[] temp = { "SID", "Last Name", "First Name", "Visit Type", "Duration" };
+            ret.Add(temp);
+            cmd.reinitialize("SELECT SID, lastName, First Name, title, duration FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID INNER JOIN dbo.visittype AS t ON v.visitTypeID = t.visitTypeID", conn);
+            try
+            {
+                using (SqlDataReader reader = cmd.executeReader())
+                {
+                    while (reader.Read())
+                    {
+                        temp[0] = (string)reader["SID"];
+                        temp[1] = (string)reader["lastName"];
+                        temp[2] = (string)reader["firstName"];
+                        temp[3] = (string)reader["title"];
+                        temp[4] = (string)reader["duration"];
+                        ret.Add(temp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception generating visit report." + ex.Message);
+            }
+            return ret;
+        }
+
+        public List<string[]> certificationReport(Certification cert)
+        {
+            List<string[]> ret = new List<string[]>();
+            string[] temp = { "Certification", "Last Name", "First Name", "Expiration Date" };
+            ret.Add(temp);
+            cmd.reinitialize("SELECT title, lastName, firstName, expDate FROM dbo.usercertifications AS uc INNER JOIN dbo.users AS u ON uc.userID = u.userID INNER JOIN dbo.certification AS c ON c.certID = uc.certID WHERE certID = @cID ORDER BY lastName", conn);
+            cmd.addParameter("@cID", cert.ID);
+            try
+            {
+                using (SqlDataReader reader = cmd.executeReader())
+                {
+                    while (reader.Read())
+                    {
+                        temp[0] = (string)reader["title"];
+                        temp[1] = (string)reader["lastName"];
+                        temp[2] = (string)reader["firstName"];
+                        temp[3] = (string)reader["expDate"];
+                        ret.Add(temp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception generating certification report." + ex.Message);
+            }
+            return ret;
+        }
+
+        public List<string[]> allCertificationReport()
+        {
+            List<string[]> ret = new List<string[]>();
+            string[] temp = { "Certification", "Last Name", "First Name", "Expiration Date" };
+            ret.Add(temp);
+            cmd.reinitialize("SELECT title, lastName, firstName, expDate FROM dbo.usercertifications AS uc INNER JOIN dbo.users AS u ON uc.userID = u.userID INNER JOIN dbo.certification AS c ON c.certID = uc.certID GROUP BY title", conn);
+            try
+            {
+                using (SqlDataReader reader = cmd.executeReader())
+                {
+                    while (reader.Read())
+                    {
+                        temp[0] = (string)reader["title"];
+                        temp[1] = (string)reader["lastName"];
+                        temp[2] = (string)reader["firstName"];
+                        temp[3] = (string)reader["expDate"];
+                        ret.Add(temp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception generating certification report." + ex.Message);
+            }
+            return ret;
         }
 
     }
