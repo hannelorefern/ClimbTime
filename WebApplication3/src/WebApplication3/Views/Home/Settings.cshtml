@@ -19,7 +19,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            @{string[] sizes = { "10.0", "10.5", "11.0" };//
+                            @{string[] sizes = { "10.0", "10.5", "11.0" };//what are the acceptable sizes, or, are we going to let them add new sizes?
                                 for (int i = 0; i < sizes.Length; i++) {
                                     <li style="display:block" onclick="getShoeCount(@sizes[i])">@sizes[i]</li>
                                 }
@@ -40,7 +40,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <!--Fill with harness sizes-->
+                            <!--same question as for shoe sizes-->
                             <li onclick="getHarnessCount('L')">L</li>
                             <li onclick="getHarnessCount('M')">M</li>
                             <li onclick="getHarnessCount('S')">S</li>
@@ -84,28 +84,61 @@
             </div>
 
             <div class="tab-pane" id="c" name="certificationpane">
-                    <div id="scrollview" style="overflow:scroll;height:400px">
+                    <div id="certscrollview" style="overflow:scroll;height:400px">
+                        
+                        <ul id="certList">
+                            
+
+
+                            <!--{string[] certificationNames = getCertificationNames();
+                                for (int i = 0; i < certificationNames.Length; i++)
+                                {
+                                    <li><input type="radio" name="certificationList" value="certificationNames[i]" />certificationNames[i]</li>
+
+
+                                }
+
+                            }-->
+
+
+                        </ul>
+                        <script>
+                            
+</script>
                     </div>
-                <form>
                     <button type="button" class="btn btn-primary" pullleft onclick="location.href='AddCertification'">Add</button>
-                    <button class="btn btn-primary" pullright>Edit Selected</button>
-                    <button class="btn btn-primary" pullleft>Remove Selected</button>
-                </form>
+                    <button type="button" class="btn btn-primary" pullright onclick="editCertification()">Edit Selected</button>
+                    <button type="button" class="btn btn-primary" pullleft onclick="removeCertification()">Remove Selected</button>
+                
             </div>
 
             <div class="tab-pane" id="d" name="staffpane">
                     <div id="scrollview" style="overflow:scroll;height:400px">
+                        <ul>
+                            @{string[] staffNames = { "staff 1", "staff 2", "staff 3" };//this should be replaced with a proper scan of the database;
+                                for (int i = 0; i < staffNames.Length; i++)
+                                {
+                                    <li><input type="radio" name="staffList" value="@staffNames[i]" />@staffNames[i]</li>
+
+
+                                }
+
+                            }
+
+
+                        </ul>
                     </div>
                 <form>
-                    <button class="btn btn-primary" pullleft>Add</button>
-                    <button class="btn btn-primary" pullright>Edit Selected</button>
-                    <button class="btn btn-primary" pullleft>Remove Selected</button>
+                    <button class="btn btn-primary" pullleft onclick="location.href='AddStaff'">Add</button>
+                    <button class="btn btn-primary" pullright onclick="editStaff()">Edit Selected</button>
+                    <button class="btn btn-primary" pullleft onclick="removeStaff()">Remove Selected</button>
                 </form>
             </div>
         </div>
     </div>
     <!-- /tabs -->
 </body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     function getHarnessCount(size) {
         var count;
@@ -135,7 +168,7 @@
 
     }
     function addClass() {
-        window.location.href = '@Url.Action("addClass");
+        window.location.href = '@Url.Action("addClass")';
 
     }
 
@@ -168,6 +201,75 @@
         window.location.href = url;
 
     }
+    
+    function editCertification() {
+        var url = '@Url.Action("editCertification")';
+        var certForm = this.document.getElementsByName("certificationList");
+        var toEdit
+        var i;
+        for (i = 0; i < certForm.length; i++) {
+            if (certForm[i].checked) {
+                toEdit = certForm[i].value;
+            }
+        }
+        url += '?certificationName=' + toEdit;
+        window.location.href = url;
 
+    }
 
+    function removeCertification() {
+        var url = '@Url.Action("removeCertification")';
+        var certForm = this.document.getElementsByName("certificationList");
+        var toEdit
+        var i;
+        for (i = 0; i < certForm.length; i++) {
+            if (certForm[i].checked) {
+                toEdit = certForm[i].value;
+            }
+        }
+        url += '?certificationName=' + toEdit;
+        window.location.href = url;
+
+    }
+
+     function editStaff() {
+        var url = '@Url.Action("editStaff")';
+        var Form = this.document.getElementsByName("staffList");
+        var toEdit
+        var i;
+        for (i = 0; i < Form.length; i++) {
+            if (Form[i].checked) {
+                toEdit = Form[i].value;
+            }
+        }
+        url += '?staffName=' + toEdit;
+        window.location.href = url;
+
+    }
+
+    function removeStaff() {
+        var url = '@Url.Action("removeStaff")';
+        var Form = this.document.getElementsByName("staffList");
+        var toEdit
+        var i;
+        for (i = 0; i < Form.length; i++) {
+            if (Form[i].checked) {
+                toEdit = Form[i].value;
+            }
+        }
+        url += '?staffName=' + toEdit;
+        window.location.href = url;
+
+    }
+    var certDiv = this.document.getElementById("certList");
+    $(document).ready(function(){
+    var url = '@Url.Action("getCertificationNames")';
+    $.ajax({
+        url: url
+    }).done(function (data) {
+        var i = 0;
+        for (i = 0; i < data.length; i++)
+            certDiv.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[i] + " \" />" + data[i] + "</li>";
+    });
+    });
 </script>

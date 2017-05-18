@@ -360,17 +360,68 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
+        public string[] GetCertificationNames()
+        {
+            List<Certification> certifications = db.getCerts();
+            string[] result = new string[certifications.Count];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = certifications[i].title;
+            }
+
+
+            return result;
+        }
 
         public IActionResult AddCertification()
         {
             return View("CertificationCreation");
         }
 
+        public IActionResult EditCertification(string certificationName)
+        {
+            //Course toEdit = db.getCourse(className); //or something like it
 
+            return View("CertificationCreation");
+        }
+
+        public IActionResult RemoveCertification(string certificationName)
+        {
+            //db.removeCourse();
+
+            return View("Settings");
+        }
 
         public IActionResult SaveCertification(string nameField, string yearsField, string descriptionField) {
 
             //database Writeout
+
+            return View("Settings");
+        }
+
+
+        public string[] GetStaffNames()
+        {
+            //read in Staff names, return them as a string
+
+            return null;
+        }
+
+        public IActionResult AddStaff()
+        {
+            return View("StaffCreation");
+        }
+
+        public IActionResult EditStaff(string staffName)
+        {
+            //Course toEdit = db.getCourse(className); //or something like it
+
+            return View("StaffCreation");
+        }
+
+        public IActionResult RemoveStaff(string staffName)
+        {
+            //db.removeCourse();
 
             return View("Settings");
         }
