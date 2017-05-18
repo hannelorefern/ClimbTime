@@ -8,7 +8,6 @@ using System.Data;
 using System.Diagnostics;
 using WebApplication3.App_Data;
 using WebApplication3.Models;
-using System.IO;
 
 namespace WebApplication3.Controllers
 {
@@ -17,7 +16,6 @@ namespace WebApplication3.Controllers
         static List<User> signedInUsers = new List<User>();
         // SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
         DataAccessor db = new DataAccessor("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
-        string path = "./";
 
         public IActionResult Index()
         {
@@ -211,7 +209,6 @@ namespace WebApplication3.Controllers
 
         public IActionResult MoveGroupToVideo()
         {
-            //TO DO: assign a default user type to new users
 
             string temp = this.Request.Form["nameField"];
             string[] names = temp.Split(',');
@@ -307,94 +304,126 @@ namespace WebApplication3.Controllers
         }
 
 
-        //Stubbed out methods for Add Users Page
-        public void TemporaryUserStore() {
-            //This corresponds to item BatchAddUsers-2, when there are more users to add in the current batch
-            //this should hold on to the data to be comitted to the database until it's ready, and
-            //this should reset the page for the next user to be added
+        //These methods are for the settings page
+        public string getHarnessCount(string harnessSize)
+        {
+            string count = ""+0;
+            //count = databaseRead
+            return count;
+        }
+        public string getShoeCount(string shoeSize)
+        {
+            string count = "" + 0;
+            //count = databaseRead
+            return count;
+        }
+        public IActionResult saveInventoryEdits(string shoebox, string shoeboxsize, string harnessbox, string harnessboxsize) {
+            if (shoebox != null)
+            {
+                //databaseWrite
+            }
+            if (harnessbox!= null)
+            {
+                //databaseWrite
+            }
+            return View("Settings");
         }
 
-        public IActionResult GroupInfoFinished() {
-            //this corresponds to item BatchAddUsers-2, when on the final user for the current batch
-            //this should hold on to the data to be comitted to the database until it's ready, and
-            //this should redirect to (I think) the page with the appropriate training video
+        public string[] getClasses()
+        {
+            //Course courses = db.getCourses();
+            
+            //put all the course names in a string []
+
+            //return the array
+
 
             return null;
-
-
         }
 
-        public IActionResult InstructionalVideoFinished()
-        {   //this corresponds to item BatchAddUsers-5, the call should be restricted on the JS/HTML side of things (I think)
-            //this should retrieve the data for the current group watching, and
-            //this should return the waiver signing page for this group
+        public IActionResult AddClass()
+        {
+            return View("ClassCreation");
+        }
+
+        public IActionResult EditClass(string className)
+        {
+            //Course toEdit = db.getCourse(className); //or something like it
+
+            return View("ClassCreation");
+        }
+
+        public IActionResult RemoveClass(string className)
+        {
+            //db.removeCourse();
+
+            return View("Settings");
+        }
+
+        public string[] GetCertificationNames()
+        {
+            List<Certification> certifications = db.getCerts();
+            string[] result = new string[certifications.Count];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = certifications[i].title;
+            }
+
+
+            return result;
+        }
+
+        public IActionResult AddCertification()
+        {
+            return View("CertificationCreation");
+        }
+
+        public IActionResult EditCertification(string certificationName)
+        {
+            //Course toEdit = db.getCourse(className); //or something like it
+
+            return View("CertificationCreation");
+        }
+
+        public IActionResult RemoveCertification(string certificationName)
+        {
+            //db.removeCourse();
+
+            return View("Settings");
+        }
+
+        public IActionResult SaveCertification(string nameField, string yearsField, string descriptionField) {
+
+            //database Writeout
+
+            return View("Settings");
+        }
+
+
+        public string[] GetStaffNames()
+        {
+            //read in Staff names, return them as a string
+
             return null;
         }
 
-        public void RegisterUser() {
-            //this corresponds to item BatchAddUsers-7, when there are more users to add in the current batch
-            //this should commit user data and the waiver to the database, and
-            //this should prepare the page for the next user
-        }
-
-        public void RegisterFinalUser(){
-            //this corresponds to item BatchAddUsers-7, when on the final user
-            //this should commit user data and the waiver to the database and
-            //return to which page? this is currently unknown by Parker.
-
-        }
-
-        public void generateCourseReport()
+        public IActionResult AddStaff()
         {
-            string fileName = "Course Report " + DateTime.Now;
-            FileStream file = new FileStream(Path.Combine(path, fileName), FileMode.Create);
-            using (StreamWriter fout = new StreamWriter(file)) {
-                List<string[]> records = db.allCourseReport();
-                foreach (string[] record in records)
-                {
-                    foreach (string field in record)
-                    {
-                        fout.Write(field + ",");
-                    }
-                    fout.Write("\n");
-                }
-            }
+            return View("StaffCreation");
         }
 
-        public void generateVisitReport()
+        public IActionResult EditStaff(string staffName)
         {
-            string fileName = "Visit Report " + DateTime.Now;
-            FileStream file = new FileStream(Path.Combine(path, fileName), FileMode.Create);
-            using (StreamWriter fout = new StreamWriter(file))
-            {
-                List<string[]> records = db.allVisitReport();
-                foreach (string[] record in records)
-                {
-                    foreach (string field in record)
-                    {
-                        fout.Write(field + ",");
-                    }
-                    fout.Write("\n");
-                }
-            }
+            //Course toEdit = db.getCourse(className); //or something like it
+
+            return View("StaffCreation");
         }
 
-        public void generateCertificationReport()
+        public IActionResult RemoveStaff(string staffName)
         {
-            string fileName = "Certification Report " + DateTime.Now;
-            FileStream file = new FileStream(Path.Combine(path, fileName), FileMode.Create);
-            using (StreamWriter fout = new StreamWriter(file))
-            {
-                List<string[]> records = db.allCertificationReport();
-                foreach (string[] record in records)
-                {
-                    foreach (string field in record)
-                    {
-                        fout.Write(field + ",");
-                    }
-                    fout.Write("\n");
-                }
-            }
+            //db.removeCourse();
+
+            return View("Settings");
         }
 
     }
