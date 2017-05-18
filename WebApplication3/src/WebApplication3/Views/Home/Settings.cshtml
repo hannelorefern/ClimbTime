@@ -22,7 +22,7 @@
                             @{string[] sizes = { "10.0", "10.5", "11.0" };//
                                 for (int i = 0; i < sizes.Length; i++) {
                                     <li style="display:block" onclick="getShoeCount(@sizes[i])">@sizes[i]</li>
-                                 }
+                                }
                                 }
 
                             <!--Fill with shoe sizes-->
@@ -60,26 +60,40 @@
             </div>
 
             <div class="tab-pane" id="b" name="classpane">
+
+                <form id="classForm">
                     <div id="scrollview" style="overflow:scroll;height:400px">
+                        <ul>
+                            @{string[] classNames = { "class1", "class2", "class3" };//this should be replaced with a proper scan of the database;
+                                for (int i = 0; i < classNames.Length; i++)
+                                {
+                                    <li><input type="radio" name="classList" value="@classNames[i]" />@classNames[i]</li>
+
+
+                                }
+
+                            }
+
+
+                        </ul>
                     </div>
-                <form>
-                    <button class="btn btn-primary" pullleft onclick="">Add</button>
-                    <button class="btn btn-primary" pullright >Edit Selected</button>
-                    <button class="btn btn-primary" pullleft>Remove Selected</button>
+                    <button type="button" class="btn btn-primary" pullleft onclick="AddClass()">Add</button>
+                    <button type="button" class="btn btn-primary" pullright onclick="editClass()">Edit Selected</button>
+                    <button type="button" class="btn btn-primary" pullleft onclick="removeClass()">Remove Selected</button>
                 </form>
             </div>
 
-            <div class="tab-pane" id="c">
+            <div class="tab-pane" id="c" name="certificationpane">
                     <div id="scrollview" style="overflow:scroll;height:400px">
                     </div>
                 <form>
-                    <button class="btn btn-primary" pullleft>Add</button>
+                    <button type="button" class="btn btn-primary" pullleft onclick="location.href='AddCertification'">Add</button>
                     <button class="btn btn-primary" pullright>Edit Selected</button>
                     <button class="btn btn-primary" pullleft>Remove Selected</button>
                 </form>
             </div>
 
-            <div class="tab-pane" id="d">
+            <div class="tab-pane" id="d" name="staffpane">
                     <div id="scrollview" style="overflow:scroll;height:400px">
                     </div>
                 <form>
@@ -120,5 +134,40 @@
         });
 
     }
+    function addClass() {
+        window.location.href = '@Url.Action("addClass");
+
+    }
+
+    function editClass() {
+        var url = '@Url.Action("editClass")';
+        var classForm = this.document.getElementsByName("classList");
+        var toEdit
+        var i;
+        for (i = 0; i < classForm.length; i++) {
+            if (classForm[i].checked) {
+                toEdit = classForm[i].value;
+            }
+        }
+        url += '?className=' + toEdit;
+        window.location.href = url;
+
+    }
+
+    function removeClass() {
+        var url = '@Url.Action("removeClass")';
+        var classForm = this.document.getElementsByName("classList");
+        var toEdit
+        var i;
+        for (i = 0; i < classForm.length; i++) {
+            if (classForm[i].checked) {
+                toEdit = classForm[i].value;
+            }
+        }
+        url += '?className=' + toEdit;
+        window.location.href = url;
+
+    }
+
 
 </script>

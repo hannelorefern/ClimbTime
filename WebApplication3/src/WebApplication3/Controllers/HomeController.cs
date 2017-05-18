@@ -209,7 +209,6 @@ namespace WebApplication3.Controllers
 
         public IActionResult MoveGroupToVideo()
         {
-            //TO DO: assign a default user type to new users
 
             string temp = this.Request.Form["nameField"];
             string[] names = temp.Split(',');
@@ -304,6 +303,8 @@ namespace WebApplication3.Controllers
             return null;
         }
 
+
+        //These methods are for the settings page
         public string getHarnessCount(string harnessSize)
         {
             string count = ""+0;
@@ -325,6 +326,52 @@ namespace WebApplication3.Controllers
             {
                 //databaseWrite
             }
+            return View("Settings");
+        }
+
+        public string[] getClasses()
+        {
+            //Course courses = db.getCourses();
+            
+            //put all the course names in a string []
+
+            //return the array
+
+
+            return null;
+        }
+
+        public IActionResult AddClass()
+        {
+            return View("ClassCreation");
+        }
+
+        public IActionResult EditClass(string className)
+        {
+            //Course toEdit = db.getCourse(className); //or something like it
+
+            return View("ClassCreation");
+        }
+
+        public IActionResult RemoveClass(string className)
+        {
+            //db.removeCourse();
+
+            return View("Settings");
+        }
+
+
+        public IActionResult AddCertification()
+        {
+            return View("CertificationCreation");
+        }
+
+
+
+        public IActionResult SaveCertification(string nameField, string yearsField, string descriptionField) {
+
+            //database Writeout
+
             return View("Settings");
         }
 

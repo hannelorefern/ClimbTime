@@ -10,6 +10,7 @@ namespace WebApplication3.Models
         public int ID { get; set; }
         public string title { get; set; }
         public int yearsBeforeExp { get; set; }
+        public string description { get; set; }
 
         public Certification()
         {
