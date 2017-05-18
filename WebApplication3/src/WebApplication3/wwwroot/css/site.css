@@ -53,3 +53,17 @@ textarea {
 .input-append .btn.dropdown-toggle {
     float: none;
 }
+
+.fixed-panel{
+    min-height: 500px;
+    max-height: 700px;
+    
+}
+.text-left-align{
+    text-align: left;
+}
+
+.vertical-center {
+  display: flex;
+  align-items: center;
+}
