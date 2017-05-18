@@ -687,39 +687,92 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
-        //update
         public void updateName(string firstName, string lastName, int userID)
         {
-
+            cmd.reinitialize("UPDATE dbo.users SET firstName = @firstName, lastName = @lastName WHERE userID = @userID", conn);
+            cmd.addParameter("@firstName", firstName);
+            cmd.addParameter("@lastName", lastName);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
         }
 
         public void updateStudentID(string studentID, int userID)
         {
-
+            cmd.reinitialize("UPDATE dbo.users SET SID = @studentID WHERE userID = @userID", conn);
+            cmd.addParameter("@studentID", studentID);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
         }
 
         public void updateShoeSize(string shoeSize, int userID)
         {
-
+            cmd.reinitialize("UPDATE dbo.users SET shoeSize = @shoeSize WHERE userID = @userID", conn);
+            cmd.addParameter("@shoeSize", shoeSize);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
         }
 
         public void updateHarnessSize(string harnessSize, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET harnessSize = @harnessSize WHERE userID = @userID", conn);
+            cmd.addParameter("@harnessSize", harnessSize);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
 
         public void updatePhone(string phoneNum, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET phone = @phoneNum WHERE userID = @userID", conn);
+            cmd.addParameter("@phoneNum", phoneNum);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
 
         public void updateEmail(string email, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET email = @email WHERE userID = @userID", conn);
+            cmd.addParameter("@email", email);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
 
         public void updateUserType(string userType, int userID)
         {
+            cmd.reinitialize("UPDATE dbo.users SET userType = @userType WHERE userID = @userID", conn);
+            cmd.addParameter("@userType", userType);
+            cmd.addParameter("@userID", userID);
+            try { cmd.execute(); }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception updating user. " + ex.Message);
+            }
 
         }
 
@@ -892,5 +945,4 @@ namespace WebApplication3.App_Data
 
     }
 
-   
 }

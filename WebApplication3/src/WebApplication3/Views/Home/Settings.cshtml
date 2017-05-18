@@ -5,74 +5,96 @@
     <!-- tabs left -->
     <div class="tabbable tabs-left">
         <ul class="nav nav-tabs">
-            <li><a href="#a" data-toggle="tab">Equipment</a></li>
-            <li class="active"><a href="#b" data-toggle="tab">Two</a></li>
+            <li class="active"><a href="#a" data-toggle="tab">Equipment</a></li>
+            <li><a href="#b" data-toggle="tab">Classes</a></li>
             <li><a href="#c" data-toggle="tab">Certification</a></li>
             <li><a href="#d" data-toggle="tab">Staff</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="a">
-                <form class="form-inline">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle pull-right" type="button" data-toggle="dropdown">
-                            Shoe Size:
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <!--Fill with shoe sizes-->
-                        </ul>
+                <form asp-controller="Home" asp-action="saveInventoryEdits" class="form-inline">
+                    <div class="col-md-offset-3">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle pull-left" type="button" data-toggle="dropdown">
+                                        Shoe Size:
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        @{string[] sizes = { "10.0", "10.5", "11.0" };//
+                                            for (int i = 0; i < sizes.Length; i++)
+                                            {
+                                                <li style="display:block" onclick="getShoeCount(@sizes[i])">@sizes[i]</li>
+                                            }
+                                        }
+
+                                        <!--Fill with shoe sizes-->
+                                    </ul>
+                                </div>
+                                <div class="form-group pull-right">
+                                    <label for="shoe-box">Amount:</label>
+                                    <input type="text" name="shoebox" id="shoeBox" />
+                                    <input type="text" name="shoeboxsize" id="shoeBoxSize" hidden />
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height:10px"></div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle pull-left" type="button" data-toggle="dropdown">
+                                        Harness Size:
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <!--Fill with harness sizes-->
+                                        <li onclick="getHarnessCount('L')">L</li>
+                                        <li onclick="getHarnessCount('M')">M</li>
+                                        <li onclick="getHarnessCount('S')">S</li>
+                                    </ul>
+                                </div>
+                                <div class="form-group pull-right">
+                                    <label for="harness-box">Amount:</label>
+                                    <input type="text" name="harnessbox" id="harnessBox" />
+                                    <input type="text" name="harnessboxsize" id="harnessBoxSize" hidden />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div style="height:10px"></div>
+                        <div>
+                            <button class="btn btn-primary" type="submit">Save Changes</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="shoe-box">Amount:</label>
-                        <input type="text" name="shoe-box" />
-                    </div>
-                </form>
-                <form class="form-inline">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle pull-right" type="button" data-toggle="dropdown">
-                            Harness Size:
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <!--Fill with harness sizes-->
-                        </ul>
-                    </div>
-                    <div class="form-group">
-                        <label for="harness-box">Amount:</label>
-                        <input type="text" name="harness-box" />
-                    </div>
+                
                 </form>
             </div>
-            <div class="tab-pane" id="b">
-                <form asp-controller="BatchAddClimbers" asp-action="x">
+
+            <div class="tab-pane" id="b" name="classpane">
                     <div id="scrollview" style="overflow:scroll;height:400px">
-                        @*Code for users who have signed up in batch group*@
                     </div>
+                <form>
+                    <button class="btn btn-primary" pullleft onclick="">Add</button>
+                    <button class="btn btn-primary" pullright >Edit Selected</button>
+                    <button class="btn btn-primary" pullleft>Remove Selected</button>
                 </form>
+            </div>
+
+            <div class="tab-pane" id="c">
+                    <div id="scrollview" style="overflow:scroll;height:400px">
+                    </div>
                 <form>
                     <button class="btn btn-primary" pullleft>Add</button>
                     <button class="btn btn-primary" pullright>Edit Selected</button>
                     <button class="btn btn-primary" pullleft>Remove Selected</button>
                 </form>
             </div>
-            <div class="tab-pane" id="c">
-                <form asp-controller="BatchAddClimbers" asp-action="x">
-                    <div id="scrollview" style="overflow:scroll;height:400px">
-                        @*Code for users who have signed up in batch group*@
-                    </div>
-                </form>
-                <form>
-                    <button class="btn btn-primary"pullleft>Add</button>
-                    <button class="btn btn-primary"pullright>Edit Selected</button>
-                    <button class="btn btn-primary"pullleft>Remove Selected</button>
-                </form>
-            </div>
+
             <div class="tab-pane" id="d">
-                <form asp-controller="BatchAddClimbers" asp-action="x">
                     <div id="scrollview" style="overflow:scroll;height:400px">
-                        @*Code for users who have signed up in batch group*@
                     </div>
-                </form>
                 <form>
                     <button class="btn btn-primary" pullleft>Add</button>
                     <button class="btn btn-primary" pullright>Edit Selected</button>
@@ -83,3 +105,33 @@
     </div>
     <!-- /tabs -->
 </body>
+<script>
+    function getHarnessCount(size) {
+        var count;
+        //var box = this.document.getElementById()
+        var url = '@Url.Action("getHarnessCount")';
+        document.getElementById("harnessBoxSize").value = size;
+        $.ajax({
+            url: url,
+            data: { harnessSize: size }
+        }).done(function (data) {
+            count = data;
+            document.getElementById("harnessBox").value = data;
+        });
+
+    } function getShoeCount(size) {
+        var count;
+        //var box = this.document.getElementById()
+        var url = '@Url.Action("getShoeCount")';
+        document.getElementById("shoeBoxSize").value = size;
+        $.ajax({
+            url: url,
+            data: { shoeSize: size }
+        }).done(function (data) {
+            count = data;
+            document.getElementById("shoeBox").value = data;
+        });
+
+    }
+
+</script>
