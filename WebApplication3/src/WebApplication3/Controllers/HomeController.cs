@@ -296,7 +296,7 @@ namespace WebApplication3.Controllers
 
         public void CheckoutShoes() {
             //This corresponds to item Homepage-9
-
+            
             //this should log in the data base that the shoes were used, and any assorted data
         }
 
@@ -319,24 +319,28 @@ namespace WebApplication3.Controllers
         //These methods are for the settings page
         public string getHarnessCount(string harnessSize)
         {
-            string count = ""+0;
-            //count = databaseRead
+            string[] data = db.getInventoryData("Harness", harnessSize);
+            string count = "" + data[3];
             return count;
         }
         public string getShoeCount(string shoeSize)
         {
-            string count = "" + 0;
-            //count = databaseRead
+            string[] data = db.getInventoryData("Shoes", shoeSize);
+            string count = "" + data[3];
             return count;
         }
         public IActionResult saveInventoryEdits(string shoebox, string shoeboxsize, string harnessbox, string harnessboxsize) {
             if (shoebox != null)
             {
-                //databaseWrite
+                string shoes = "Shoes";
+                int newCount = int.Parse(shoebox);
+                db.setEquipCount(shoes, shoeboxsize, newCount);
             }
             if (harnessbox!= null)
             {
-                //databaseWrite
+                string equipName = "Harness";
+                int newCount = int.Parse(harnessbox);
+                db.setEquipCount(equipName, harnessboxsize, newCount);
             }
             return View("Settings");
         }
@@ -344,13 +348,13 @@ namespace WebApplication3.Controllers
         public string[] getClasses()
         {
             //Course courses = db.getCourses();
-            
+            string[] temp = { "TestClass" };
             //put all the course names in a string []
 
             //return the array
 
-
-            return null;
+            
+            return temp;
         }
 
         public IActionResult AddClass()
@@ -372,17 +376,19 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
-        public string[] GetCertificationNames()
+        public string[][] GetCertificationData()
         {
             List<Certification> certifications = db.getCerts();
-            string[] result = new string[certifications.Count];
-            for (int i = 0; i < result.Length; i++)
+            string[] certIds = new string[certifications.Count];
+            string[] certNames = new string[certifications.Count];
+            for (int i = 0; i < certNames.Length; i++)
             {
-                result[i] = certifications[i].title;
+                certIds[i] =""+ certifications[i].ID;
+                certNames[i] = certifications[i].title;
             }
 
-
-            return result;
+            string[][] ret = { certNames, certIds };
+            return ret;
         }
 
         public IActionResult AddCertification()
@@ -390,17 +396,18 @@ namespace WebApplication3.Controllers
             return View("CertificationCreation");
         }
 
-        public IActionResult EditCertification(string certificationName)
+        public IActionResult EditCertification(string certificationID)
         {
-            //Course toEdit = db.getCourse(className); //or something like it
-
-            return View("CertificationCreation");
+            int id = int.Parse(certificationID);
+            Certification toEdit = db.getCertification(id);
+            return View("CertificationCreation", toEdit);
         }
 
-        public IActionResult RemoveCertification(string certificationName)
+        public IActionResult RemoveCertification(string certificationID)
         {
-            //db.removeCourse();
-
+            int id = int.Parse(certificationID);
+            Certification toEdit = db.getCertification(id);
+            db.removeCertification(toEdit);
             return View("Settings");
         }
 

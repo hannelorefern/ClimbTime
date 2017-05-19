@@ -338,6 +338,23 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        public Certification getCertification(int id)
+        {
+            cmd.reinitialize("SELECT * WHERE certID = @id", conn);
+            cmd.addParameter("@id", id);
+            Certification ret = new Certification();
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                if (reader.Read())
+                {
+                    ret.ID = (int)reader["certID"];
+                    ret.title = (string)reader["title"];
+                    ret.yearsBeforeExp = (int)reader["yearsBeforeExp"];
+                }
+            }
+            return ret;
+        }
+
         public bool removeCertification(Certification cert)
         {
             bool retFlag = false;
@@ -622,6 +639,24 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        public string[] getInventoryData(string name, string size)
+        {
+            string[] ret = new string[4];
+            cmd.reinitialize("SELECT * FROM dbo.equipment WHERE name = @name AND size = @size", conn);
+            cmd.addParameter("@name", name);
+            cmd.addParameter("@size", size);
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    ret[0] = (string)reader["equipID"];
+                    ret[1] = (string)reader["name"];
+                    ret[2] = (string)reader["size"];
+                    ret[3] = (string)reader["count"];
+                }
+            }
+            return ret;
+        }
         //equipmentuse
         public bool equipCheckout(int visitID, User climber, int equipID)
         {

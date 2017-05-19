@@ -18,30 +18,32 @@
         <div class="panel-body">
             <form>
                 <div class="form-group">
-                    <div class="form-inline">
-                        <div class="col-md-4 col-md-offset-1">
-                            @{ 
-                                var shoeSize = Model.ShoeSize;
-                                if (shoeSize == null)
-                                { shoeSize = "N/A"; }
-                                var harnessSize = Model.HarnessSize;
-                                if (harnessSize == null) {
-                                    harnessSize = "N/A";
-
-                                }
-                                var shoeString = "Shoes (" + shoeSize+")";
-                                var harnessString = "Harness (" + harnessSize + ")";
-
+                    <div class="col-md-4 col-md-offset-1">
+                        @{
+                            var shoeSize = Model.ShoeSize;
+                            if (shoeSize == null)
+                            { shoeSize = "N/A"; }
+                            var harnessSize = Model.HarnessSize;
+                            if (harnessSize == null)
+                            {
+                                harnessSize = "N/A";
 
                             }
-                            <button class="btn btn-primary" onclick="@Url.Action("CheckoutShoes")">@shoeString</button>
-                        </div>
-                        <div class="col-md-4 col-md-offset-1">
-                            <button class="btn btn-primary" onclick="@Url.Action("CheckoutHarness")">@harnessString</button>
-                        </div>
-                    </div>  
+                            var shoeString = "Shoes (" + shoeSize + ")";
+                            var harnessString = "Harness (" + harnessSize + ")";
+
+
+                        }
+                        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CheckoutShoes")'">@shoeString</button>
+                    </div>
+                    <div class="col-md-4 col-md-offset-1">
+                        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CheckoutHarness")'">@harnessString</button>
+                    </div>
+                </div>
+
+            </form><div style="height:40px"></div>
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button class="btn btn-primary dropdown-toggle dropdown-menu-right" type="button" data-toggle="dropdown">
                             Lap Type
                             <span class="caret"></span>
                         </button>
@@ -53,8 +55,7 @@
                     <button type="button" class="btn btn-primary" onClick="checkInUser()">Check In</button>
                     @{ var systemId = Model.systemID;}
                     <input type="text" id="systemIDField" value="@systemId" hidden/>
-                </div>
-            </form>
+                
         </div>
     </div>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
@@ -70,6 +71,8 @@
         </div>
     </div>
 </body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     function checkInUser() {
         var url = '@Url.Action("AddClimberBySystemID")'
@@ -83,7 +86,7 @@
 
     var classList = this.document.getElementById("classList");
     $(document).ready(function () {
-        var url = '@Url.Action("getClassNames")';
+        var url = '@Url.Action("getClasses")';
         $.ajax({
             url: url
         }).done(function (data) {

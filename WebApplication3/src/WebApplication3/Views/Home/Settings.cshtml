@@ -33,7 +33,7 @@
                                     </ul>
                                 </div>
                                 <div class="form-group pull-right">
-                                    <label for="shoe-box">Amount:</label>
+                                    <label for="shoebox">Amount:</label>
                                     <input type="text" name="shoebox" id="shoeBox" />
                                     <input type="text" name="shoeboxsize" id="shoeBoxSize" hidden />
                                 </div>
@@ -55,7 +55,7 @@
                                     </ul>
                                 </div>
                                 <div class="form-group pull-right">
-                                    <label for="harness-box">Amount:</label>
+                                    <label for="harnessbox">Amount:</label>
                                     <input type="text" name="harnessbox" id="harnessBox" />
                                     <input type="text" name="harnessboxsize" id="harnessBoxSize" hidden />
                                 </div>
@@ -276,13 +276,13 @@
     }
     var certDiv = this.document.getElementById("certList");
     $(document).ready(function(){
-    var url = '@Url.Action("getCertificationNames")';
+    var url = '@Url.Action("getCertificationData")';
     $.ajax({
         url: url
     }).done(function (data) {
         var i = 0;
         for (i = 0; i < data.length; i++)
-            certDiv.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[i] + " \" />" + data[i] + "</li>";
+            certDiv.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
     });
     });
 </script>
