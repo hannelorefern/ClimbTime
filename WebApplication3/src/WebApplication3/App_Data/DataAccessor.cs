@@ -47,8 +47,13 @@ namespace WebApplication3.App_Data
                 {
                     ret.systemID = (int)reader["userID"];
                     ret.studentID = (string)reader["SID"];
+                    ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
+                    ret.ShoeSize = (string)reader["shoeSize"];
+                    ret.HarnessSize = (string)reader["harnessSize"];
+                    ret.phoneNumber = (string)reader["phone"];
+                    ret.email = (string)reader["email"];
                 }
             }
             return ret;
@@ -76,34 +81,10 @@ namespace WebApplication3.App_Data
                     ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
-
-
-                    if (!DBNull.Value.Equals(reader["shoeSize"]))
-                    { ret.ShoeSize = (string)reader["shoeSize"]; }
-                    else
-                    {
-                        ret.ShoeSize = "Information not found";
-                    }
-                    if (!DBNull.Value.Equals(reader["harnessSize"]))
-                    { ret.HarnessSize = (string)reader["harnessSize"]; }
-                    else
-                    {
-                        ret.HarnessSize = "Information not found";
-                    }
-                    if (! DBNull.Value.Equals(reader["phone"]))
-                    { ret.phoneNumber = (string)reader["phone"]; }
-                    else
-                    {
-                        ret.phoneNumber = "Information not found";
-                    }
-                    if (! DBNull.Value.Equals(reader["email"]))
-                    { ret.email = (string)reader["email"]; }
-                    else
-                    {
-                        ret.email = "Information not found";
-                    }
-                    
-
+                    ret.ShoeSize = (string)reader["shoeSize"];
+                    ret.HarnessSize = (string)reader["harnessSize"];
+                    ret.phoneNumber = (string)reader["phone"];
+                    ret.email = (string)reader["email"];
 
                 }
             }

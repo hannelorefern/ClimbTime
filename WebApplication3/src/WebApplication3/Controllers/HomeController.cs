@@ -178,8 +178,33 @@ namespace WebApplication3.Controllers
 
         public IActionResult ShowUserDetails(string IDToShow) {
             User toShow = db.getUser(IDToShow);
-
-            return View("Users", toShow);
+            User display = new User();
+            display.systemID = toShow.systemID;
+            display.studentID = toShow.studentID;
+            display.userType = toShow.userType;
+            display.firstName = toShow.firstName;
+            display.lastName = toShow.lastName;
+            if (toShow.ShoeSize != null){
+                display.ShoeSize = toShow.ShoeSize;
+            } else{
+                display.ShoeSize = "Information not found";
+            }
+            if (toShow.HarnessSize != null)
+            { display.HarnessSize = toShow.HarnessSize;
+            } else{
+                display.HarnessSize = "Information not found";
+            }
+            if (toShow.phoneNumber != null)
+            { display.phoneNumber = toShow.phoneNumber;
+            } else{
+                display.phoneNumber = "Information not found";
+            }
+            if (toShow.email != null)
+            { display.email = toShow.email;
+            }else{
+                display.email = "Information not found";
+            }
+            return View("Users", display);
         }
 
 
