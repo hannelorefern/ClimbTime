@@ -77,14 +77,40 @@ namespace WebApplication3.App_Data
                 if (reader.Read())
                 {
                     ret.systemID = (int)reader["userID"];
-                    ret.studentID = (string)reader["SID"];
                     ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
-                    ret.ShoeSize = (string)reader["shoeSize"];
-                    ret.HarnessSize = (string)reader["harnessSize"];
-                    ret.phoneNumber = (string)reader["phone"];
-                    ret.email = (string)reader["email"];
+
+                    if (!DBNull.Value.Equals(reader["SID"]))
+                    { ret.studentID = (string)reader["SID"]; }
+                    else
+                    {
+                        ret.studentID = null;
+                    }
+                    if (!DBNull.Value.Equals(reader["shoeSize"]))
+                    { ret.ShoeSize = (string)reader["shoeSize"]; }
+                    else
+                    {
+                        ret.ShoeSize = null;
+                    }
+                    if (!DBNull.Value.Equals(reader["harnessSize"]))
+                    { ret.HarnessSize = (string)reader["harnessSize"]; }
+                    else
+                    {
+                        ret.HarnessSize = null;
+                    }
+                    if (!DBNull.Value.Equals(reader["phone"]))
+                    { ret.phoneNumber = (string)reader["phone"]; }
+                    else
+                    {
+                        ret.phoneNumber = null;
+                    }
+                    if (!DBNull.Value.Equals(reader["email"]))
+                    { ret.email = (string)reader["email"]; }
+                    else
+                    {
+                        ret.email = null;
+                    }
 
                 }
             }

@@ -25,9 +25,9 @@ namespace WebApplication3.Models
             this.days = days;
             this.start = start;
             this.end = end;
-            this.term = term;
-            this.equip = equip;
-            this.cert = cert;
+            this.termID = term;
+            this.equipID = equip;
+            this.certID = cert.ID;
         }
 
         public Course()
@@ -38,9 +38,9 @@ namespace WebApplication3.Models
             days = null;
             start = TimeSpan.Zero;
             end = TimeSpan.Zero;
-            term = -1;
-            equip = -1;
-            cert = null;
+            termID = -1;
+            equipID = -1;
+            certID = -1;
         }
     }
 }
