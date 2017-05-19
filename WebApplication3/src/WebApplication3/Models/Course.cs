@@ -13,9 +13,9 @@ namespace WebApplication3.Models
         public string days { get; set; }
         public TimeSpan start { get; set; }
         public TimeSpan end { get; set; }
-        public int term { get; set; } //CHANGE IF TERM MODEL IS CREATED
-        public int equip { get; set; } //CHANGE IF EQUIP MODEL IS CREATED
-        public Certification cert { get; set; }
+        public int termID { get; set; } 
+        public int equipID { get; set; } 
+        public int certID { get; set; }
    
         public Course(int id, string title, string code, string days, TimeSpan start, TimeSpan end, int term, int equip, Certification cert)
         {

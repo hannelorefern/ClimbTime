@@ -8,6 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using WebApplication3.App_Data;
 using WebApplication3.Models;
+using System.IO;
 
 namespace WebApplication3.Controllers
 {
@@ -16,6 +17,7 @@ namespace WebApplication3.Controllers
         static List<User> signedInUsers = new List<User>();
         // SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
         DataAccessor db = new DataAccessor("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
+        string path = "./";
 
         public IActionResult Index()
         {
@@ -187,8 +189,33 @@ namespace WebApplication3.Controllers
 
         public IActionResult ShowUserDetails(string IDToShow) {
             User toShow = db.getUser(IDToShow);
-
-            return View("Users", toShow);
+            User display = new User();
+            display.systemID = toShow.systemID;
+            display.studentID = toShow.studentID;
+            display.userType = toShow.userType;
+            display.firstName = toShow.firstName;
+            display.lastName = toShow.lastName;
+            if (toShow.ShoeSize != null){
+                display.ShoeSize = toShow.ShoeSize;
+            } else{
+                display.ShoeSize = "Information not found";
+            }
+            if (toShow.HarnessSize != null)
+            { display.HarnessSize = toShow.HarnessSize;
+            } else{
+                display.HarnessSize = "Information not found";
+            }
+            if (toShow.phoneNumber != null)
+            { display.phoneNumber = toShow.phoneNumber;
+            } else{
+                display.phoneNumber = "Information not found";
+            }
+            if (toShow.email != null)
+            { display.email = toShow.email;
+            }else{
+                display.email = "Information not found";
+            }
+            return View("Users", display);
         }
 
 
@@ -485,6 +512,92 @@ namespace WebApplication3.Controllers
 
             return View("Settings");
         }
+
+       
+
+        public FileResult CertificationReport()
+        {
+            string fileName = "CertificationReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateCertificationReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
+        public FileResult CourseReport()
+        {
+            string fileName = "CourseReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateCourseReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
+        public FileResult VisitReport()
+        {
+            string fileName = "VisitReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateVisitReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
+        public void generateCourseReport(string filename)
+         {
+             FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
+             using (StreamWriter fout = new StreamWriter(file)) {
+                 List<string[]> records = db.allCourseReport();
+                 foreach (string[] record in records)
+                 {
+                     foreach (string field in record)
+                     {
+                         fout.Write(field + ",");
+                     }
+                     fout.Write("\n");
+                 }
+             }
+         }
+ 
+         public void generateVisitReport(string filename)
+         {
+             FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
+             using (StreamWriter fout = new StreamWriter(file))
+             {
+                 List<string[]> records = db.allVisitReport();
+                 foreach (string[] record in records)
+                 {
+                     foreach (string field in record)
+                     {
+                         fout.Write(field + ",");
+                     }
+                     fout.Write("\n");
+                 }
+             }
+         }
+
+        public void generateCertificationReport(string filename)
+         {
+             FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
+             using (StreamWriter fout = new StreamWriter(file))
+             {
+                 List<string[]> records = db.allCertificationReport();
+                 foreach (string[] record in records)
+                 {
+                     foreach (string field in record)
+                     {
+                         fout.Write(field + ",");
+                     }
+                     fout.Write("\n");
+                 }
+             }
+         }
+
 
     }
 
