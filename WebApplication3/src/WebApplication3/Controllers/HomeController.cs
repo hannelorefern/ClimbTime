@@ -461,7 +461,7 @@ namespace WebApplication3.Controllers
                 dayString += days[i]; 
             }
             toSave.days = dayString;
-            toSave.end
+            //Finish this method;
 
 
             return View("Settings");
