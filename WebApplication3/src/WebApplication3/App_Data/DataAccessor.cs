@@ -875,7 +875,7 @@ public int addUser(string[] args)
         public bool getSignIn(string userName, string password)
         {
             bool retFlag = false;
-            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u AND password=@p)", conn);
+            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u AND password=@p", conn);
             cmd.addParameter("@u", userName);
             cmd.addParameter("@p", password);
             try

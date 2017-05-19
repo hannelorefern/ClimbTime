@@ -435,14 +435,14 @@ namespace WebApplication3.Controllers
             return View("ClassCreation");
         }
 
-        public IActionResult EditClass(string className)
+        public IActionResult EditClass(string courseId)
         {
             //Course toEdit = db.getCourse(className); //or something like it
 
             return View("ClassCreation");
         }
 
-        public IActionResult RemoveClass(string className)
+        public IActionResult RemoveClass(string courseId)
         {
             //db.removeCourse();
 
@@ -461,6 +461,7 @@ namespace WebApplication3.Controllers
                 dayString += days[i]; 
             }
             toSave.days = dayString;
+
             //Finish this method;
 
 
@@ -643,11 +644,14 @@ namespace WebApplication3.Controllers
             string uName = this.Request.Form["usernameField"];
             string pWord = this.Request.Form["passwordField"];
             if (db.getSignIn(uName, pWord))
-                return Index();
+                return this.Index();
             else
                 return View("AdminSignIn");
         }
-
+        public IActionResult AdminSignIn()
+        {
+            return View("AdminSignIn");
+        }
 
     }
 
