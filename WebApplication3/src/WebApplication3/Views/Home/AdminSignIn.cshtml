@@ -8,18 +8,18 @@
 </head>
 <body>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
-        <form>
+        <form asp-controller="Home" asp-action="SignInAdmin">
             <!--Authenticate the user-->
             <div class="form-group">
                 <div class="form-inline">
                     <label class="control-label">User Name:</label>
-                    <input type="text" />
+                    <input type="text" id="usernameField" class="form-control"/>
                 </div>
                 <div class="form-inline">
                     <label class="control-label">Password:</label>
-                    <input type="text" />
+                    <input type="text" id="passwordField" class="form-control"/>
                 </div>
-                <button class="btn btn-primary">Log in </button>
+                <button class="btn btn-primary" type="submit">Log in </button>
             </div>
         </form>
     </div>
