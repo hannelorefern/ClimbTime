@@ -26,7 +26,7 @@ namespace WebApplication3.Controllers
             signedInUsers.Sort();
             
 
-            return View(signedInUsers);
+            return View("Index",signedInUsers);
         }
 
         public IActionResult Reports()
