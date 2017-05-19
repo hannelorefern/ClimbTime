@@ -126,15 +126,7 @@ namespace WebApplication3.App_Data
                     ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
-                    ret.ShoeSize = (string)reader["shoeSize"];
-                    ret.HarnessSize = (string)reader["harnessSize"];
-                    ret.phoneNumber = (string)reader["phone"];
-                    ret.email = (string)reader["email"];
-
-                }
-            }
-            return ret;
-        }
+                    
 
                     if (!DBNull.Value.Equals(reader["shoeSize"]))
                     { ret.ShoeSize = (string)reader["shoeSize"]; }
