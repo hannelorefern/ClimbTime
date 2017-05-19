@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body fixed-panel">
             <form asp-controller="Home" asp-action="SaveCourse">
                 @{ string title;
                     string courseCode;
@@ -44,42 +44,42 @@
                 }
                 <div class="form-group">
                     <div class="form-inline">
-                        <label class="control-label">Title:</label>
+                        <label class="control-label col-md-4">Title:</label>
                         <input type="text" name="TitleField" value="@title" /> 
                     </div>
-                    <div class="form-inline">
-                        <label class="control-label">Course Code:</label>
+                    <div class="form-inline vert-offset-top-20">
+                        <label class="control-label col-md-4">Course Code:</label>
                         <input type="text" name="CourseCodeField" value="@courseCode"/>
                     </div>
                 </div>
-                <div class="form-group">
-                        <label class="control-label pull-left">Days:</label>
-                    <div class="checkbox pull-right">
+                <div class="form-group vert-offset-top-20">
+                        <label class="control-label col-md-4">Days:</label>
+                    <div class="checkbox">
                         <label><input type="checkbox" name="dayField" value="M">Monday</label>
                     </div>
-                    <div class="checkbox pull-right">
+                    <div class="checkbox col-md-offset-4"">
                         <label><input type="checkbox" name="dayField" value="T">Tuesday</label>
                     </div>
-                    <div class="checkbox pull-right">
+                    <div class="checkbox col-md-offset-4"">
                         <label><input type="checkbox" name="dayField" value="W">Wednesday</label>
                     </div>
-                    <div class="checkbox pull-right">
+                    <div class="checkbox col-md-offset-4"">
                         <label><input type="checkbox" name="dayField" value="R">Thursday</label>
                     </div>
-                    <div class="checkbox pull-right">
+                    <div class="checkbox col-md-offset-4"t">
                         <label><input type="checkbox" name="dayField" value="F">Friday</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-inline">
-                        <label class="control-label">Time Start</label>
+                        <label class="control-label col-md-4">Time Start</label>
                         <input type="text" name="timeStartField" value="@timeStart"/>
                     </div>
-                    <div class="form-inline">
+                    <div class="form-inline vert-offset-top-20">
                         <label class="control-label">Time End</label>
                         <input type="text" name="timeEndField" value="@timeEnd"/>
                     </div>
-                    <div class="dropdown">
+                    <div class="col-md-4 dropdown vert-offset-top-20">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="termButton" data-toggle="dropdown">
                             Term
                             <span class="caret"></span>
@@ -94,6 +94,9 @@
                         <input type="text" id="systemIDField" name="systemIDField" value="@courseID" hidden/>
                     </div>
                 </div>
+                <div class="row form-group vert-offset-top-20">
+                    <button class="btn btn-primary col-md-4">Save</button>
+                </div>
                 <button class="btn btn-primary dropdown-toggle" type="submit">Save</button>
             </form>
         </div>
@@ -106,9 +109,9 @@
                 </div>
     
             </form>
-            <!--Generate href tags for all the  certifications and when selected add them to the list above
+            <!--Generate href tags for all the certifications and when selected add them to the list above-->
             <div class="form-group">
-                <div class="dropdown">
+                <div class="dropdown vert-offset-top-20">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                         Term
                         <span class="caret"></span>

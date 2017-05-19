@@ -15,7 +15,7 @@
 
 <body>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body fixed-panel">
             <form>
                 <div class="form-group">
                     <div class="col-md-4 col-md-offset-1">
@@ -42,17 +42,17 @@
                 </div>
 
             </form><div style="height:40px"></div>
-                    <div class="dropdown">
+                    <div class="col-md-offset-1 vert-offset-top-20 dropdown">
                         <button class="btn btn-primary dropdown-toggle dropdown-menu-right" type="button" data-toggle="dropdown">
-                            Lap Type
+                            Class
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" id="classList">
-                            <li><a href="#">Boulder</a></li>
-                            <li><a href="#">Top Rope</a></li>
+                            <li><a href="#">Climb Time</a></li>
+                            <li><a href="#">Intro</a></li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-primary" onClick="checkInUser()">Check In</button>
+                    <button class="col-md-offset-1 vert-offset-top-20 btn btn-primary" type="button" class="btn btn-primary" onClick="checkInUser()">Check In</button>
                     @{ var systemId = Model.systemID;}
                     <input type="text" id="systemIDField" value="@systemId" hidden/>
                 
