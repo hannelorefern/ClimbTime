@@ -219,7 +219,7 @@ public int addUser(string[] args)
             flag = Int32.TryParse(args[10], out num);
             if (flag) { contact = num; } else { contact = -1; }
             int ret = -1;
-
+            //
             cmd.reinitialize("INSERT INTO dbo.users (userType, firstName, lastName, SID, phone, email, shoeSize, harnessSize, mile) " +
                 "output INSERTED.ID VALUES(@userType, @firstName, @lastName, @sid, @phoneNumber, @email, @shoeSize, @harnessSize, @miles)", conn);
             cmd.addParameter("@userType", utype);
@@ -227,13 +227,13 @@ public int addUser(string[] args)
             cmd.addParameter("@lastName", lastName);
             cmd.addParameter("@sid", sid);
             cmd.addParameter("@netID", netID);
-            cmd.addParameter("@phone", phone);
+            cmd.addParameter("@phoneNumber", phone);
             cmd.addParameter("@email", email);
             cmd.addParameter("@shoeSize", shoeSize);
             cmd.addParameter("@harnessSize", harnessSize);
-            if (miles >= 0)
+            
                 cmd.addParameter("@miles", miles);
-            if (contact >= 0)
+            
                 cmd.addParameter("@contact", contact);
 
             try
