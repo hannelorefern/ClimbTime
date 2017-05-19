@@ -428,7 +428,40 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
-       public void generateCourseReport(string filename)
+        public FileResult CertificationReport()
+        {
+            string fileName = "CertificationReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateCertificationReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
+        public FileResult CourseReport()
+        {
+            string fileName = "CourseReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateCourseReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
+        public FileResult VisitReport()
+        {
+            string fileName = "VisitReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateVisitReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
+        public void generateCourseReport(string filename)
          {
              FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
              using (StreamWriter fout = new StreamWriter(file)) {
@@ -461,18 +494,7 @@ namespace WebApplication3.Controllers
              }
          }
 
-        public FileResult certificationReport()
-        {
-            string fileName = "CertificationReport" + DateTime.Now + ".csv";
-            generateCertificationReport(fileName);
-            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
-            {
-                FileDownloadName = fileName
-            };
-            return result;
-        }
- 
-         public void generateCertificationReport(string filename)
+        public void generateCertificationReport(string filename)
          {
              FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
              using (StreamWriter fout = new StreamWriter(file))

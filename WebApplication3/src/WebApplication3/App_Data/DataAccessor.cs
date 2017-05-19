@@ -110,6 +110,39 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        public List<User> getUsersByType(string type)
+        {
+            List<User> ret = new List<User>();
+            cmd.reinitialize("SELECT * FROM dbo.users WHERE userType = @ut", conn);
+            cmd.addParameter("@ut", type);
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    User temp = new User();
+                    temp.firstName = (string)reader["firstName"];
+                    temp.lastName = (string)reader["lastName"];
+                    temp.studentID = (string)reader["SID"];
+                    temp.systemID = (int)reader["userID"];
+                    temp.netID = (string)reader["netID"];
+                    temp.phoneNumber = (string)reader["phone"];
+                    temp.email = (string)reader["email"];
+                    temp.HarnessSize = (string)reader["harnessSize"];
+                    temp.ShoeSize = (string)reader["shoeSize"];
+                    ret.Add(temp);
+                }
+            }
+            return ret;
+        }
+
+        public List<User> getStaffUsers()
+        {
+            List<User> ret = new List<User>(); 
+            ret.AddRange(getUsersByType("A")); //admin
+            ret.AddRange(getUsersByType("S")); //staff
+            return ret;
+        }
+
         public int addUser(string[] args)
         {
             //returns ID of added user, -1 if not successful
@@ -466,6 +499,30 @@ namespace WebApplication3.App_Data
             return retFlag;
         }
 
+        public List<Course> getCourses()
+        {
+            List <Course> ret = new List<Course>();
+            cmd.reinitialize("SELECT * FROM dbo.course", conn);
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    Course temp = new Course();
+                    temp.ID = (int)reader["courseID"];
+                    temp.title = (string)reader["title"];
+                    temp.code = (string)reader["code"];
+                    temp.days = (string)reader["daysOfWeek"];
+                    temp.start = (TimeSpan)reader["startTime"];
+                    temp.end = (TimeSpan)reader["endTime"];
+                    temp.termID = (int)reader["term"];
+                    temp.certID = (int)reader["certification"];
+                    temp.equipID = (int)reader["checkout"];
+                    ret.Add(temp);
+                }
+            }
+            return ret;
+        }
+
         //enrolled
         public int enrollUser(User u, Course c)
         {
@@ -687,6 +744,65 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        //sign in
+        public bool addSignIn(string userName, string password)
+        {
+            bool retFlag = false;
+            cmd.reinitialize("INSERT INTO dbo.signin (userName, password) VALUES (@u, @p)", conn);
+            cmd.addParameter("@u", userName);
+            cmd.addParameter("@p", password);
+            try
+            {
+                cmd.execute();
+                retFlag = true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception adding staff member. " + ex.Message);
+            }
+            return retFlag;
+        }
+
+        public bool removeSignIn(string userName, string password)
+        {
+            bool retFlag = false;
+            cmd.reinitialize("DELETE FROM dbo.signin WHERE userName=@u AND password=@p)", conn);
+            cmd.addParameter("@u", userName);
+            cmd.addParameter("@p", password);
+            try
+            {
+                cmd.execute();
+                retFlag = true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception removing staff member. " + ex.Message);
+            }
+            return retFlag;
+        }
+
+        public bool getSignIn(string userName, string password)
+        {
+            bool retFlag = false;
+            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u AND password=@p)", conn);
+            cmd.addParameter("@u", userName);
+            cmd.addParameter("@p", password);
+            try
+            {
+                using(SqlDataReader reader = cmd.executeReader())
+                {
+                    if (reader.Read())
+                        retFlag = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Exception looking up staff member. " + ex.Message);
+            }
+            return retFlag;
+        }
+        
+        //update
         public void updateName(string firstName, string lastName, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET firstName = @firstName, lastName = @lastName WHERE userID = @userID", conn);
@@ -806,15 +922,16 @@ namespace WebApplication3.App_Data
         public List<string[]> allCourseReport()
         {
             List<string[]> ret = new List<string[]>();
-            string[] temp = { "User Type", "First Name", "Last Name", "Course"};
-            ret.Add(temp);
-            cmd.reinitialize("SELECT firstName, lastName, userType, code FROM dbo.enrolled AS e INNER JOIN dbo.users AS u ON e.userID = u.userID INNER JOIN dbo.course AS c ON c.courseID = e.courseID GROUP BY c.code", conn);
+            
+            ret.Add(new string[]{ "User Type", "First Name", "Last Name", "Course" });
+            cmd.reinitialize("SELECT firstName, lastName, userType, code FROM dbo.enrolled AS e INNER JOIN dbo.users AS u ON e.userID = u.userID INNER JOIN dbo.course AS c ON c.courseID = e.courseID ORDER BY c.code", conn);
             try
             {
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
                     {
+                        string[] temp = new string[4];
                         temp[0] = (string)reader["userType"];
                         temp[1] = (string)reader["firstName"];
                         temp[2] = (string)reader["lastName"];
@@ -863,20 +980,21 @@ namespace WebApplication3.App_Data
         public List<string[]> allVisitReport()
         {
             List<string[]> ret = new List<string[]>();
-            string[] temp = { "SID", "Last Name", "First Name", "Visit Type", "Duration" };
-            ret.Add(temp);
-            cmd.reinitialize("SELECT SID, lastName, First Name, title, duration FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID INNER JOIN dbo.visittype AS t ON v.visitTypeID = t.visitTypeID", conn);
+            ret.Add(new string[] { "SID", "Last Name", "First Name", "Visit Type", "Duration" });
+            cmd.reinitialize("SELECT SID, lastName, firstName, title, duration FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID INNER JOIN dbo.visittype AS t ON v.visitTypeID = t.visitTypeID", conn);
             try
             {
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
                     {
+                        string[] temp = new string[5];
                         temp[0] = (string)reader["SID"];
                         temp[1] = (string)reader["lastName"];
                         temp[2] = (string)reader["firstName"];
                         temp[3] = (string)reader["title"];
-                        temp[4] = (string)reader["duration"];
+                        int t = (int)reader["duration"];
+                        temp[4] = t.ToString();
                         ret.Add(temp);
                     }
                 }
@@ -919,19 +1037,20 @@ namespace WebApplication3.App_Data
         public List<string[]> allCertificationReport()
         {
             List<string[]> ret = new List<string[]>();
-            string[] temp = { "Certification", "Last Name", "First Name", "Expiration Date" };
-            ret.Add(temp);
-            cmd.reinitialize("SELECT title, lastName, firstName, expDate FROM dbo.usercertifications AS uc INNER JOIN dbo.users AS u ON uc.userID = u.userID INNER JOIN dbo.certification AS c ON c.certID = uc.certID GROUP BY title", conn);
+            ret.Add(new string[] { "Certification", "Last Name", "First Name", "Expiration Date" });
+            cmd.reinitialize("SELECT title, lastName, firstName, expDate FROM dbo.usercertifications AS uc INNER JOIN dbo.users AS u ON uc.userID = u.userID INNER JOIN dbo.certification AS c ON c.certID = uc.certID ORDER BY title", conn);
             try
             {
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
                     {
+                        string[] temp = new string[4];
                         temp[0] = (string)reader["title"];
                         temp[1] = (string)reader["lastName"];
                         temp[2] = (string)reader["firstName"];
-                        temp[3] = (string)reader["expDate"];
+                        DateTime t = (DateTime)reader["expDate"];
+                        temp[3] = t.ToString("MM-dd-yyyy");
                         ret.Add(temp);
                     }
                 }
