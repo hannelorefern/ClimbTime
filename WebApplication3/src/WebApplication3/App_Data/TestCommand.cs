@@ -62,7 +62,6 @@ namespace WebApplication3.App_Data
                 {
                     Debug.Write(reader[i] + " - ");
                 }
-                Debug.Write("\n");
             }
             return reader;
         }

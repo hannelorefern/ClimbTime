@@ -15,56 +15,37 @@
 
 <body>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
-        <div class="panel-body fixed-panel">
+        <div class="panel-body">
             <form>
                 <div class="form-group">
-                    <div class="col-md-4 col-md-offset-1">
-                        @{
-                            var shoeSize = Model.ShoeSize;
-                            if (shoeSize == null)
-                            { shoeSize = "N/A"; }
-                            var harnessSize = Model.HarnessSize;
-                            if (harnessSize == null)
-                            {
-                                harnessSize = "N/A";
-
-                            }
-                            var shoeString = "Shoes (" + shoeSize + ")";
-                            var harnessString = "Harness (" + harnessSize + ")";
-
-
-                        }
-                        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CheckoutShoes")'">@shoeString</button>
-                    </div>
-                    <div class="col-md-4 col-md-offset-1">
-                        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CheckoutHarness")'">@harnessString</button>
-                    </div>
-                </div>
-
-            </form><div style="height:40px"></div>
-                    <div class="col-md-offset-1 vert-offset-top-20 dropdown">
-                        <button class="btn btn-primary dropdown-toggle dropdown-menu-right" type="button" data-toggle="dropdown">
-                            Class
+                    <div class="form-inline">
+                        <div class="col-md-4 col-md-offset-1">
+                            <button class="btn btn-primary">Shoes</button>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <button class="btn btn-primary">Harness</button>
+                        </div>
+                    </div>  
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            Lap Type
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" id="classList">
-                            <li><a href="#">Climb Time</a></li>
-                            <li><a href="#">Intro</a></li>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Boulder</a></li>
+                            <li><a href="#">Top Rope</a></li>
                         </ul>
                     </div>
-                    <button class="col-md-offset-1 vert-offset-top-20 btn btn-primary" type="button" class="btn btn-primary" onClick="checkInUser()">Check In</button>
-                    @{ var systemId = Model.systemID;}
-                    <input type="text" id="systemIDField" value="@systemId" hidden/>
-                
+                    <button class="btn btn-primary">Check In</button>
+                </div>
+            </form>
         </div>
     </div>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
         <div class="panel-body">
             <form asp-controller="Home" asp-action="">
                 <div id="scrollview" style="overflow:scroll;height:400px">
-                   <ul id="certList">
-
-                   </ul>
+                   
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary btn-lg vert-offset-top-20" id="Button3" type="submit">Add Certification</button>
@@ -73,42 +54,6 @@
         </div>
     </div>
 </body>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script>
-    function checkInUser() {
-        var url = '@Url.Action("AddClimberBySystemID")'
-        var systemID = this.document.getElementById("systemIDField").value;
-        url += '?systemID=' + systemID;
-
-        window.location.href = url;
-
-
-    }
-
-    var classList = this.document.getElementById("classList");
-    $(document).ready(function () {
-        var url = '@Url.Action("getClasses")';
-        $.ajax({
-            url: url
-        }).done(function (data) {
-            var i = 0;
-            for (i = 0; i < data.length; i++)
-                classList.innerHTML += "<li>" + data[i] + "</li>";
-        });
-    });
-    var certList = this.document.getElementById("certList");
-    $(document).ready(function () {
-        var url = '@Url.Action("getCertificationData")';
-        $.ajax({
-            url: url
-        }).done(function (data) {
-            var i = 0;
-            for (i = 0; i < data.length; i++)
-                certList.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
-        });
-    });
-</script>
 
 
 

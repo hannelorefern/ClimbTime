@@ -12,9 +12,9 @@
             <li><a href="#e" data-toggle="tab">Enrollment</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active fixed-panel" id="a">
+            <div class="tab-pane active" id="a">
                 <form asp-controller="Home" asp-action="saveInventoryEdits" class="form-inline">
-                    <div class="col-md-offset-3 vert-offset-top-20">
+                    <div class="col-md-offset-3">
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="dropdown">
@@ -23,7 +23,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        @{string[] sizes = { "10.0", "10.5", "11.0" };////what are the acceptable sizes, or, are we going to let them add new sizes?
+                                        @{string[] sizes = { "10.0", "10.5", "11.0" };//
                                             for (int i = 0; i < sizes.Length; i++)
                                             {
                                                 <li style="display:block" onclick="getShoeCount(@sizes[i])">@sizes[i]</li>
@@ -34,7 +34,7 @@
                                     </ul>
                                 </div>
                                 <div class="form-group pull-right">
-                                    <label for="shoebox">Amount:</label>
+                                    <label for="shoe-box">Amount:</label>
                                     <input type="text" name="shoebox" id="shoeBox" />
                                     <input type="text" name="shoeboxsize" id="shoeBoxSize" hidden />
                                 </div>
@@ -56,7 +56,7 @@
                                     </ul>
                                 </div>
                                 <div class="form-group pull-right">
-                                    <label for="harnessbox">Amount:</label>
+                                    <label for="harness-box">Amount:</label>
                                     <input type="text" name="harnessbox" id="harnessBox" />
                                     <input type="text" name="harnessboxsize" id="harnessBoxSize" hidden />
                                 </div>
@@ -73,67 +73,43 @@
                 </form>
             </div>
 
-            <div class="tab-pane fixed-panel" id="b" name="classpane">
-
-                <form id="classForm">
+            <div class="tab-pane" id="b" name="classpane">
                     <div id="scrollview" style="overflow:scroll;height:400px">
-                        <ul id="courseDiv">
-                            
-
-
-                        </ul>
                     </div>
-                    <button type="button" class="btn btn-primary" pullleft onclick="AddClass()">Add</button>
-                    <button type="button" class="btn btn-primary" pullright onclick="editClass()">Edit Selected</button>
-                    <button type="button" class="btn btn-primary" pullleft onclick="removeClass()">Remove Selected</button>
+                <form>
+                    <button class="btn btn-primary" pullleft onclick="">Add</button>
+                    <button class="btn btn-primary" pullright >Edit Selected</button>
+                    <button class="btn btn-primary" pullleft>Remove Selected</button>
                 </form>
             </div>
 
-            <div class="tab-pane fixed-panel" id="c" name="certificationpane">
-                    <div id="certscrollview" style="overflow:scroll;height:400px">
-                        
-                        <ul id="certList">
-                            
-
-
-                           
-
-
-                        </ul>
-                        <script>
-                            
-</script>
+            <div class="tab-pane" id="c">
+                    <div id="scrollview" style="overflow:scroll;height:400px">
                     </div>
-                    <button type="button" class="btn btn-primary" pullleft onclick="location.href='AddCertification'">Add</button>
-                    <button type="button" class="btn btn-primary" pullright onclick="editCertification()">Edit Selected</button>
-                    <button type="button" class="btn btn-primary" pullleft onclick="removeCertification()">Remove Selected</button>
-                
+                <form>
+                    <button class="btn btn-primary" pullleft>Add</button>
+                    <button class="btn btn-primary" pullright>Edit Selected</button>
+                    <button class="btn btn-primary" pullleft>Remove Selected</button>
+                </form>
             </div>
 
-            <div class="tab-pane fixed-panel" id="d" name="staffpane">
+            <div class="tab-pane" id="d">
                     <div id="scrollview" style="overflow:scroll;height:400px">
-                        <ul id="staffDiv">
-                           
-
-
-                        </ul>
                     </div>
                 <form>
-                    <button type="button" class="btn btn-primary" pullleft onclick="location.href='AddStaff'">Add</button>
-                    <button type="button" class="btn btn-primary" pullright onclick="editStaff()">Edit Selected</button>
-                    <button type="button" class="btn btn-primary" pullleft onclick="removeStaff()">Remove Selected</button>
+                    <button class="btn btn-primary" pullleft>Add</button>
+                    <button class="btn btn-primary" pullright>Edit Selected</button>
+                    <button class="btn btn-primary" pullleft>Remove Selected</button>
                 </form>
-             </div>
-            
-            <div class="tab-pane fixed-panel" id="e">
-                <form>
-                    <div class="input-group">
+                <div class="tab-pane" id="e">
+                    <form>
+                        <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search" name="SearchTerm" id="Text2"><div class="input-group-btn">
                                 <div class="btn-group" role="group">
                                     <div class="dropdown dropdown-lg">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="updateSearchResults()" aria-expanded="false"><span class="caret"></span></button>
                                         <div class="dropdown-menu dropdown-menu-right" role="menu" style="width:600px;" id="partial">
-                                            @Html.Partial("SearchResults", new List<User>());
+                                            @Html.Partial("SearchResults")
                                         </div>
                                     </div>
                                 </div>
@@ -144,19 +120,22 @@
                                 Harness Size:
                                 <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu" id="courseEnroll">
-                                <!--Fill with classes-->
+                            <ul class="dropdown-menu">
+                                <!--Fill with harness sizes-->
+                                <li onclick="getHarnessCount('L')">L</li>
+                                <li onclick="getHarnessCount('M')">M</li>
+                                <li onclick="getHarnessCount('S')">S</li>
                             </ul>
                         </div>
                         <!--Submit the record and then refresh--> 
                         <button class="btn btn-primary">Enroll</button>
                     </form>
                 </div>
+            </div>
         </div>
     </div>
     <!-- /tabs -->
 </body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     function getHarnessCount(size) {
         var count;
@@ -185,141 +164,5 @@
         });
 
     }
-    function AddClass() {
-        window.location.href = '@Url.Action("addClass")';
 
-    }
-
-    function editClass() {
-        var url = '@Url.Action("editClass")';
-        var classForm = this.document.getElementsByName("courseList");
-        var toEdit
-        var i;
-        for (i = 0; i < classForm.length; i++) {
-            if (classForm[i].checked) {
-                toEdit = classForm[i].value;
-            }
-        }
-        url += '?className=' + toEdit;
-        window.location.href = url;
-
-    }
-
-    function removeClass() {
-        var url = '@Url.Action("removeClass")';
-        var classForm = this.document.getElementsByName("classList");
-        var toEdit
-        var i;
-        for (i = 0; i < classForm.length; i++) {
-            if (classForm[i].checked) {
-                toEdit = classForm[i].value;
-            }
-        }
-        url += '?className=' + toEdit;
-        window.location.href = url;
-
-    }
-    
-    function editCertification() {
-        var url = '@Url.Action("editCertification")';
-        var certForm = this.document.getElementsByName("certificationList");
-        var toEdit
-        var i;
-        for (i = 0; i < certForm.length; i++) {
-            if (certForm[i].checked) {
-                toEdit = certForm[i].value;
-            }
-        }
-        url += '?certificationID=' + toEdit;
-        window.location.href = url;
-
-    }
-
-    function removeCertification() {
-        var url = '@Url.Action("removeCertification")';
-        var certForm = this.document.getElementsByName("certificationList");
-        var toEdit
-        var i;
-        for (i = 0; i < certForm.length; i++) {
-            if (certForm[i].checked) {
-                toEdit = certForm[i].value;
-            }
-        }
-        url += '?certificationID=' + toEdit;
-        window.location.href = url;
-
-    }
-
-     function editStaff() {
-        var url = '@Url.Action("editStaff")';
-        var Form = this.document.getElementsByName("staffList");
-        var toEdit
-        var i;
-        for (i = 0; i < Form.length; i++) {
-            if (Form[i].checked) {
-                toEdit = Form[i].value;
-            }
-        }
-        url += '?staffID=' + toEdit;
-        window.location.href = url;
-
-    }
-
-    function removeStaff() {
-        var url = '@Url.Action("removeStaff")';
-        var Form = this.document.getElementsByName("staffList");
-        var toEdit
-        var i;
-        for (i = 0; i < Form.length; i++) {
-            if (Form[i].checked) {
-                toEdit = Form[i].value;
-            }
-        }
-        url += '?staffID=' + toEdit;
-        window.location.href = url;
-
-    }
-    var certDiv = this.document.getElementById("certList");
-    $(document).ready(function(){
-    var url = '@Url.Action("getCertificationData")';
-    $.ajax({
-        url: url
-    }).done(function (data) {
-        var i = 0;
-        for (i = 0; i < data[0].length; i++)
-            certDiv.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
-    });
-    });
-    var staffDiv = this.document.getElementById("staffDiv");
-    $(document).ready(function(){
-        var url = '@Url.Action("getStaffData")';
-        $.ajax({
-            url: url
-        }).done(function (data) {
-            var i = 0;
-            for (i = 0; i < data[0].length; i++)
-                staffDiv.innerHTML += "<li><input type=\"radio\" name=\"staffList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
-        });
-    });
-    var courseDiv = this.document.getElementById("courseDiv");
-    var secondDiv = this.document.getElementById("courseEnroll");
-    $(document).ready(function () {
-        var url = '@Url.Action("getCourseData")';
-        $.ajax({
-            url: url
-        }).done(function (data) {
-            var i = 0;
-            for (i = 0; i < data[0].length; i++)
-                courseDiv.innerHTML += "<li><input type=\"radio\" name=\"courseList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
-                secondDiv.innerHTML += "<li><input type=\"radio\" name=\"enrollCourseList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
-        });
-    });
-
-    function updateSearchResults() {
-
-        var url = '@Url.Action("GetMatchesForSignIn")'
-        url += '?searchTerm=' + Text2.value;
-        var partial = $("#partial");
-        partial.load(url);
-    }
 </script>

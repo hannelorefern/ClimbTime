@@ -47,24 +47,26 @@ namespace WebApplication3.App_Data
                 {
                     ret.systemID = (int)reader["userID"];
                     ret.studentID = (string)reader["SID"];
-                    ret.userType = (string)reader["userType"];
                     ret.firstName = (string)reader["firstName"];
                     ret.lastName = (string)reader["lastName"];
-                    ret.ShoeSize = (string)reader["shoeSize"];
-                    ret.HarnessSize = (string)reader["harnessSize"];
-                    ret.phoneNumber = (string)reader["phone"];
-                    ret.email = (string)reader["email"];
                 }
             }
             return ret;
         }
 
-        public User getUser(int systemID)
-        { User ret = new User();
-            
-                cmd.reinitialize("SELECT * FROM dbo.users WHERE userID = @systemID", conn);
-                cmd.addParameter("@systemID", systemID);
-
+        public User getUser(string CardSwipe) {
+            User ret = new User();
+            if (char.IsLetter(CardSwipe.First()))
+            {
+                //TO DO: FIX THIS SHIT.
+                cmd.reinitialize("SELECT * FROM dbo.users WHERE netID = @netID", conn);
+                cmd.addParameter("@netID", CardSwipe);
+            }
+            else
+            {
+                cmd.reinitialize("SELECT * FROM dbo.users WHERE SID = @sid", conn);
+                cmd.addParameter("@sid", CardSwipe);
+            }
             using (SqlDataReader reader = cmd.executeReader())
             {
                 if (reader.Read())
@@ -88,114 +90,27 @@ namespace WebApplication3.App_Data
                     {
                         ret.HarnessSize = "Information not found";
                     }
-                    if (!DBNull.Value.Equals(reader["phone"]))
+                    if (! DBNull.Value.Equals(reader["phone"]))
                     { ret.phoneNumber = (string)reader["phone"]; }
                     else
                     {
                         ret.phoneNumber = "Information not found";
                     }
-                    if (!DBNull.Value.Equals(reader["email"]))
+                    if (! DBNull.Value.Equals(reader["email"]))
                     { ret.email = (string)reader["email"]; }
                     else
                     {
                         ret.email = "Information not found";
                     }
-                }
-            }
-            return ret;
-        }
+                    
 
-        public User getUser(string CardSwipe) {
-            User ret = new User();
-            if (char.IsLetter(CardSwipe.First()))
-            {
-                cmd.reinitialize("SELECT * FROM dbo.users WHERE netID = @netID", conn);
-                cmd.addParameter("@netID", CardSwipe);
-            }
-            else
-            {
-                cmd.reinitialize("SELECT * FROM dbo.users WHERE SID = @sid", conn);
-                cmd.addParameter("@sid", CardSwipe);
-            }
-            using (SqlDataReader reader = cmd.executeReader())
-            {
-                if (reader.Read())
-                {
-                    ret.systemID = (int)reader["userID"];
-                    ret.userType = (string)reader["userType"];
-                    ret.firstName = (string)reader["firstName"];
-                    ret.lastName = (string)reader["lastName"];
-
-                    if (!DBNull.Value.Equals(reader["SID"]))
-                    { ret.studentID = (string)reader["SID"]; }
-                    else
-                    {
-                        ret.studentID = null;
-                    }
-                    if (!DBNull.Value.Equals(reader["shoeSize"]))
-                    { ret.ShoeSize = (string)reader["shoeSize"]; }
-                    else
-                    {
-                        ret.ShoeSize = null;
-                    }
-                    if (!DBNull.Value.Equals(reader["harnessSize"]))
-                    { ret.HarnessSize = (string)reader["harnessSize"]; }
-                    else
-                    {
-                        ret.HarnessSize = null;
-                    }
-                    if (!DBNull.Value.Equals(reader["phone"]))
-                    { ret.phoneNumber = (string)reader["phone"]; }
-                    else
-                    {
-                        ret.phoneNumber = null;
-                    }
-                    if (!DBNull.Value.Equals(reader["email"]))
-                    { ret.email = (string)reader["email"]; }
-                    else
-                    {
-                        ret.email = null;
-                    }
 
                 }
             }
             return ret;
         }
 
-     public List<User> getUsersByType(string type)
-{
-    List<User> ret = new List<User>();
-    cmd.reinitialize("SELECT * FROM dbo.users WHERE userType = @ut", conn);
-    cmd.addParameter("@ut", type);
-    using (SqlDataReader reader = cmd.executeReader())
-    {
-        while (reader.Read())
-        {
-            User temp = new User();
-            temp.firstName = (string)reader["firstName"];
-            temp.lastName = (string)reader["lastName"];
-            temp.studentID = (string)reader["SID"];
-            temp.systemID = (int)reader["userID"];
-            temp.netID = (string)reader["netID"];
-            temp.phoneNumber = (string)reader["phone"];
-            temp.email = (string)reader["email"];
-            temp.HarnessSize = (string)reader["harnessSize"];
-            temp.ShoeSize = (string)reader["shoeSize"];
-            ret.Add(temp);
-        }
-    }
-    return ret;
-}
-
-public List<User> getStaffUsers()
-{
-    List<User> ret = new List<User>();
-    ret.AddRange(getUsersByType("A")); //admin
-    ret.AddRange(getUsersByType("S")); //staff
-    return ret;
-}
-
-public int addUser(string[] args)
+        public int addUser(string[] args)
         {
             //returns ID of added user, -1 if not successful
 
@@ -364,7 +279,7 @@ public int addUser(string[] args)
         public int addCertification(string title, int yearsBeforeExp)
         {
             int ret = -1;
-            cmd.reinitialize("INSERT INTO dbo.certification (title, yearsBeforeExp) output INSERTED.certID VALUES (@title, @years)", conn);
+            cmd.reinitialize("INSERT INTO dbo.certifications (title, yearsBeforeExp) output INSERTED.ID VALUES (@title, @years)", conn);
             cmd.addParameter("@title", title);
             cmd.addParameter("@years", yearsBeforeExp);
             try
@@ -378,27 +293,10 @@ public int addUser(string[] args)
             return ret;
         }
 
-        public Certification getCertification(int id)
-        {
-            cmd.reinitialize("SELECT * FROM dbo.certification WHERE certID = @id", conn);
-            cmd.addParameter("@id", id);
-            Certification ret = new Certification();
-            using (SqlDataReader reader = cmd.executeReader())
-            {
-                if (reader.Read())
-                {
-                    ret.ID = (int)reader["certID"];
-                    ret.title = (string)reader["title"];
-                    ret.yearsBeforeExp = (int)reader["yearsBeforeExp"];
-                }
-            }
-            return ret;
-        }
-
         public bool removeCertification(Certification cert)
         {
             bool retFlag = false;
-            cmd.reinitialize("DELETE FROM dbo.certification WHERE certID = @id", conn);
+            cmd.reinitialize("DELETE FROM dbo.certifications WHERE certID = @id", conn);
             cmd.addParameter("@id", cert.ID);
             try
             {
@@ -568,63 +466,6 @@ public int addUser(string[] args)
             return retFlag;
         }
 
-        public Course getCourse(int courseID)
-        {
-            cmd.reinitialize("SELECT * FROM dbo.course where courseID=@id", conn);
-            cmd.addParameter("@id", courseID);
-            Course temp = new Course();
-            using (SqlDataReader reader = cmd.executeReader())
-            {
-                while (reader.Read())
-                {
-                    temp.ID = (int)reader["courseID"];
-                    temp.title = (string)reader["title"];
-                    temp.code = (string)reader["code"];
-                    temp.days = (string)reader["daysOfWeek"];
-                    temp.start = (TimeSpan)reader["startTime"];
-                    temp.end = (TimeSpan)reader["endTime"];
-                    temp.termID = (int)reader["term"];
-                    if (!DBNull.Value.Equals(reader["certification"]))
-                    {
-                        temp.certID = (int)reader["certification"];
-                    }
-                    if (!DBNull.Value.Equals(reader["checkout"]))
-                    { temp.equipID = (int)reader["checkout"]; }
-                    
-                }
-            }
-            return temp;
-
-        }
-
-        public List<Course> getCourses()
-        {
-            List <Course> ret = new List<Course>();
-            cmd.reinitialize("SELECT * FROM dbo.course", conn);
-            using (SqlDataReader reader = cmd.executeReader())
-            {
-                while (reader.Read())
-                {
-                    Course temp = new Course();
-                    temp.ID = (int)reader["courseID"];
-                    temp.title = (string)reader["title"];
-                    temp.code = (string)reader["code"];
-                    temp.days = (string)reader["daysOfWeek"];
-                    temp.start = (TimeSpan)reader["startTime"];
-                    temp.end = (TimeSpan)reader["endTime"];
-                    temp.termID = (int)reader["term"];
-                    if (!DBNull.Value.Equals(reader["certification"]))
-                    {
-                        temp.certID = (int)reader["certification"];
-                    }
-                    if (!DBNull.Value.Equals(reader["checkout"]))
-                    { temp.equipID = (int)reader["checkout"]; }
-                    ret.Add(temp);
-                }
-            }
-            return ret;
-        }
-
         //enrolled
         public int enrollUser(User u, Course c)
         {
@@ -736,24 +577,6 @@ public int addUser(string[] args)
             return ret;
         }
 
-        public string[] getInventoryData(string name, string size)
-        {
-            string[] ret = new string[4];
-            cmd.reinitialize("SELECT * FROM dbo.equipment WHERE name = @name AND size = @size", conn);
-            cmd.addParameter("@name", name);
-            cmd.addParameter("@size", size);
-            using (SqlDataReader reader = cmd.executeReader())
-            {
-                while (reader.Read())
-                {
-                    ret[0] = (string)reader["equipID"];
-                    ret[1] = (string)reader["name"];
-                    ret[2] = (string)reader["size"];
-                    ret[3] = (string)reader["count"];
-                }
-            }
-            return ret;
-        }
         //equipmentuse
         public bool equipCheckout(int visitID, User climber, int equipID)
         {
@@ -864,65 +687,6 @@ public int addUser(string[] args)
             return ret;
         }
 
-        //sign in
-        public bool addSignIn(string userName, string password)
-        {
-            bool retFlag = false;
-            cmd.reinitialize("INSERT INTO dbo.signin (userName, password) VALUES (@u, @p)", conn);
-            cmd.addParameter("@u", userName);
-            cmd.addParameter("@p", password);
-            try
-            {
-                cmd.execute();
-                retFlag = true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception adding staff member. " + ex.Message);
-            }
-            return retFlag;
-        }
-
-        public bool removeSignIn(string userName, string password)
-        {
-            bool retFlag = false;
-            cmd.reinitialize("DELETE FROM dbo.signin WHERE userName=@u AND password=@p)", conn);
-            cmd.addParameter("@u", userName);
-            cmd.addParameter("@p", password);
-            try
-            {
-                cmd.execute();
-                retFlag = true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception removing staff member. " + ex.Message);
-            }
-            return retFlag;
-        }
-
-        public bool getSignIn(string userName, string password)
-        {
-            bool retFlag = false;
-            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u AND password=@p", conn);
-            cmd.addParameter("@u", userName);
-            cmd.addParameter("@p", password);
-            try
-            {
-                using(SqlDataReader reader = cmd.executeReader())
-                {
-                    if (reader.Read())
-                        retFlag = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception looking up staff member. " + ex.Message);
-            }
-            return retFlag;
-        }
-        
-        //update
         public void updateName(string firstName, string lastName, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET firstName = @firstName, lastName = @lastName WHERE userID = @userID", conn);
@@ -935,6 +699,7 @@ public int addUser(string[] args)
                 throw new Exception("Exception updating user. " + ex.Message);
             }
         }
+
         public void updateStudentID(string studentID, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET SID = @studentID WHERE userID = @userID", conn);
@@ -946,7 +711,6 @@ public int addUser(string[] args)
                 throw new Exception("Exception updating user. " + ex.Message);
             }
         }
-
         public void updateShoeSize(string shoeSize, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET shoeSize = @shoeSize WHERE userID = @userID", conn);
@@ -958,7 +722,6 @@ public int addUser(string[] args)
                 throw new Exception("Exception updating user. " + ex.Message);
             }
         }
-
         public void updateHarnessSize(string harnessSize, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET harnessSize = @harnessSize WHERE userID = @userID", conn);
@@ -971,7 +734,6 @@ public int addUser(string[] args)
             }
 
         }
-
         public void updatePhone(string phoneNum, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET phone = @phoneNum WHERE userID = @userID", conn);
@@ -984,7 +746,6 @@ public int addUser(string[] args)
             }
 
         }
-
         public void updateEmail(string email, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET email = @email WHERE userID = @userID", conn);
@@ -997,7 +758,6 @@ public int addUser(string[] args)
             }
 
         }
-
         public void updateUserType(string userType, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET userType = @userType WHERE userID = @userID", conn);
@@ -1009,186 +769,6 @@ public int addUser(string[] args)
                 throw new Exception("Exception updating user. " + ex.Message);
             }
 
-        }
-
-        public void updateCertification(string title, int yearsValid, int sysID)
-        {
-            cmd.reinitialize("UPDATE dbo.certification SET title = @t, yearsBeforeExp = @y WHERE certID = @c", conn);
-            cmd.addParameter("@t", title);
-            cmd.addParameter("@y", yearsValid);
-            cmd.addParameter("@c", sysID);
-            try { cmd.execute(); }
-            catch (Exception ex) { throw new Exception("Exception updating certification. " + ex.Message); }
-        }
-
-        //reports
-        public List<string[]> courseReport(Course c)
-        {
-            List <string[]> ret = new List<string[]>();
-            string[] temp = { "User Type", "First Name", "Last Name" };
-            ret.Add(temp);
-            cmd.reinitialize("SELECT firstName, lastName, userType FROM dbo.enrolled INNER JOIN dbo.users ON dbo.users.userID = dbo.enrolled.userID WHERE courseID = @cID", conn);
-            cmd.addParameter("@cID", c.ID);
-            try
-            {
-                using (SqlDataReader reader = cmd.executeReader())
-                {
-                    while (reader.Read())
-                    {
-                        temp[0] = (string)reader["userType"];
-                        temp[1] = (string)reader["firstName"];
-                        temp[2] = (string)reader["lastName"];
-                        ret.Add(temp);
-                    }
-                }
-            } catch(Exception ex)
-            {
-                throw new Exception("Exception generating course report." + ex.Message);
-            }
-            return ret;
-        }
-
-        public List<string[]> allCourseReport()
-        {
-            List<string[]> ret = new List<string[]>();
-            
-            ret.Add(new string[]{ "User Type", "First Name", "Last Name", "Course" });
-            cmd.reinitialize("SELECT firstName, lastName, userType, code FROM dbo.enrolled AS e INNER JOIN dbo.users AS u ON e.userID = u.userID INNER JOIN dbo.course AS c ON c.courseID = e.courseID ORDER BY c.code", conn);
-            try
-            {
-                using (SqlDataReader reader = cmd.executeReader())
-                {
-                    while (reader.Read())
-                    {
-                        string[] temp = new string[4];
-                        temp[0] = (string)reader["userType"];
-                        temp[1] = (string)reader["firstName"];
-                        temp[2] = (string)reader["lastName"];
-                        temp[3] = (string)reader["code"];
-                        ret.Add(temp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception generating course report." + ex.Message);
-            }
-            return ret;
-        }
-
-        public List<string[]> visitReport(DateTime start, DateTime end)
-        {
-            List<string[]> ret = new List<string[]>();
-            string[] temp = { "SID", "Last Name", "First Name", "Visit Type", "Duration" };
-            ret.Add(temp);
-            cmd.reinitialize("SELECT SID, lastName, First Name, title, duration FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID INNER JOIN dbo.visittype AS t ON v.visitTypeID = t.visitTypeID WHERE startDateTime >= @s AND startDateTime <= @e", conn);
-            cmd.addParameter("@s", start);
-            cmd.addParameter("@e", end);
-            try
-            {
-                using (SqlDataReader reader = cmd.executeReader())
-                {
-                    while (reader.Read())
-                    {
-                        temp[0] = (string)reader["SID"];
-                        temp[1] = (string)reader["lastName"];
-                        temp[2] = (string)reader["firstName"];
-                        temp[3] = (string)reader["title"];
-                        temp[4] = (string)reader["duration"];
-                        ret.Add(temp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception generating visit report." + ex.Message);
-            }
-            return ret;
-        }
-
-        public List<string[]> allVisitReport()
-        {
-            List<string[]> ret = new List<string[]>();
-            ret.Add(new string[] { "SID", "Last Name", "First Name", "Visit Type", "Duration" });
-            cmd.reinitialize("SELECT SID, lastName, firstName, title, duration FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID INNER JOIN dbo.visittype AS t ON v.visitTypeID = t.visitTypeID", conn);
-            try
-            {
-                using (SqlDataReader reader = cmd.executeReader())
-                {
-                    while (reader.Read())
-                    {
-                        string[] temp = new string[5];
-                        temp[0] = (string)reader["SID"];
-                        temp[1] = (string)reader["lastName"];
-                        temp[2] = (string)reader["firstName"];
-                        temp[3] = (string)reader["title"];
-                        int t = (int)reader["duration"];
-                        temp[4] = t.ToString();
-                        ret.Add(temp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception generating visit report." + ex.Message);
-            }
-            return ret;
-        }
-
-        public List<string[]> certificationReport(Certification cert)
-        {
-            List<string[]> ret = new List<string[]>();
-            string[] temp = { "Certification", "Last Name", "First Name", "Expiration Date" };
-            ret.Add(temp);
-            cmd.reinitialize("SELECT title, lastName, firstName, expDate FROM dbo.usercertifications AS uc INNER JOIN dbo.users AS u ON uc.userID = u.userID INNER JOIN dbo.certification AS c ON c.certID = uc.certID WHERE certID = @cID ORDER BY lastName", conn);
-            cmd.addParameter("@cID", cert.ID);
-            try
-            {
-                using (SqlDataReader reader = cmd.executeReader())
-                {
-                    while (reader.Read())
-                    {
-                        temp[0] = (string)reader["title"];
-                        temp[1] = (string)reader["lastName"];
-                        temp[2] = (string)reader["firstName"];
-                        temp[3] = (string)reader["expDate"];
-                        ret.Add(temp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception generating certification report." + ex.Message);
-            }
-            return ret;
-        }
-
-        public List<string[]> allCertificationReport()
-        {
-            List<string[]> ret = new List<string[]>();
-            ret.Add(new string[] { "Certification", "Last Name", "First Name", "Expiration Date" });
-            cmd.reinitialize("SELECT title, lastName, firstName, expDate FROM dbo.usercertifications AS uc INNER JOIN dbo.users AS u ON uc.userID = u.userID INNER JOIN dbo.certification AS c ON c.certID = uc.certID ORDER BY title", conn);
-            try
-            {
-                using (SqlDataReader reader = cmd.executeReader())
-                {
-                    while (reader.Read())
-                    {
-                        string[] temp = new string[4];
-                        temp[0] = (string)reader["title"];
-                        temp[1] = (string)reader["lastName"];
-                        temp[2] = (string)reader["firstName"];
-                        DateTime t = (DateTime)reader["expDate"];
-                        temp[3] = t.ToString("MM-dd-yyyy");
-                        ret.Add(temp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Exception generating certification report." + ex.Message);
-            }
-            return ret;
         }
 
     }

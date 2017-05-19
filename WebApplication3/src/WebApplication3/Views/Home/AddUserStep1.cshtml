@@ -67,6 +67,7 @@
         <div class="panel-body">
             <form asp-controller="Home" asp-action="MoveGroupToVideo" id="progressForm">
                 <div id="scrollview" style="overflow:scroll;height:400px">
+                    @*Code for users who have signed up in batch group*@
                     <div></div>
                 </div>
             </form>
@@ -81,7 +82,7 @@
         var phone = this.document.getElementById("phoneField");
         var address = this.document.getElementById("addressField");
         var cardSwipe = this.document.getElementById("cardSwipeField");
-        if (name.value!="" ){
+        if (name.value!="" || cardSwipe.value!=""){
             var count = @Model.Count();
             var scrollView = this.document.getElementById("scrollview");
             scrollView.innerHTML+="<div>"+name.value+"</div>"+

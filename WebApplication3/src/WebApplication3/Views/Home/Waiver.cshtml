@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-@model IEnumerable<User>
+
 
 <!DOCTYPE HTML>
 <!-- saved from url=(0038)http://szimek.github.io/signature_pad/ -->
@@ -208,43 +208,15 @@
     </div>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
         <div class="panel-body">
-            <form asp-controller="Home" asp-action="FinalizeWaiver" id="progressForm">
+            <form asp-controller="BatchAddClimbers" asp-action="x">
                 <div id="scrollview" style="overflow:scroll;height:400px">
-                    @{ foreach (User user in Model)
-                        {
-                            <div>
-                                @user.firstName &nbsp @user.lastName;
-                                <input type="text" name="firstNameField" value="@user.firstName" hidden />
-                                <input type="text" name="lastNameField" value="@user.lastName" hidden />
-                                <input type="text" name="phoneField" value="@user.phoneNumber" hidden />
-                                <input type="text" name="addressField" value="@user.email" hidden />
-                                <input type="text" name="cardSwipeField" value="@user.studentID" hidden />
-
-                            </div>
-                        }
-                    }</div>
-                <button type="button" class="btn btn-primary" onclick="nextButton()">Next</button>
+                    @*Code for users who have signed up in batch group*@
+                </div>
+                <button class="btn btn-primary">Next</button>
             </form>
         </div>
     </div>
 
 
 </BODY>
-<script>
-    var iter = 0;
-    function nextButton() {
-        var signed = true;
-        //this needs to be a proper check of the waiver
-        if (signed) {
-            iter = iter + 1;
-            var count = @Model.Count();
-            if(iter>= count){
-                this.document.getElementById("progressForm").submit();
-            
-            }
 
-        }
-
-    }
-
-</script>
