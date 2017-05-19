@@ -412,18 +412,22 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
-        public string[] getClasses()
+        public string[][] getCourseData()
         {
             List<Course> courses = db.getCourses();
-            string[] ret = new string[courses.Count()];
-
-            string[] temp = { "TestClass" };
+            string[] name = new string[courses.Count];
+            string[] sysID = new string[courses.Count];
+            for(int i = 0; i < courses.Count; i++)
+            {
+                name[i] = courses[i].title;
+                sysID[i] = ""+courses[i].ID;
+            }
             //put all the course names in a string []
 
             //return the array
-
+            string[][] ret = { name, sysID };
             
-            return temp;
+            return ret;
         }
 
         public IActionResult AddClass()
@@ -431,16 +435,35 @@ namespace WebApplication3.Controllers
             return View("ClassCreation");
         }
 
-        public IActionResult EditClass(string className)
+        public IActionResult EditClass(string courseId)
         {
             //Course toEdit = db.getCourse(className); //or something like it
 
             return View("ClassCreation");
         }
 
-        public IActionResult RemoveClass(string className)
+        public IActionResult RemoveClass(string courseId)
         {
             //db.removeCourse();
+
+            return View("Settings");
+        }
+
+        public IActionResult SaveCourse(string TitleField, string CourseCodeField, string timeStartField, string timeEndField, string termField)
+        {
+            Course toSave = new Course();
+            toSave.code = CourseCodeField;
+            string dayString = this.Request.Form["dayField"];
+            string[] days = dayString.Split(',');
+            dayString = "";
+            for (int i = 0; i < days.Count(); i++)
+            {
+                dayString += days[i]; 
+            }
+            toSave.days = dayString;
+
+            //Finish this method;
+
 
             return View("Settings");
         }
@@ -489,7 +512,7 @@ namespace WebApplication3.Controllers
             }
             else
             {
-                //db.editCertification(nameField, yearsValid, sysID);
+                db.updateCertification(nameField, yearsValid, sysID);
             }
 
             return View("Settings");
@@ -621,11 +644,14 @@ namespace WebApplication3.Controllers
             string uName = this.Request.Form["usernameField"];
             string pWord = this.Request.Form["passwordField"];
             if (db.getSignIn(uName, pWord))
-                return Index();
+                return this.Index();
             else
                 return View("AdminSignIn");
         }
-
+        public IActionResult AdminSignIn()
+        {
+            return View("AdminSignIn");
+        }
 
     }
 
