@@ -181,7 +181,6 @@ namespace WebApplication3.Controllers
                 toSignIn = db.getUser(CardSwipe);
 
                 return View("SignInDetails", toSignIn);
-                //return AddClimber(toSignIn.lastName, toSignIn.firstName);
             }
         
             return View("Index", signedInUsers);
@@ -415,7 +414,9 @@ namespace WebApplication3.Controllers
 
         public string[] getClasses()
         {
-            //Course courses = db.getCourses();
+            List<Course> courses = db.getCourses();
+            string[] ret = new string[courses.Count()];
+
             string[] temp = { "TestClass" };
             //put all the course names in a string []
 
@@ -479,31 +480,48 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
-        public IActionResult SaveCertification(string nameField, string yearsField, string descriptionField) {
-
-            //database Writeout
+        public IActionResult SaveCertification(string nameField, string yearsField, string IDField) {
+            int sysID= int.Parse(IDField);
+            int yearsValid = int.Parse(yearsField);
+            if (sysID == -1)
+            {
+                db.addCertification(nameField, yearsValid);
+            }
+            else
+            {
+                //db.editCertification(nameField, yearsValid, sysID);
+            }
 
             return View("Settings");
         }
 
 
-        public string[] GetStaffNames()
+        public string[][] GetStaffData()
         {
             //read in Staff names, return them as a string
-
-            return null;
+            List<User> staff = db.getStaffUsers();
+            string[] staffNames = new string[staff.Count];
+            string[] staffID = new string[staff.Count];
+            
+            for (int i = 0; i<staff.Count; i++)
+            {
+                staffNames[i] = staff[i].Name();
+                staffID[i] = ""+staff[i].systemID;
+            }
+            string[][] ret = { staffNames, staffID };
+            return ret;
         }
 
         public IActionResult AddStaff()
         {
-            return View("StaffCreation");
+            return View("AddStaff");
         }
 
         public IActionResult EditStaff(string staffName)
         {
             //Course toEdit = db.getCourse(className); //or something like it
 
-            return View("StaffCreation");
+            return View("AddStaff");
         }
 
         public IActionResult RemoveStaff(string staffName)
