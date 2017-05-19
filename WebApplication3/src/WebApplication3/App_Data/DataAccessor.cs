@@ -568,6 +568,35 @@ public int addUser(string[] args)
             return retFlag;
         }
 
+        public Course getCourse(int courseID)
+        {
+            cmd.reinitialize("SELECT * FROM dbo.course where courseID=@id", conn);
+            cmd.addParameter("@id", courseID);
+            Course temp = new Course();
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    temp.ID = (int)reader["courseID"];
+                    temp.title = (string)reader["title"];
+                    temp.code = (string)reader["code"];
+                    temp.days = (string)reader["daysOfWeek"];
+                    temp.start = (TimeSpan)reader["startTime"];
+                    temp.end = (TimeSpan)reader["endTime"];
+                    temp.termID = (int)reader["term"];
+                    if (!DBNull.Value.Equals(reader["certification"]))
+                    {
+                        temp.certID = (int)reader["certification"];
+                    }
+                    if (!DBNull.Value.Equals(reader["checkout"]))
+                    { temp.equipID = (int)reader["checkout"]; }
+                    
+                }
+            }
+            return temp;
+
+        }
+
         public List<Course> getCourses()
         {
             List <Course> ret = new List<Course>();

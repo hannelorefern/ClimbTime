@@ -437,19 +437,20 @@ namespace WebApplication3.Controllers
 
         public IActionResult EditClass(string courseId)
         {
-            //Course toEdit = db.getCourse(className); //or something like it
-
-            return View("ClassCreation");
+            int cID = int.Parse(courseId);
+            Course toEdit = db.getCourse(cID); 
+            
+            return View("ClassCreation",toEdit);
         }
 
         public IActionResult RemoveClass(string courseId)
         {
-            //db.removeCourse();
-
+            int cID = int.Parse(courseId);
+            db.removeCourse(cID);
             return View("Settings");
         }
 
-        public IActionResult SaveCourse(string TitleField, string CourseCodeField, string timeStartField, string timeEndField, string termField)
+        public IActionResult SaveCourse(string TitleField, string CourseCodeField, string timeStartField, string timeEndField, string termField, string systemIDField)
         {
             Course toSave = new Course();
             toSave.code = CourseCodeField;
@@ -461,8 +462,20 @@ namespace WebApplication3.Controllers
                 dayString += days[i]; 
             }
             toSave.days = dayString;
-
+            //start time and end time currently do not get recorded
             //Finish this method;
+            //toSave.term also needs a look;
+            int sysID = int.Parse(systemIDField);
+            if (sysID == -1)
+            {
+
+                //db.addCourse(toSave);
+            }
+            else
+            {
+                //db.updateCourse(toSave);
+            }
+
 
 
             return View("Settings");
@@ -540,20 +553,31 @@ namespace WebApplication3.Controllers
             return View("AddStaff");
         }
 
-        public IActionResult EditStaff(string staffName)
+        public IActionResult EditStaff(string staffID)
         {
-            //Course toEdit = db.getCourse(className); //or something like it
+            User toEdit = db.getUser(int.Parse(staffID)); //or something like it
 
-            return View("AddStaff");
+            return View("AddStaff", toEdit);
         }
 
-        public IActionResult RemoveStaff(string staffName)
+        public IActionResult RemoveStaff(string staffID)
         {
             //db.removeCourse();
+            db.updateUserType("G", int.Parse(staffID));
 
             return View("Settings");
         }
 
+        public IActionResult SaveStaff(string nameField, string passwordField)
+        {
+            string[] names = nameField.Split(' ');
+            User user = db.getUser(names[0], names[names.Count() - 1]);
+
+            db.updateUserType("S", user.systemID);
+            db.addSignIn(nameField, passwordField);
+
+            return View("Settings");
+        }
        
 
         public FileResult CertificationReport()
