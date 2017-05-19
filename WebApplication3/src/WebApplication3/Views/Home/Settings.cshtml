@@ -9,6 +9,7 @@
             <li><a href="#b" data-toggle="tab">Classes</a></li>
             <li><a href="#c" data-toggle="tab">Certification</a></li>
             <li><a href="#d" data-toggle="tab">Staff</a></li>
+            <li><a href="#e" data-toggle="tab">Enrollment</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="a">
@@ -146,6 +147,36 @@
                     <button class="btn btn-primary" pullright onclick="editStaff()">Edit Selected</button>
                     <button class="btn btn-primary" pullleft onclick="removeStaff()">Remove Selected</button>
                 </form>
+                <div class="tab-pane" id="e">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="SearchTerm" id="Text2"><div class="input-group-btn">
+                                <div class="btn-group" role="group">
+                                    <div class="dropdown dropdown-lg">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="updateSearchResults()" aria-expanded="false"><span class="caret"></span></button>
+                                        <div class="dropdown-menu dropdown-menu-right" role="menu" style="width:600px;" id="partial">
+                                            @Html.Partial("SearchResults")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle pull-left" type="button" data-toggle="dropdown">
+                                Harness Size:
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!--Fill with harness sizes-->
+                                <li onclick="getHarnessCount('L')">L</li>
+                                <li onclick="getHarnessCount('M')">M</li>
+                                <li onclick="getHarnessCount('S')">S</li>
+                            </ul>
+                        </div>
+                        <!--Submit the record and then refresh--> 
+                        <button class="btn btn-primary">Enroll</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
