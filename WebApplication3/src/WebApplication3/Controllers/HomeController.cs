@@ -19,14 +19,14 @@ namespace WebApplication3.Controllers
         DataAccessor db = new DataAccessor("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
         string path = "./";
 
-        public IActionResult Index()
+        public IActionResult HomePage()
         {
 
             signedInUsers = db.getSignedIn();
             signedInUsers.Sort();
             
 
-            return View("Index",signedInUsers);
+            return View("HomePage",signedInUsers);
         }
 
         public IActionResult Reports()
@@ -63,7 +63,7 @@ namespace WebApplication3.Controllers
             signedInUsers.Add(toAdd);
 
 
-            return View("Index", signedInUsers);
+            return View("HomePage", signedInUsers);
         }
         public IActionResult AddClimberBySystemID(string systemID)
         {
@@ -75,7 +75,7 @@ namespace WebApplication3.Controllers
             signedInUsers.Add(toAdd);
 
 
-            return View("Index", signedInUsers);
+            return View("HomePage", signedInUsers);
         }
 
         public IActionResult RemoveClimbers()
@@ -97,7 +97,7 @@ namespace WebApplication3.Controllers
 
 
             
-            return View("Index", signedInUsers);
+            return View("HomePage", signedInUsers);
         }
 
 
@@ -172,7 +172,7 @@ namespace WebApplication3.Controllers
 
             //To Do: re route this method to the sign in details page, instead of the temp sign in action
             if (CardSwipe == null) {
-                return View("Index", signedInUsers);
+                return View("HomePage", signedInUsers);
             }
             System.Diagnostics.Debug.WriteLine("*************" + CardSwipe.First());
             User toSignIn;
@@ -183,7 +183,7 @@ namespace WebApplication3.Controllers
                 return View("SignInDetails", toSignIn);
             }
         
-            return View("Index", signedInUsers);
+            return View("HomePage", signedInUsers);
         }
 
         public IActionResult ShowUserDetails(string IDToShow) {
@@ -241,7 +241,7 @@ namespace WebApplication3.Controllers
                 return View("AddUserStep1", group);
             }
             else
-            { return View("Index", signedInUsers); }
+            { return View("HomePage", signedInUsers); }
         }
 
         public IActionResult MoveGroupToVideo()
@@ -316,7 +316,7 @@ namespace WebApplication3.Controllers
                 db.addUser(tempArray);
                 
             }
-            return View("Index");
+            return View("HomePage", signedInUsers);
         }
 
         public IActionResult SaveData(string NameField, string SystemIDField,
@@ -644,13 +644,13 @@ namespace WebApplication3.Controllers
             string uName = this.Request.Form["usernameField"];
             string pWord = this.Request.Form["passwordField"];
             if (db.getSignIn(uName, pWord))
-                return this.Index();
+                return View("HomePage", signedInUsers);
             else
-                return View("AdminSignIn");
+                return View("Index");
         }
-        public IActionResult AdminSignIn()
+        public IActionResult Index()
         {
-            return View("AdminSignIn");
+            return View("Index");
         }
 
     }

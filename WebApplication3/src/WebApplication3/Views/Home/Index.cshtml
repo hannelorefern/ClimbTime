@@ -1,151 +1,27 @@
-﻿@model IEnumerable<WebApplication3.User>
-
-
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
 @{
-    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutNoNav";
 }
-
-
-
-
-
 <head>
 
 </head>
-
 <body>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
-        <div class="panel-body fixed-panel">
-            <div class="row">
-                <div class="panel panel-default col-md-8 col-md-offset-2" id="cardSwipeBox" style="min-height: 300">
-                    <div class="panel-heading">User Login</div>
-                    <div class="panel-body" >
-                        <form asp-controller="Home" asp-action="SignInClimber">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Card Swipe" name="CardSwipe" id="Text1" >
-                            </div>
-                        </form>
-
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="SearchTerm" id="Text2"><div class="input-group-btn">
-                                    <div class="btn-group" role="group">
-                                        <div class="dropdown dropdown-lg">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="updateSearchResults()" aria-expanded="false"><span class="caret"></span></button>
-                                            <div class="dropdown-menu dropdown-menu-right" role="menu" style="width:600px;" id="partial">
-                                                    @Html.Partial("SearchResults") 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
+        <form asp-controller="Home" asp-action="SignInAdmin">
+            <!--Authenticate the user-->
+            <div class="form-group">
+                <div class="form-inline">
+                    <label class="control-label">User Name:</label>
+                    <input type="text" name="usernameField" class="form-control"/>
                 </div>
+                <div class="form-inline">
+                    <label class="control-label">Password:</label>
+                    <input type="text" name="passwordField" class="form-control"/>
+                </div>
+                <button class="btn btn-primary" type="submit">Log in </button>
             </div>
-            <div class="row">
-                <form asp-controller="Home" asp-action="AddUser">
-                    <div class="form-group">
-
-                        <button type="submit" class="btn btn-primary btn-lg center-block vert-offset-top-20" id="addClimber" title="Add Climber">Add Climber</button>
-                    </div>
-                </form>
-                <form asp-controller="Home" asp-action="BatchAddUser" id="batchAddForm">
-                    <div class="form-group">
-                        <button type="button" class="btn btn-primary btn-lg center-block vert-offset-top-20 vert-offset-bottom-20" id="batchAdd" onclick="getCount()">Batch Add Climber</button>
-                        <input type="text" id="batchAddField" name="batchAddField" style="display:none" />
-                    </div>
-                </form>
-            </div>
-        </div>
+        </form>
     </div>
-    <div class="col-md-5 col-md-offset-1 panel panel-default" id="login-div">
-        <div class="panel-heading">
-            Climb Time Students
-        </div>
-        <div class="panel-body fixed-panel">
-            <form asp-controller="Home" asp-action="RemoveClimbers">
-                <div id="scrollview" style="overflow:scroll;height:400px">
-                    @for (int i = 0; i < ((List<User>)Model).Count; i++)
-                    {
-                        string identifier = "timer" + i;
-                        User item = ((List<User>)Model)[i];
-                        <div class="row">
-                            <div class="col-md-4">
-                                @{string fullName = item.Name(); }
-                                @Html.DisplayFor(ModelItem => fullName)
-                            </div>
-                            <div class="col-md-4">
-                                <p id="@identifier"></p>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="checkbox" name="signOutCheckBox" value="@i" />
-                                @Html.HiddenFor(x => @item.studentID)
-
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-lg vert-offset-top-20" id="Button3" type="submit">Log out selected climbers</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-        <script type="text/javascript">
-
-            function updateSearchResults() {
-                
-                var url = '@Url.Action("GetMatchesForSignIn")'
-                url += '?searchTerm=' + Text2.value;
-                var partial = $("#partial");
-                partial.load(url);
-            }
-
-
-            function getTimes() {
-                    var b = [];
-                    @foreach (User item in Model){
-                <text>b.push(@Json.Serialize(item.time));</text>
-
-            }
-            return b;
-
-        }
-
-        function updateTimes(times) {
-            var now = new Date().getTime();
-            for (i = 0; i < times.length; i++) {
-                var loginDate = new Date(times[i]);
-                var distance = now - loginDate;
-
-                // Time calculations for hours, minutes, and seconds
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("timer" + i).innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
-            }
-
-         };
-
-        function getCount() {
-            var x = prompt("How many users are in this batch?", "0");
-            this.document.getElementById("batchAddField").value = x;
-            this.document.getElementById("batchAddForm").submit();
-
-        }
-
-        var x = setInterval(function () {
-            var times = getTimes();
-            var y = updateTimes(times);
-        }, 1000);
-
-
-        </script>
-
-        
-
 </body>
-
-   
-
