@@ -982,6 +982,16 @@ public int addUser(string[] args)
 
         }
 
+        public void updateCertification(string title, int yearsValid, int sysID)
+        {
+            cmd.reinitialize("UPDATE dbo.certification SET title = @t, yearsBeforeExp = @y WHERE certID = @c", conn);
+            cmd.addParameter("@t", title);
+            cmd.addParameter("@y", yearsValid);
+            cmd.addParameter("@c", sysID);
+            try { cmd.execute(); }
+            catch (Exception ex) { throw new Exception("Exception updating certification. " + ex.Message); }
+        }
+
         //reports
         public List<string[]> courseReport(Course c)
         {
