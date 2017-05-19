@@ -598,6 +598,16 @@ namespace WebApplication3.Controllers
              }
          }
 
+        public IActionResult SignInAdmin()
+        {
+            string uName = this.Request.Form["usernameField"];
+            string pWord = this.Request.Form["passwordField"];
+            if (db.getSignIn(uName, pWord))
+                return Index();
+            else
+                return View("AdminSignIn");
+        }
+
 
     }
 
