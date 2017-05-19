@@ -836,12 +836,13 @@ public int addUser(string[] args)
         }
 
         //sign in
-        public bool addSignIn(string userName, string password)
+        public bool addSignIn(string userName, string password, User newStaff)
         {
             bool retFlag = false;
-            cmd.reinitialize("INSERT INTO dbo.signin (userName, password) VALUES (@u, @p)", conn);
+            cmd.reinitialize("INSERT INTO dbo.signin (userName, password, userID) VALUES (@u, @p, @id)", conn);
             cmd.addParameter("@u", userName);
             cmd.addParameter("@p", password);
+            cmd.addParameter("@id", newStaff.systemID);
             try
             {
                 cmd.execute();
@@ -854,12 +855,11 @@ public int addUser(string[] args)
             return retFlag;
         }
 
-        public bool removeSignIn(string userName, string password)
+        public bool removeSignIn(User climber)
         {
             bool retFlag = false;
-            cmd.reinitialize("DELETE FROM dbo.signin WHERE userName=@u AND password=@p)", conn);
-            cmd.addParameter("@u", userName);
-            cmd.addParameter("@p", password);
+            cmd.reinitialize("DELETE FROM dbo.signin WHERE userID = @u)", conn);
+            cmd.addParameter("@u", climber.systemID);
             try
             {
                 cmd.execute();
@@ -872,7 +872,7 @@ public int addUser(string[] args)
             return retFlag;
         }
 
-        public bool getSignIn(string userName, string password)
+        public bool isValidSignIn(string userName, string password)
         {
             bool retFlag = false;
             cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u AND password=@p", conn);
