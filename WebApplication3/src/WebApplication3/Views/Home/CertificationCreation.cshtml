@@ -9,11 +9,10 @@
 </head>
 
 <body>
-    <div class="container col-md-6 col-md-offset-3 panel panel-default">
+    <div class="container col-md-5 col-md-offset-3 panel panel-default">
         Certificate Information
         <div class="panel-body">
-            <div class="panel panel-default col-md-6">
-                <div class="panel-body">
+                <div class="container">
                       @{string certName;
                           string yearsValid;
                           int systemID;
@@ -31,24 +30,25 @@
                           }
                         }
                     <form asp-controller="Home" asp-action="SaveCertification" id="certForm">
-                        <div class="form-inline">
-                            <label pullleft>Name:</label>
+                        <div class="form-inline col-md-8">
+                            <label class="col-md-2">Name:</label>
                             <input type="text" name="nameField" value="@certName" pullright />
                             <input type="text" name="IDField" value="@systemID" hidden />
                         </div>
-                        <div class="form-inline">
-                            <label pullleft>Years Valid:</label>
-                            <input class="pull-right" name="yearsField" value="@yearsValid" type="text"  />
+                        <div class="form-inline col-md-8 vert-offset-top-20">
+                            <label class="col-md-2">Years Valid:</label>
+                            <input name="yearsField" value="@yearsValid" type="text"  />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-md-8 vert-offset-top-20">
                             <label for="comment">Description:</label>
                             <textarea class="form-control" form="certForm" rows="5" id="comment" name="descriptionField"></textarea>
                         </div>
-                        <button type="button" class="btn btn-primary">Upload</button>
-                        <button class="btn btn-primary">Save</button>
+                        <div class="col-md-8">
+                            <button type="button" class="btn btn-primary">Upload</button>
+                            <button class="btn btn-primary">Save</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
 </body>

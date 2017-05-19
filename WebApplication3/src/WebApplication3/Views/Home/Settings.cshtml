@@ -12,9 +12,9 @@
             <li><a href="#e" data-toggle="tab">Enrollment</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="a">
+            <div class="tab-pane active fixed-panel" id="a">
                 <form asp-controller="Home" asp-action="saveInventoryEdits" class="form-inline">
-                    <div class="col-md-offset-3">
+                    <div class="col-md-offset-3 vert-offset-top-20">
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="dropdown">
@@ -73,7 +73,7 @@
                 </form>
             </div>
 
-            <div class="tab-pane" id="b" name="classpane">
+            <div class="tab-pane fixed-panel" id="b" name="classpane">
 
                 <form id="classForm">
                     <div id="scrollview" style="overflow:scroll;height:400px">
@@ -89,7 +89,7 @@
                 </form>
             </div>
 
-            <div class="tab-pane" id="c" name="certificationpane">
+            <div class="tab-pane fixed-panel" id="c" name="certificationpane">
                     <div id="certscrollview" style="overflow:scroll;height:400px">
                         
                         <ul id="certList">
@@ -110,7 +110,7 @@
                 
             </div>
 
-            <div class="tab-pane" id="d" name="staffpane">
+            <div class="tab-pane fixed-panel" id="d" name="staffpane">
                     <div id="scrollview" style="overflow:scroll;height:400px">
                         <ul id="staffDiv">
                            
@@ -123,10 +123,11 @@
                     <button type="button" class="btn btn-primary" pullright onclick="editStaff()">Edit Selected</button>
                     <button type="button" class="btn btn-primary" pullleft onclick="removeStaff()">Remove Selected</button>
                 </form>
-                </div>
-               <div class="tab-pane" id="e">
-                    <form>
-                        <div class="input-group">
+             </div>
+            
+            <div class="tab-pane fixed-panel" id="e">
+                <form>
+                    <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search" name="SearchTerm" id="Text2"><div class="input-group-btn">
                                 <div class="btn-group" role="group">
                                     <div class="dropdown dropdown-lg">
@@ -151,7 +152,6 @@
                         <button class="btn btn-primary">Enroll</button>
                     </form>
                 </div>
-            </div>
         </div>
     </div>
     <!-- /tabs -->
