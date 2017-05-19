@@ -127,25 +127,25 @@ namespace WebApplication3.App_Data
                     { ret.ShoeSize = (string)reader["shoeSize"]; }
                     else
                     {
-                        ret.ShoeSize = "Information not found";
+                        ret.ShoeSize = null;
                     }
                     if (!DBNull.Value.Equals(reader["harnessSize"]))
                     { ret.HarnessSize = (string)reader["harnessSize"]; }
                     else
                     {
-                        ret.HarnessSize = "Information not found";
+                        ret.HarnessSize = null;
                     }
                     if (! DBNull.Value.Equals(reader["phone"]))
                     { ret.phoneNumber = (string)reader["phone"]; }
                     else
                     {
-                        ret.phoneNumber = "Information not found";
+                        ret.phoneNumber = null;
                     }
                     if (! DBNull.Value.Equals(reader["email"]))
                     { ret.email = (string)reader["email"]; }
                     else
                     {
-                        ret.email = "Information not found";
+                        ret.email = null;
                     }
                     
 

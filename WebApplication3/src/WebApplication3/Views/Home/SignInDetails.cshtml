@@ -62,7 +62,9 @@
         <div class="panel-body">
             <form asp-controller="Home" asp-action="">
                 <div id="scrollview" style="overflow:scroll;height:400px">
-                   
+                   <ul id="certList">
+
+                   </ul>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary btn-lg vert-offset-top-20" id="Button3" type="submit">Add Certification</button>
@@ -93,6 +95,17 @@
             var i = 0;
             for (i = 0; i < data.length; i++)
                 classList.innerHTML += "<li>" + data[i] + "</li>";
+        });
+    });
+    var certList = this.document.getElementById("certList");
+    $(document).ready(function () {
+        var url = '@Url.Action("getCertificationData")';
+        $.ajax({
+            url: url
+        }).done(function (data) {
+            var i = 0;
+            for (i = 0; i < data.length; i++)
+                certList.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
         });
     });
 </script>

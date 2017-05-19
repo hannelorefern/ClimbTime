@@ -133,9 +133,8 @@ namespace WebApplication3.Controllers
 
         }
 
-        public IActionResult TestMethod(List<User> userList)
+        public IActionResult MoveGroupToWaiver()
         {
-            //TO DO: assign a default user type to new users
 
             string temp = this.Request.Form["firstNameField"];
             string[] firstNames = temp.Split(',');
@@ -162,7 +161,7 @@ namespace WebApplication3.Controllers
                 users.Add(toAdd);
             }
 
-            return View("EmbeddedVideo", users);
+            return View("Waiver", users);
         }
 
 
@@ -250,7 +249,49 @@ namespace WebApplication3.Controllers
 
             return View("EmbeddedVideo",users);
         }
+        public IActionResult FinalizeWaiver()
+        {
 
+            string temp = this.Request.Form["firstNameField"];
+            string[] firstNames = temp.Split(',');
+            temp = this.Request.Form["lastNameField"];
+            string[] lastNames = temp.Split(',');
+            temp = this.Request.Form["phoneField"];
+            string[] phones = temp.Split(',');
+            temp = this.Request.Form["addressField"];
+            string[] addresses = temp.Split(',');
+            temp = this.Request.Form["cardswipeField"];
+            string[] cardswipes = temp.Split(',');
+            List<User> users = new List<User>();
+            for (int i = 0; i < firstNames.Length; i++)
+            {
+                User toAdd = new WebApplication3.User();
+                toAdd.firstName = firstNames[i];
+                toAdd.lastName = lastNames[i];
+                toAdd.phoneNumber = phones[i];
+                toAdd.email = addresses[i];
+                char firstChar = cardswipes[i][0];
+                if (char.IsLetter(firstChar)) {
+                    toAdd.netID = cardswipes[i];
+                }
+                else
+                {
+                    toAdd.studentID = cardswipes[i];
+                }
+                toAdd.userType = "G";
+
+
+                users.Add(toAdd);
+            }
+            foreach (User user in users)
+            {
+                //addUser to Database;
+                string[] tempArray = user.convertToStringArray();
+                db.addUser(tempArray);
+                
+            }
+            return View("Index");
+        }
 
         public IActionResult SaveData(string NameField, string SystemIDField,
                                       string SIDField, string ShoeField,
