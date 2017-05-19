@@ -10,11 +10,11 @@
 
 <body>
     <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="This is where the video link goes" >  </iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/FcdOlAwqswA" frameborder="0" allowfullscreen></iframe>
     </div>
     <div id="fieldStorage">
         
-        <button type="button" class="btn btn-primary" onclick="passToNextPage()" >Next</button>
+        <button type="button" class="btn btn-primary col-md-offset-4 vert-offset-top-20" onclick="passToNextPage()" >Next</button>
         <form asp-controller="Home" asp-action="TestMethod" id="progress-form">
             @{ foreach (User user in Model)
                 {
