@@ -412,18 +412,22 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
-        public string[] getClasses()
+        public string[][] getCourseData()
         {
             List<Course> courses = db.getCourses();
-            string[] ret = new string[courses.Count()];
-
-            string[] temp = { "TestClass" };
+            string[] name = new string[courses.Count];
+            string[] sysID = new string[courses.Count];
+            for(int i = 0; i < courses.Count; i++)
+            {
+                name[i] = courses[i].title;
+                sysID[i] = ""+courses[i].ID;
+            }
             //put all the course names in a string []
 
             //return the array
-
+            string[][] ret = { name, sysID };
             
-            return temp;
+            return ret;
         }
 
         public IActionResult AddClass()

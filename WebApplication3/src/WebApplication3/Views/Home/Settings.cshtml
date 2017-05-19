@@ -78,15 +78,7 @@
                 <form id="classForm">
                     <div id="scrollview" style="overflow:scroll;height:400px">
                         <ul id="courseDiv">
-                            @{string[] classNames = { "class1", "class2", "class3" };//this should be replaced with a proper scan of the database;
-                                for (int i = 0; i < classNames.Length; i++)
-                                {
-                                    <li><input type="radio" name="classList" value="@classNames[i]" />@classNames[i]</li>
-
-
-                                }
-
-                            }
+                            
 
 
                         </ul>
@@ -127,9 +119,9 @@
                         </ul>
                     </div>
                 <form>
-                    <button class="btn btn-primary" pullleft onclick="location.href='AddStaff'">Add</button>
-                    <button class="btn btn-primary" pullright onclick="editStaff()">Edit Selected</button>
-                    <button class="btn btn-primary" pullleft onclick="removeStaff()">Remove Selected</button>
+                    <button type="button" class="btn btn-primary" pullleft onclick="location.href='AddStaff'">Add</button>
+                    <button type="button" class="btn btn-primary" pullright onclick="editStaff()">Edit Selected</button>
+                    <button type="button" class="btn btn-primary" pullleft onclick="removeStaff()">Remove Selected</button>
                 </form>
                 </div>
                <div class="tab-pane" id="e">
@@ -193,7 +185,7 @@
         });
 
     }
-    function addClass() {
+    function AddClass() {
         window.location.href = '@Url.Action("addClass")';
 
     }
@@ -238,7 +230,7 @@
                 toEdit = certForm[i].value;
             }
         }
-        url += '?certificationName=' + toEdit;
+        url += '?certificationID=' + toEdit;
         window.location.href = url;
 
     }
@@ -253,7 +245,7 @@
                 toEdit = certForm[i].value;
             }
         }
-        url += '?certificationName=' + toEdit;
+        url += '?certificationID=' + toEdit;
         window.location.href = url;
 
     }
@@ -294,7 +286,7 @@
         url: url
     }).done(function (data) {
         var i = 0;
-        for (i = 0; i < data.length; i++)
+        for (i = 0; i < data[0].length; i++)
             certDiv.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
     });
     });
@@ -305,10 +297,21 @@
             url: url
         }).done(function (data) {
             var i = 0;
-            for (i = 0; i < data.length; i++)
-                certDiv.innerHTML += "<li><input type=\"radio\" name=\"staffList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
+            for (i = 0; i < data[0].length; i++)
+                staffDiv.innerHTML += "<li><input type=\"radio\" name=\"staffList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
         });
     });
     var courseDiv = this.document.getElementById("courseDiv");
     var secondDiv = this.document.getElementById("courseEnroll");
+    $(document).ready(function () {
+        var url = '@Url.Action("getCourseData")';
+        $.ajax({
+            url: url
+        }).done(function (data) {
+            var i = 0;
+            for (i = 0; i < data[0].length; i++)
+                courseDiv.innerHTML += "<li><input type=\"radio\" name=\"staffList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
+                secondDiv.innerHTML += "<li><input type=\"radio\" name=\"staffList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
+        });
+    });
 </script>

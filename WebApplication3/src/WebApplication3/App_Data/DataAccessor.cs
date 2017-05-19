@@ -364,7 +364,7 @@ public int addUser(string[] args)
         public int addCertification(string title, int yearsBeforeExp)
         {
             int ret = -1;
-            cmd.reinitialize("INSERT INTO dbo.certifications (title, yearsBeforeExp) output INSERTED.ID VALUES (@title, @years)", conn);
+            cmd.reinitialize("INSERT INTO dbo.certification (title, yearsBeforeExp) output INSERTED.certID VALUES (@title, @years)", conn);
             cmd.addParameter("@title", title);
             cmd.addParameter("@years", yearsBeforeExp);
             try
@@ -380,7 +380,7 @@ public int addUser(string[] args)
 
         public Certification getCertification(int id)
         {
-            cmd.reinitialize("SELECT * WHERE certID = @id", conn);
+            cmd.reinitialize("SELECT * FROM dbo.certification WHERE certID = @id", conn);
             cmd.addParameter("@id", id);
             Certification ret = new Certification();
             using (SqlDataReader reader = cmd.executeReader())
@@ -398,7 +398,7 @@ public int addUser(string[] args)
         public bool removeCertification(Certification cert)
         {
             bool retFlag = false;
-            cmd.reinitialize("DELETE FROM dbo.certifications WHERE certID = @id", conn);
+            cmd.reinitialize("DELETE FROM dbo.certification WHERE certID = @id", conn);
             cmd.addParameter("@id", cert.ID);
             try
             {
@@ -584,8 +584,12 @@ public int addUser(string[] args)
                     temp.start = (TimeSpan)reader["startTime"];
                     temp.end = (TimeSpan)reader["endTime"];
                     temp.termID = (int)reader["term"];
-                    temp.certID = (int)reader["certification"];
-                    temp.equipID = (int)reader["checkout"];
+                    if (!DBNull.Value.Equals(reader["certification"]))
+                    {
+                        temp.certID = (int)reader["certification"];
+                    }
+                    if (!DBNull.Value.Equals(reader["checkout"]))
+                    { temp.equipID = (int)reader["checkout"]; }
                     ret.Add(temp);
                 }
             }
