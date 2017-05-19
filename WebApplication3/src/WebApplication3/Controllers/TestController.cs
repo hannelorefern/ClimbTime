@@ -40,7 +40,7 @@ namespace WebApplication3.Controllers
             db.addUser(args);
 
             db.testPrint("SEARCH FOR USERS");
-            db.searchForUsers("j", "");
+            db.searchForUsers("j", "j");
 
             //contacts table
 
