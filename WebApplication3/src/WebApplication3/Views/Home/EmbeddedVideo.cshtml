@@ -10,12 +10,12 @@
 
 <body>
     <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="This is where the video link goes" >  </iframe>
+        <iframe class="embed-responsive-item" src="http://www.youtube.com/embed/W7qWa52k-nE" >  </iframe>
     </div>
     <div id="fieldStorage">
         
         <button type="button" class="btn btn-primary" onclick="passToNextPage()" >Next</button>
-        <form asp-controller="Home" asp-action="TestMethod" id="progress-form">
+        <form asp-controller="Home" asp-action="MoveGroupToWaiver" id="progress-form">
             @{ foreach (User user in Model)
                 {
                     <div>

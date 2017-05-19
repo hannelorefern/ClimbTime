@@ -15,21 +15,25 @@
             <div class="panel panel-default col-md-6">
                 <div class="panel-body">
                       @{string certName;
-                        string yearsValid;
-                        string description;
-                        if (Model == null)
-                        {
-                              
-                        }
-                        else
-                        {
-
-                        }
+                          string yearsValid;
+                          int systemID;
+                          if (Model == null)
+                          {
+                              certName = "";
+                              yearsValid = "";
+                              systemID = -1;
+                          }
+                          else
+                          {
+                              certName = Model.title;
+                              yearsValid =""+ Model.yearsBeforeExp;
+                              systemID = Model.ID;
+                          }
                         }
                     <form asp-controller="Home" asp-action="SaveCertification" id="certForm">
                         <div class="form-inline">
                             <label pullleft>Name:</label>
-                            <input type="text" name="nameField" pullright />
+                            <input type="text" name="nameField" value="@certName" pullright />
                         </div>
                         <div class="form-inline">
                             <label pullleft>Years Valid:</label>

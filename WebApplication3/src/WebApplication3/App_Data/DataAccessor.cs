@@ -59,11 +59,56 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        public User getUser(int systemID)
+        { User ret = new User();
+            
+                cmd.reinitialize("SELECT * FROM dbo.users WHERE userID = @systemID", conn);
+                cmd.addParameter("@systemID", systemID);
+
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                if (reader.Read())
+                {
+                    ret.systemID = (int)reader["userID"];
+                    ret.studentID = (string)reader["SID"];
+                    ret.userType = (string)reader["userType"];
+                    ret.firstName = (string)reader["firstName"];
+                    ret.lastName = (string)reader["lastName"];
+
+
+                    if (!DBNull.Value.Equals(reader["shoeSize"]))
+                    { ret.ShoeSize = (string)reader["shoeSize"]; }
+                    else
+                    {
+                        ret.ShoeSize = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["harnessSize"]))
+                    { ret.HarnessSize = (string)reader["harnessSize"]; }
+                    else
+                    {
+                        ret.HarnessSize = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["phone"]))
+                    { ret.phoneNumber = (string)reader["phone"]; }
+                    else
+                    {
+                        ret.phoneNumber = "Information not found";
+                    }
+                    if (!DBNull.Value.Equals(reader["email"]))
+                    { ret.email = (string)reader["email"]; }
+                    else
+                    {
+                        ret.email = "Information not found";
+                    }
+                }
+            }
+            return ret;
+        }
+
         public User getUser(string CardSwipe) {
             User ret = new User();
             if (char.IsLetter(CardSwipe.First()))
             {
-                //TO DO: FIX THIS SHIT.
                 cmd.reinitialize("SELECT * FROM dbo.users WHERE netID = @netID", conn);
                 cmd.addParameter("@netID", CardSwipe);
             }
@@ -117,40 +162,40 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
-        public List<User> getUsersByType(string type)
+     public List<User> getUsersByType(string type)
+{
+    List<User> ret = new List<User>();
+    cmd.reinitialize("SELECT * FROM dbo.users WHERE userType = @ut", conn);
+    cmd.addParameter("@ut", type);
+    using (SqlDataReader reader = cmd.executeReader())
+    {
+        while (reader.Read())
         {
-            List<User> ret = new List<User>();
-            cmd.reinitialize("SELECT * FROM dbo.users WHERE userType = @ut", conn);
-            cmd.addParameter("@ut", type);
-            using (SqlDataReader reader = cmd.executeReader())
-            {
-                while (reader.Read())
-                {
-                    User temp = new User();
-                    temp.firstName = (string)reader["firstName"];
-                    temp.lastName = (string)reader["lastName"];
-                    temp.studentID = (string)reader["SID"];
-                    temp.systemID = (int)reader["userID"];
-                    temp.netID = (string)reader["netID"];
-                    temp.phoneNumber = (string)reader["phone"];
-                    temp.email = (string)reader["email"];
-                    temp.HarnessSize = (string)reader["harnessSize"];
-                    temp.ShoeSize = (string)reader["shoeSize"];
-                    ret.Add(temp);
-                }
-            }
-            return ret;
+            User temp = new User();
+            temp.firstName = (string)reader["firstName"];
+            temp.lastName = (string)reader["lastName"];
+            temp.studentID = (string)reader["SID"];
+            temp.systemID = (int)reader["userID"];
+            temp.netID = (string)reader["netID"];
+            temp.phoneNumber = (string)reader["phone"];
+            temp.email = (string)reader["email"];
+            temp.HarnessSize = (string)reader["harnessSize"];
+            temp.ShoeSize = (string)reader["shoeSize"];
+            ret.Add(temp);
         }
+    }
+    return ret;
+}
 
-        public List<User> getStaffUsers()
-        {
-            List<User> ret = new List<User>(); 
-            ret.AddRange(getUsersByType("A")); //admin
-            ret.AddRange(getUsersByType("S")); //staff
-            return ret;
-        }
+public List<User> getStaffUsers()
+{
+    List<User> ret = new List<User>();
+    ret.AddRange(getUsersByType("A")); //admin
+    ret.AddRange(getUsersByType("S")); //staff
+    return ret;
+}
 
-        public int addUser(string[] args)
+public int addUser(string[] args)
         {
             //returns ID of added user, -1 if not successful
 
@@ -329,6 +374,23 @@ namespace WebApplication3.App_Data
             catch (Exception ex)
             {
                 throw new Exception("Exeception adding new certification. " + ex.Message);
+            }
+            return ret;
+        }
+
+        public Certification getCertification(int id)
+        {
+            cmd.reinitialize("SELECT * WHERE certID = @id", conn);
+            cmd.addParameter("@id", id);
+            Certification ret = new Certification();
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                if (reader.Read())
+                {
+                    ret.ID = (int)reader["certID"];
+                    ret.title = (string)reader["title"];
+                    ret.yearsBeforeExp = (int)reader["yearsBeforeExp"];
+                }
             }
             return ret;
         }
@@ -641,6 +703,24 @@ namespace WebApplication3.App_Data
             return ret;
         }
 
+        public string[] getInventoryData(string name, string size)
+        {
+            string[] ret = new string[4];
+            cmd.reinitialize("SELECT * FROM dbo.equipment WHERE name = @name AND size = @size", conn);
+            cmd.addParameter("@name", name);
+            cmd.addParameter("@size", size);
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    ret[0] = (string)reader["equipID"];
+                    ret[1] = (string)reader["name"];
+                    ret[2] = (string)reader["size"];
+                    ret[3] = (string)reader["count"];
+                }
+            }
+            return ret;
+        }
         //equipmentuse
         public bool equipCheckout(int visitID, User climber, int equipID)
         {
@@ -822,7 +902,6 @@ namespace WebApplication3.App_Data
                 throw new Exception("Exception updating user. " + ex.Message);
             }
         }
-
         public void updateStudentID(string studentID, int userID)
         {
             cmd.reinitialize("UPDATE dbo.users SET SID = @studentID WHERE userID = @userID", conn);
