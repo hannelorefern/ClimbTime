@@ -449,6 +449,24 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
+        public IActionResult SaveCourse(string TitleField, string CourseCodeField, string timeStartField, string timeEndField, string termField)
+        {
+            Course toSave = new Course();
+            toSave.code = CourseCodeField;
+            string dayString = this.Request.Form["dayField"];
+            string[] days = dayString.Split(',');
+            dayString = "";
+            for (int i = 0; i < days.Count(); i++)
+            {
+                dayString += days[i]; 
+            }
+            toSave.days = dayString;
+            toSave.end
+
+
+            return View("Settings");
+        }
+
         public string[][] GetCertificationData()
         {
             List<Certification> certifications = db.getCerts();
@@ -493,7 +511,7 @@ namespace WebApplication3.Controllers
             }
             else
             {
-                //db.editCertification(nameField, yearsValid, sysID);
+                db.updateCertification(nameField, yearsValid, sysID);
             }
 
             return View("Settings");
