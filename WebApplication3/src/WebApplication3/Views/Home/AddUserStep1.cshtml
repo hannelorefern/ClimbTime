@@ -81,7 +81,7 @@
         var phone = this.document.getElementById("phoneField");
         var address = this.document.getElementById("addressField");
         var cardSwipe = this.document.getElementById("cardSwipeField");
-        if (name.value!="" && address.value!=""){
+        if (isValidName(name) && isValidEmail(address.value) && isValidPhone(phone.value) && isValidCardSwipe(cardSwipe.value) ){
             var count = @Model.Count();
             var scrollView = this.document.getElementById("scrollview");
             scrollView.innerHTML+="<div>"+name.value+"</div>"+
@@ -94,8 +94,8 @@
             phone.value="";
             address.value="";
             cardSwipe.value="";
-            
-            
+
+
             iter = iter+1;
             if(iter>= count){
 
@@ -105,6 +105,53 @@
             }
         }
 
+    }
+
+    function isValidName(field){//this one is different than the following three because I was trying to get the field to have a red outline on
+        //invalid input, but couldn't figure it out and gave up for a while ~ Parker
+        var toCheck = field.value;
+        if(toCheck==""){
+            return false;
+        }
+        else if(toCheck.match(/\S+\s\S+/)){
+            return true;
+
+        }
+        return false;
+    }
+    function isValidEmail(toCheck){
+        if(toCheck==""){
+            return false;
+
+        }
+        else if(toCheck.match(/\S+[@Html.Raw("@")]\S+/)){
+            return true;
+
+        }
+        return false;
+    }
+
+    function isValidPhone(toCheck){
+        if(toCheck==""){
+            return false;
+
+        }
+        else if(toCheck.length == 10){
+            return true;
+
+        }
+        return false;
+    }
+
+    function isValidCardSwipe(toCheck){
+        if(toCheck==""){
+            return false;
+
+        }
+        else {
+            return true;
+
+        }
     }
 
 
