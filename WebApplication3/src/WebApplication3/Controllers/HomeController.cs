@@ -401,6 +401,17 @@ namespace WebApplication3.Controllers
             return null;
         }
 
+        public IActionResult AddDistance(string userID, string distance)
+        {
+            int toAdd = int.Parse(distance);
+            int sysID = int.Parse(userID);
+
+            db.updateDistance(sysID, toAdd);
+
+            User ret = db.getUser(sysID);
+            return View("Users", ret);
+        }
+
 
         //These methods are for the settings page
         public string getHarnessCount(string harnessSize)

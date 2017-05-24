@@ -18,6 +18,7 @@ namespace WebApplication3
         public string firstName { get; set; }
         public string time { get; set; }
         public string netID { get; set; }
+        public int meters { get; set; }
 
 
         public User()

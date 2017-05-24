@@ -100,6 +100,20 @@ namespace WebApplication3.App_Data
                     {
                         ret.email = "Information not found";
                     }
+                    if (!DBNull.Value.Equals(reader["email"]))
+                    { ret.email = (string)reader["email"]; }
+                    else
+                    {
+                        ret.email = null;
+                    }
+                    if (!DBNull.Value.Equals(reader["miles"]))
+                    {
+                        ret.meters = (int)reader["miles"];
+                    }
+                    else
+                    {
+                        ret.meters = 0;
+                    }
                 }
             }
             return ret;
@@ -156,6 +170,14 @@ namespace WebApplication3.App_Data
                     {
                         ret.email = null;
                     }
+                    if (!DBNull.Value.Equals(reader["miles"]))
+                    {
+                        ret.meters = (int)reader["miles"];
+                    }
+                    else
+                    {
+                        ret.meters = 0;
+                    }
 
                 }
             }
@@ -194,6 +216,32 @@ public List<User> getStaffUsers()
     ret.AddRange(getUsersByType("S")); //staff
     return ret;
 }
+
+        public void updateDistance(int userID, int distance)
+        {
+            int oldDistance = 0;
+            cmd.reinitialize("SELECT * FROM dbo.users WHERE userID = @userID", conn);
+            cmd.addParameter("@userID", userID);
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                if (reader.Read())
+                {
+                    if (DBNull.Value.Equals(reader["miles"]))
+                    {
+
+                    }
+                    else
+                    {
+                        oldDistance = (int)reader["miles"];
+                        distance += oldDistance;
+                    }
+                }
+            }
+            cmd.reinitialize("UPDATE dbo.users set miles = @distance Where userID = @userID", conn);
+            cmd.addParameter("@distance", distance);
+            cmd.addParameter("@userID", userID);
+            cmd.execute();
+        }
 
 public int addUser(string[] args)
         {

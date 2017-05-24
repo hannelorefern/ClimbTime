@@ -40,7 +40,7 @@
                         string email;
                         string userType;
                         string SystemIDField;
-
+                        string meters;
                         if (user == null)
                         {
                             fullName = "FirstName LastName";
@@ -51,6 +51,8 @@
                             email = "name@place.co";
                             userType = "X";
                             SystemIDField = "-1";
+                            meters = ""+0;
+
                         }
                         else
                         {
@@ -62,6 +64,7 @@
                             email = user.email;
                             userType = user.userType;
                             SystemIDField = "" + user.systemID;
+                            meters = "" + user.meters;
                         }
                     }
                     <form asp-controller="Home" asp-action="SaveData">
@@ -74,7 +77,7 @@
                         </div>
                         <div class="form-inline">
                             <label class="text-left-align control-label col-sm-4" for="SIDField"><strong>SID:</strong></label>
-                                                        <input type="text" class="form-control pull-right" id="SystemIDField" value="@SystemIDField" readonly style="display:none" name="SystemIDField" />
+                            <input type="text" class="form-control pull-right" id="SystemIDField" value="@SystemIDField" readonly style="display:none" name="SystemIDField" />
                             <input type="text" class="form-control " id="SIDField" placeholder="@IDfield" readonly name="SIDField" />
                             <button type="button" class="btn btn-sm btn-primary" name="EditIDButton" id="EditIDButton" onclick="toggleEditID()" style="display:none">
                                 Edit ID
@@ -119,15 +122,15 @@
                                 <form>
                                     <div class="form-inline vert-offset-bottom-20">
                                         <label class="control-label text-left-align col-sm-4" for="MeterDisplay"><strong>Meters:</strong></label>
-                                        <input type="text" name="MeterDisplay" readonly/>
+                                        <input type="text" name="MeterDisplay" value="@meters" readonly/>
                                     </div>
                                     <div class="form-inline vert-offset-bottom-20">
                                         <label class="text-left-align control-label col-sm-4" for="FeetAddText"> Add Meters</label>
-                                        <input type="text" class="form-control pull-left" name="FeetAddText">
+                                        <input type="text" class="form-control pull-left" name="FeetAddText" id="FeetAddText">
                                     </div>
                                     <div class="vert-offset-top-20">
                                         <div class="form-group col-md-5 col-centered">
-                                            <button class="btn btn-primary form-control" value="Add" name="FeetAddButton">Add</button>
+                                            <button class="btn btn-primary form-control" value="Add" name="FeetAddButton" onclick="addMeters()" type="button">Add</button>
                                         </div>
                                     </div>
                                 </form>
@@ -147,6 +150,13 @@
         partial.load(url);
     }
 
+    function addMeters() {
+        var url = '@Url.Action("AddDistance")';
+        url += '?userID=' + SystemIDField.value;
+        url += '&distance=' + FeetAddText.value;
+        window.location.href = url;
+
+    }
 
     function toggleEditName() {
         var field = $("#NameFieldText");
