@@ -65,11 +65,21 @@ namespace WebApplication3.Controllers
 
             return View("HomePage", signedInUsers);
         }
-        public IActionResult AddClimberBySystemID(string systemID)
+        public IActionResult AddClimberBySystemID(string systemID, string courseID)
         {
+            
+
             int sysID = int.Parse(systemID);
             User toAdd = db.getUser(sysID);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
+            if (courseID.Equals("undefined"))
+            {
+                //no course type
+            }
+            else
+            {
+                //courseID is an int hiding in a string, and is the course they're signing in for
+            }
             db.addVisit(toAdd);
 
             signedInUsers.Add(toAdd);
@@ -135,36 +145,7 @@ namespace WebApplication3.Controllers
 
         }
 
-        public IActionResult MoveGroupToWaiver()
-        {
-
-            string temp = this.Request.Form["firstNameField"];
-            string[] firstNames = temp.Split(',');
-            temp = this.Request.Form["lastNameField"];
-            string[] lastNames = temp.Split(',');
-            temp = this.Request.Form["phoneField"];
-            string[] phones = temp.Split(',');
-            temp = this.Request.Form["addressField"];
-            string[] addresses = temp.Split(',');
-            temp = this.Request.Form["cardswipeField"];
-            string[] cardswipes = temp.Split(',');
-            List<User> users = new List<User>();
-            for (int i = 0; i < firstNames.Length; i++)
-            {
-                User toAdd = new WebApplication3.User();
-                toAdd.firstName = firstNames[i];
-                toAdd.lastName = lastNames[i];
-                toAdd.phoneNumber = phones[i];
-                toAdd.email = addresses[i];
-                toAdd.studentID = cardswipes[i];
-                //toAdd.userType = **default VALUE**
-
-
-                users.Add(toAdd);
-            }
-
-            return View("Waiver", users);
-        }
+        
 
 
 
@@ -275,6 +256,37 @@ namespace WebApplication3.Controllers
 
             return View("EmbeddedVideo",users);
         }
+
+        public IActionResult MoveGroupToWaiver()
+        {
+
+            string temp = this.Request.Form["firstNameField"];
+            string[] firstNames = temp.Split(',');
+            temp = this.Request.Form["lastNameField"];
+            string[] lastNames = temp.Split(',');
+            temp = this.Request.Form["phoneField"];
+            string[] phones = temp.Split(',');
+            temp = this.Request.Form["addressField"];
+            string[] addresses = temp.Split(',');
+            temp = this.Request.Form["cardswipeField"];
+            string[] cardswipes = temp.Split(',');
+            List<User> users = new List<User>();
+            for (int i = 0; i < firstNames.Length; i++)
+            {
+                User toAdd = new WebApplication3.User();
+                toAdd.firstName = firstNames[i];
+                toAdd.lastName = lastNames[i];
+                toAdd.phoneNumber = phones[i];
+                toAdd.email = addresses[i];
+                toAdd.studentID = cardswipes[i];
+
+
+                users.Add(toAdd);
+            }
+
+            return View("Waiver", users);
+        }
+
         public IActionResult FinalizeWaiver()
         {
 
@@ -319,6 +331,14 @@ namespace WebApplication3.Controllers
             return View("HomePage", signedInUsers);
         }
 
+        public IActionResult takeToCertification(string userID, string certID)
+        {
+            //this needs to take the user to a certification page, ready for the user and the cert IDs passed
+
+            return null;
+        }
+
+
         public IActionResult SaveData(string NameField, string SystemIDField,
                                       string SIDField, string ShoeField,
                                       string HarnessField, string PhoneField,
@@ -362,13 +382,12 @@ namespace WebApplication3.Controllers
         }
 
         public void CheckoutShoes() {
-            //This corresponds to item Homepage-9
             
             //this should log in the data base that the shoes were used, and any assorted data
         }
 
         public void CheckoutHarness()
-        {   //This corresponds to item Homepage-9
+        {   
 
             //this should log in the data base that the harness was used, and any assorted data
         }

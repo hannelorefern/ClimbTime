@@ -34,10 +34,10 @@
 
 
                         }
-                        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CheckoutShoes")'">@shoeString</button>
+                        <button type="button" class="btn btn-primary" onclick="checkoutShoes()">@shoeString</button>
                     </div>
                     <div class="col-md-4 col-md-offset-1">
-                        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CheckoutHarness")'">@harnessString</button>
+                        <button type="button" class="btn btn-primary" onclick="checkoutHarness()">@harnessString</button>
                     </div>
                 </div>
 
@@ -48,8 +48,6 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" id="classList">
-                            <li><a href="#">Climb Time</a></li>
-                            <li><a href="#">Intro</a></li>
                         </ul>
                     </div>
                     <button class="col-md-offset-1 vert-offset-top-20 btn btn-primary" type="button" class="btn btn-primary" onClick="checkInUser()">Check In</button>
@@ -60,14 +58,16 @@
     </div>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
         <div class="panel-body">
-            <form asp-controller="Home" asp-action="">
+            <form asp-controller="Home" asp-action="takeToCertification">
                 <div id="scrollview" style="overflow:scroll;height:400px">
                    <ul id="certList">
 
                    </ul>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary btn-lg vert-offset-top-20" id="Button3" type="submit">Add Certification</button>
+                    <button class="btn btn-primary btn-lg vert-offset-top-20" id="Button3" onclick="takeToCertification()" type="button">
+                        Add Certification
+                    </button>
                 </div>
             </form>
         </div>
@@ -80,32 +80,75 @@
         var url = '@Url.Action("AddClimberBySystemID")'
         var systemID = this.document.getElementById("systemIDField").value;
         url += '?systemID=' + systemID;
+        var course;
+        var courseList = this.document.getElementsByName("courseList");
+        var i;
+        for (i = 0; i < courseList.length; i++) {
+            if (courseList[i].checked) {
+                course = courseList[i].value;
 
+            }
+
+        }
+        url += '&courseID=' + course;
         window.location.href = url;
+    }
 
+    function takeToCertification() {
+        var url = '@Url.Action("takeToCertification")'
+        var systemID = this.document.getElementById("systemIDField").value;
+        url += '?userID=' + systemID;
+        var cert;
+        var certList = this.document.getElementsByName("certificationList");
+        var i;
+        for (i = 0; i < certList.length; i++) {
+            if (certList[i].checked) {
+                cert = certList[i].value;
+
+            }
+
+        }
+        url += '&certID=' + cert;
+        window.location.href = url;
 
     }
 
-    var classList = this.document.getElementById("classList");
-    $(document).ready(function () {
-        var url = '@Url.Action("getClasses")';
+    function checkoutHarness() {
+        var url = '@Url.Action("CheckoutHarness")';
         $.ajax({
             url: url
-        }).done(function (data) {
-            var i = 0;
-            for (i = 0; i < data.length; i++)
-                classList.innerHTML += "<li>" + data[i] + "</li>";
         });
-    });
+     }
+    function checkoutShoes() {
+        var url = '@Url.Action("CheckoutShoes")';
+        $.ajax({
+            url: url
+        });
+    }
+
+
     var certList = this.document.getElementById("certList");
+
     $(document).ready(function () {
         var url = '@Url.Action("getCertificationData")';
         $.ajax({
             url: url
         }).done(function (data) {
             var i = 0;
-            for (i = 0; i < data.length; i++)
+            for (i = 0; i < data[0].length; i++)
                 certList.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
+        });
+    });
+    var classList = this.document.getElementById("classList");
+
+    $(document).ready(function () {
+        var url = '@Url.Action("getCourseData")';
+        $.ajax({
+            url: url
+        }).done(function (data) {
+            var i = 0;
+            for (i = 0; i < data[0].length; i++)
+                classList.innerHTML += "<li><input type=\"radio\" name=\"courseList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
         });
     });
 </script>

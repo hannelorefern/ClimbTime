@@ -81,14 +81,14 @@
         var phone = this.document.getElementById("phoneField");
         var address = this.document.getElementById("addressField");
         var cardSwipe = this.document.getElementById("cardSwipeField");
-        if (name.value!="" ){
+        if (name.value!="" && address.value!=""){
             var count = @Model.Count();
             var scrollView = this.document.getElementById("scrollview");
             scrollView.innerHTML+="<div>"+name.value+"</div>"+
-                "<input type=\"text\" name=\"nameField\" value="+name.value+" hidden />"+
-                "<input type=\"text\" name=\"phoneField\" value="+phone.value+" hidden />"+
-                "<input type=\"text\" name=\"addressField\" value="+address.value+" hidden />"+
-                "<input type=\"text\" name=\"cardSwipeField\" value="+cardSwipe.value+" hidden />";
+                "<input type=\"text\" name=\"nameField\" value=\""+name.value+"\" hidden />"+
+                "<input type=\"text\" name=\"phoneField\" value=\""+phone.value+"\" hidden />"+
+                "<input type=\"text\" name=\"addressField\" value=\""+address.value+"\" hidden />"+
+                "<input type=\"text\" name=\"cardSwipeField\" value=\""+cardSwipe.value+"\" hidden />";
 
             name.value="";
             phone.value="";
