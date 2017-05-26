@@ -243,7 +243,7 @@ public List<User> getStaffUsers()
             cmd.execute();
         }
 
-public int addUser(string[] args)
+        public int addUser(string[] args)
         {
             //returns ID of added user, -1 if not successful
 
@@ -268,17 +268,31 @@ public int addUser(string[] args)
             if (flag) { contact = num; } else { contact = -1; }
             int ret = -1;
             //
-            cmd.reinitialize("INSERT INTO dbo.users (userType, firstName, lastName, SID, phone, email, shoeSize, harnessSize, mile) " +
-                "output INSERTED.ID VALUES(@userType, @firstName, @lastName, @sid, @phoneNumber, @email, @shoeSize, @harnessSize, @miles)", conn);
+            cmd.reinitialize("INSERT INTO dbo.users (userType, firstName, lastName, SID, netID, phone, email, shoeSize, harnessSize, miles) " +
+                "output INSERTED.userID VALUES(@userType, @firstName, @lastName, @sid, @netID, @phoneNumber, @email, @shoeSize, @harnessSize, @miles)", conn);
             cmd.addParameter("@userType", utype);
             cmd.addParameter("@firstName", firstName);
             cmd.addParameter("@lastName", lastName);
+
             cmd.addParameter("@sid", sid);
-            cmd.addParameter("@netID", netID);
-            cmd.addParameter("@phoneNumber", phone);
-            cmd.addParameter("@email", email);
-            cmd.addParameter("@shoeSize", shoeSize);
-            cmd.addParameter("@harnessSize", harnessSize);
+            if (netID == null) {
+                cmd.addParameter("@netID", DBNull.Value);
+            }
+            else {
+                cmd.addParameter("@netID", netID);
+            }
+
+            if (phone == null) { cmd.addParameter("@phoneNumber", DBNull.Value); }
+            else { cmd.addParameter("@phoneNumber", phone); }
+
+            if (email == null) { cmd.addParameter("@email", DBNull.Value); }
+            else { cmd.addParameter("@email", email); }
+
+            if (shoeSize == null) { cmd.addParameter("@shoeSize", DBNull.Value); }
+            else { cmd.addParameter("@shoeSize", shoeSize); }
+
+            if (harnessSize == null) { cmd.addParameter("@harnessSize", DBNull.Value); }
+            else { cmd.addParameter("@harnessSize", harnessSize); }
             
                 cmd.addParameter("@miles", miles);
             
