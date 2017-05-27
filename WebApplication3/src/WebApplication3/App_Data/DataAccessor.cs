@@ -23,11 +23,6 @@ namespace WebApplication3.App_Data
             else
                 cmd = new SqlCommandWrapper();
         }
-        /* this is commented out for test purposes ~ Parker
-        ~DataAccessor()
-        {
-            conn.Close();
-        }*/
 
         public void testPrint(string s)
         {
