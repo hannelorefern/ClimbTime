@@ -574,7 +574,7 @@ namespace WebApplication3.Controllers
             User user = db.getUser(names[0], names[names.Count() - 1]);
 
             db.updateUserType("S", user.systemID);
-            db.addSignIn(nameField, passwordField);
+            db.addSignIn(nameField, passwordField, user);
 
             return View("Settings");
         }

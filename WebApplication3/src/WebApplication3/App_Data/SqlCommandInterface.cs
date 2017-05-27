@@ -8,7 +8,7 @@ namespace WebApplication3.App_Data
 {
     interface SqlCommandInterface
     {
-        void reinitialize(string newCommand, SqlConnection con);
+        void reinitialize(string newCommand, SqlConnection conn);
 
         void addParameter(string parameterName, object value);
 

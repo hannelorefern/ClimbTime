@@ -17,16 +17,10 @@ namespace WebApplication3.App_Data
         public DataAccessor(string connString, bool testMode)
         {
             conn = new SqlConnection(connString);
-            conn.Open();
             if (testMode)
                 cmd = new TestCommand();
             else
                 cmd = new SqlCommandWrapper();
-        }
-
-        ~DataAccessor()
-        {
-            conn.Close();
         }
 
         public void testPrint(string s)
@@ -41,6 +35,7 @@ namespace WebApplication3.App_Data
             cmd.reinitialize("SELECT * FROM dbo.users WHERE firstName = @firstName AND lastName = @lastName", conn);
             cmd.addParameter("@firstName", firstName);
             cmd.addParameter("@lastName", lastName);
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 if (reader.Read())
@@ -56,6 +51,7 @@ namespace WebApplication3.App_Data
                     ret.email = (string)reader["email"];
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -64,7 +60,7 @@ namespace WebApplication3.App_Data
             
                 cmd.reinitialize("SELECT * FROM dbo.users WHERE userID = @systemID", conn);
                 cmd.addParameter("@systemID", systemID);
-
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 if (reader.Read())
@@ -102,6 +98,7 @@ namespace WebApplication3.App_Data
                     }
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -117,6 +114,7 @@ namespace WebApplication3.App_Data
                 cmd.reinitialize("SELECT * FROM dbo.users WHERE SID = @sid", conn);
                 cmd.addParameter("@sid", CardSwipe);
             }
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 if (reader.Read())
@@ -159,6 +157,7 @@ namespace WebApplication3.App_Data
 
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -167,6 +166,7 @@ namespace WebApplication3.App_Data
     List<User> ret = new List<User>();
     cmd.reinitialize("SELECT * FROM dbo.users WHERE userType = @ut", conn);
     cmd.addParameter("@ut", type);
+            conn.Open();
     using (SqlDataReader reader = cmd.executeReader())
     {
         while (reader.Read())
@@ -184,6 +184,7 @@ namespace WebApplication3.App_Data
             ret.Add(temp);
         }
     }
+            conn.Close();
     return ret;
 }
 
@@ -275,7 +276,7 @@ public int addUser(string[] args)
             { cmd.addParameter("@firstName", firstName + '%'); }
             if (lastName != "")
             { cmd.addParameter("@lastName", lastName + '%'); }
-
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
@@ -288,6 +289,7 @@ public int addUser(string[] args)
                     Users.Add(temp);
                 }
             }
+            conn.Close();
 
 
             return Users;
@@ -340,7 +342,7 @@ public int addUser(string[] args)
             List<User> ret = new List<User>();
             cmd.reinitialize("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
             // this SqlCommand will need to be edited so that it only cares about tracked visit types.
-
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
@@ -357,6 +359,7 @@ public int addUser(string[] args)
                     ret.Add(temp);
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -383,6 +386,7 @@ public int addUser(string[] args)
             cmd.reinitialize("SELECT * FROM dbo.certification WHERE certID = @id", conn);
             cmd.addParameter("@id", id);
             Certification ret = new Certification();
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 if (reader.Read())
@@ -392,6 +396,7 @@ public int addUser(string[] args)
                     ret.yearsBeforeExp = (int)reader["yearsBeforeExp"];
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -416,6 +421,7 @@ public int addUser(string[] args)
         {
             List<Certification> ret = new List<Certification>();
             cmd.reinitialize("SELECT * FROM dbo.certification", conn);
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
@@ -427,6 +433,7 @@ public int addUser(string[] args)
                     ret.Add(temp);
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -573,6 +580,7 @@ public int addUser(string[] args)
             cmd.reinitialize("SELECT * FROM dbo.course where courseID=@id", conn);
             cmd.addParameter("@id", courseID);
             Course temp = new Course();
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
@@ -593,6 +601,7 @@ public int addUser(string[] args)
                     
                 }
             }
+            conn.Close();
             return temp;
 
         }
@@ -601,6 +610,7 @@ public int addUser(string[] args)
         {
             List <Course> ret = new List<Course>();
             cmd.reinitialize("SELECT * FROM dbo.course", conn);
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
@@ -622,6 +632,7 @@ public int addUser(string[] args)
                     ret.Add(temp);
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -724,6 +735,7 @@ public int addUser(string[] args)
             string[] temp = new string[2]; 
 
             cmd.reinitialize("SELECT * FROM dbo.equipment", conn);
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
@@ -733,6 +745,7 @@ public int addUser(string[] args)
                     ret.Add(temp, (int)reader["equipID"]);
                 }
             }
+            conn.Close();
             return ret;
         }
 
@@ -742,6 +755,7 @@ public int addUser(string[] args)
             cmd.reinitialize("SELECT * FROM dbo.equipment WHERE name = @name AND size = @size", conn);
             cmd.addParameter("@name", name);
             cmd.addParameter("@size", size);
+            conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
             {
                 while (reader.Read())
@@ -752,6 +766,7 @@ public int addUser(string[] args)
                     ret[3] = (string)reader["count"];
                 }
             }
+            conn.Close();
             return ret;
         }
         //equipmentuse
@@ -844,6 +859,7 @@ public int addUser(string[] args)
             cmd.addParameter("@uID", climber.systemID);
             try
             {
+                conn.Open();
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     if (reader.Read())
@@ -855,6 +871,7 @@ public int addUser(string[] args)
                         ret.userID = (int)reader["userID"];
                     }
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
@@ -909,11 +926,13 @@ public int addUser(string[] args)
             cmd.addParameter("@p", password);
             try
             {
+                conn.Open();
                 using(SqlDataReader reader = cmd.executeReader())
                 {
                     if (reader.Read())
                         retFlag = true;
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
@@ -1031,6 +1050,7 @@ public int addUser(string[] args)
             cmd.addParameter("@cID", c.ID);
             try
             {
+                conn.Open();
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
@@ -1041,6 +1061,7 @@ public int addUser(string[] args)
                         ret.Add(temp);
                     }
                 }
+                conn.Close();
             } catch(Exception ex)
             {
                 throw new Exception("Exception generating course report." + ex.Message);
@@ -1056,6 +1077,7 @@ public int addUser(string[] args)
             cmd.reinitialize("SELECT firstName, lastName, userType, code FROM dbo.enrolled AS e INNER JOIN dbo.users AS u ON e.userID = u.userID INNER JOIN dbo.course AS c ON c.courseID = e.courseID ORDER BY c.code", conn);
             try
             {
+                conn.Open();
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
@@ -1068,6 +1090,7 @@ public int addUser(string[] args)
                         ret.Add(temp);
                     }
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
@@ -1086,6 +1109,7 @@ public int addUser(string[] args)
             cmd.addParameter("@e", end);
             try
             {
+                conn.Open();
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
@@ -1098,6 +1122,7 @@ public int addUser(string[] args)
                         ret.Add(temp);
                     }
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
@@ -1113,6 +1138,7 @@ public int addUser(string[] args)
             cmd.reinitialize("SELECT SID, lastName, firstName, title, duration FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID INNER JOIN dbo.visittype AS t ON v.visitTypeID = t.visitTypeID", conn);
             try
             {
+                conn.Open();
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
@@ -1127,6 +1153,7 @@ public int addUser(string[] args)
                         ret.Add(temp);
                     }
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
@@ -1144,6 +1171,7 @@ public int addUser(string[] args)
             cmd.addParameter("@cID", cert.ID);
             try
             {
+                conn.Open();
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
@@ -1155,6 +1183,7 @@ public int addUser(string[] args)
                         ret.Add(temp);
                     }
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
@@ -1170,6 +1199,7 @@ public int addUser(string[] args)
             cmd.reinitialize("SELECT title, lastName, firstName, expDate FROM dbo.usercertifications AS uc INNER JOIN dbo.users AS u ON uc.userID = u.userID INNER JOIN dbo.certification AS c ON c.certID = uc.certID ORDER BY title", conn);
             try
             {
+                conn.Open();
                 using (SqlDataReader reader = cmd.executeReader())
                 {
                     while (reader.Read())
@@ -1183,6 +1213,7 @@ public int addUser(string[] args)
                         ret.Add(temp);
                     }
                 }
+                conn.Close();
             }
             catch (Exception ex)
             {
