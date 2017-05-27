@@ -90,19 +90,24 @@
             </div>
 
             <div class="tab-pane fixed-panel" id="c" name="certificationpane">
-                    <div id="certscrollview" style="overflow:scroll;height:400px">
-                        
-                        <ul id="certList">
-                            
+                    <div class="list-group" id="certscrollview" style="overflow:scroll;height:400px">
+                        <div class="col-md-12">
+                            <ul id="certList"></ul>
+                       <!--    <script>
+                                $(function () {
+                                    console.log('ready');
 
+                                    $('.list-group li').click(function (e) {
+                                        e.preventDefault()
 
-                           
+                                        $that = $(this);
 
-
-                        </ul>
-                        <script>
-                            
-</script>
+                                        $that.parent().find('li').removeClass('active');
+                                        $that.addClass('active');
+                                    });
+                                })
+                            </script> --> 
+                        </div>
                     </div>
                     <button type="button" class="btn btn-primary" pullleft onclick="location.href='AddCertification'">Add</button>
                     <button type="button" class="btn btn-primary" pullright onclick="editCertification()">Edit Selected</button>
@@ -226,7 +231,7 @@
         var toEdit
         var i;
         for (i = 0; i < certForm.length; i++) {
-            if (certForm[i].checked) {
+            if (certForm[i].classList.contains("active")) {
                 toEdit = certForm[i].value;
             }
         }
@@ -241,7 +246,7 @@
         var toEdit
         var i;
         for (i = 0; i < certForm.length; i++) {
-            if (certForm[i].checked) {
+            if (certForm[i].classList.contains("active")) {
                 toEdit = certForm[i].value;
             }
         }
@@ -279,6 +284,8 @@
         window.location.href = url;
 
     }
+
+
     var certDiv = this.document.getElementById("certList");
     $(document).ready(function(){
     var url = '@Url.Action("getCertificationData")';
@@ -287,7 +294,7 @@
     }).done(function (data) {
         var i = 0;
         for (i = 0; i < data[0].length; i++)
-            certDiv.innerHTML += "<li><input type=\"radio\" name=\"certificationList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
+            certDiv.innerHTML += "<li class=\"list-group-item\" value=\"" + data[1][i] + "\">" + data[0][i] + "</li>";
     });
     });
     var staffDiv = this.document.getElementById("staffDiv");
