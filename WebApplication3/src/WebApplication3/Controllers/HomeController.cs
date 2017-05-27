@@ -604,7 +604,7 @@ namespace WebApplication3.Controllers
             User user = db.getUser(names[0], names[names.Count() - 1]);
 
             db.updateUserType("S", user.systemID);
-            db.addSignIn(nameField, passwordField);
+            db.addSignIn(nameField, passwordField, user);
 
             return View("Settings");
         }
@@ -697,7 +697,7 @@ namespace WebApplication3.Controllers
         {
             string uName = this.Request.Form["usernameField"];
             string pWord = this.Request.Form["passwordField"];
-            if (db.getSignIn(uName, pWord))
+            if (db.isValidSignIn(uName, pWord))
                 return View("HomePage", signedInUsers);
             else
                 return View("Index");
