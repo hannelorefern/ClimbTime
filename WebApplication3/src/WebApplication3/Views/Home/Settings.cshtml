@@ -90,9 +90,14 @@
             </div>
 
             <div class="tab-pane fixed-panel" id="c" name="certificationpane">
-                    <div class="list-group" id="certscrollview" style="overflow:scroll;height:400px">
+                    <div id="certscrollview" style="overflow:scroll;height:400px">
                         <div class="col-md-12">
-                            <ul id="certList"></ul>
+                            <ul id="certList" class="list-group">
+                                
+
+
+
+                            </ul>
                        <!--    <script>
                                 $(function () {
                                     console.log('ready');
@@ -119,7 +124,7 @@
                     <div id="scrollview" style="overflow:scroll;height:400px">
                         <ul id="staffDiv">
                            
-
+                        
 
                         </ul>
                     </div>
@@ -224,7 +229,7 @@
         window.location.href = url;
 
     }
-    
+
     function editCertification() {
         var url = '@Url.Action("editCertification")';
         var certForm = this.document.getElementsByName("certificationList");
@@ -321,6 +326,23 @@
                 secondDiv.innerHTML += "<li><input type=\"radio\" name=\"enrollCourseList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
         });
     });
+
+  
+    $(document).ready(function () {
+        console.log('ready');
+
+        $('.list-group').click(function (e) {
+            e.preventDefault()
+            var clicked = 'clicked: '
+            var target = e.target;
+            clicked = clicked + target.innerText;
+            $that = $(this);
+            console.log(clicked);
+            $that.parent().find('li').removeClass('active');
+            $that.addClass('active');
+        });
+    })
+
 
     function updateSearchResults() {
 
