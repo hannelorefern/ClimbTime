@@ -11,6 +11,18 @@
 <body>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
         <form asp-controller="home" asp-action="SaveStaff">
+            <div class="input-group">
+                <input type="text" class="form-control " placeholder="Search" name="SearchTerm" id="Text2"><div class="input-group-btn">
+                    <div class="btn-group" role="group">
+                        <div class="dropdown dropdown-lg">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="updateSearchResults()" aria-expanded="false"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu" style="width:600px;" id="partial">
+                                @*  @Html.Partial("UserSearchResults") *@ Results Loading...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!--Information should be added to the admin table. get the information abouthe table from the database teammate-->
             @{ string nameVal;
                 if (Model == null) { nameVal = ""; }
@@ -18,11 +30,11 @@
                  }
             <div class="form-group">
                 <div class="form-inline">
-                    <label class="control-label">User Name:</label>
+                    <label class="control-label col-md-4">User Name:</label>
                     <input type="text" name="nameField" value="@nameVal" />
                 </div>
-                <div class="form-inline">
-                    <label class="control-label">Password:</label>
+                <div class="form-inline vert-offset-top-20 vert-offset-bottom-20">
+                    <label class="control-label col-md-4">Password:</label>
                     <input type="text" name="passwordField" required/>
                 </div>
                 <button class="btn btn-primary">Add </button>

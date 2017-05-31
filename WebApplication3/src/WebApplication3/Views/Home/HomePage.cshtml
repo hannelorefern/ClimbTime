@@ -17,7 +17,7 @@
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
         <div class="panel-body fixed-panel">
             <div class="row">
-                <div class="panel panel-default col-md-8 col-md-offset-2" id="cardSwipeBox" style="min-height: 300">
+                <div class="panel panel-default col-md-8 col-md-offset-2" id="cardSwipeBox" style="min-height: 300px">
                     <div class="panel-heading">User Login</div>
                     <div class="panel-body" >
                         <form asp-controller="Home" asp-action="SignInClimber">
@@ -32,7 +32,7 @@
                                         <div class="dropdown dropdown-lg">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" onclick="updateSearchResults()" aria-expanded="false"><span class="caret"></span></button>
                                             <div class="dropdown-menu dropdown-menu-right" role="menu" style="width:600px;" id="partial">
-                                                    @Html.Partial("SearchResults") 
+                                                    @Html.Partial("SearchResults", null) 
                                             </div>
                                         </div>
                                     </div>

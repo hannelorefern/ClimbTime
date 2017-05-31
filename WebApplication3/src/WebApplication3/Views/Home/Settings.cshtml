@@ -141,7 +141,7 @@
                         </div>
                         <div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle pull-left" type="button" data-toggle="dropdown">
-                                Harness Size:
+                                Select Course:
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" id="courseEnroll">
@@ -156,6 +156,7 @@
     </div>
     <!-- /tabs -->
 </body>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     function getHarnessCount(size) {
@@ -193,14 +194,14 @@
     function editClass() {
         var url = '@Url.Action("editClass")';
         var classForm = this.document.getElementsByName("courseList");
-        var toEdit
+        var toEdit;
         var i;
         for (i = 0; i < classForm.length; i++) {
             if (classForm[i].checked) {
                 toEdit = classForm[i].value;
             }
         }
-        url += '?className=' + toEdit;
+        url += '?courseId=' + toEdit;
         window.location.href = url;
 
     }
@@ -208,14 +209,14 @@
     function removeClass() {
         var url = '@Url.Action("removeClass")';
         var classForm = this.document.getElementsByName("classList");
-        var toEdit
+        var toEdit;
         var i;
         for (i = 0; i < classForm.length; i++) {
             if (classForm[i].checked) {
                 toEdit = classForm[i].value;
             }
         }
-        url += '?className=' + toEdit;
+        url += '?courseId=' + toEdit;
         window.location.href = url;
 
     }
@@ -223,7 +224,7 @@
     function editCertification() {
         var url = '@Url.Action("editCertification")';
         var certForm = this.document.getElementsByName("certificationList");
-        var toEdit
+        var toEdit;
         var i;
         for (i = 0; i < certForm.length; i++) {
             if (certForm[i].checked) {
@@ -309,9 +310,10 @@
             url: url
         }).done(function (data) {
             var i = 0;
-            for (i = 0; i < data[0].length; i++)
+            for (i = 0; i < data[0].length; i++) {
                 courseDiv.innerHTML += "<li><input type=\"radio\" name=\"courseList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
                 secondDiv.innerHTML += "<li><input type=\"radio\" name=\"enrollCourseList\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
+            }
         });
     });
 

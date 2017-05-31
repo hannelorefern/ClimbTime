@@ -18,6 +18,7 @@ namespace WebApplication3
         public string firstName { get; set; }
         public string time { get; set; }
         public string netID { get; set; }
+        public int meters { get; set; }
 
 
         public User()
@@ -60,7 +61,7 @@ namespace WebApplication3
 
         public string[] convertToStringArray()
         {
-            string[] result = new string[8];
+            string[] result = new string[11];
             result[0] = this.userType;
             result[1] = this.firstName;
             result[2] = this.lastName;

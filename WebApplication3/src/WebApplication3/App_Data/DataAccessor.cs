@@ -96,6 +96,20 @@ namespace WebApplication3.App_Data
                     {
                         ret.email = "Information not found";
                     }
+                    if (!DBNull.Value.Equals(reader["email"]))
+                    { ret.email = (string)reader["email"]; }
+                    else
+                    {
+                        ret.email = null;
+                    }
+                    if (!DBNull.Value.Equals(reader["miles"]))
+                    {
+                        ret.meters = (int)reader["miles"];
+                    }
+                    else
+                    {
+                        ret.meters = 0;
+                    }
                 }
             }
             conn.Close();
@@ -154,6 +168,14 @@ namespace WebApplication3.App_Data
                     {
                         ret.email = null;
                     }
+                    if (!DBNull.Value.Equals(reader["miles"]))
+                    {
+                        ret.meters = (int)reader["miles"];
+                    }
+                    else
+                    {
+                        ret.meters = 0;
+                    }
 
                 }
             }
@@ -196,7 +218,33 @@ public List<User> getStaffUsers()
     return ret;
 }
 
-public int addUser(string[] args)
+        public void updateDistance(int userID, int distance)
+        {
+            int oldDistance = 0;
+            cmd.reinitialize("SELECT * FROM dbo.users WHERE userID = @userID", conn);
+            cmd.addParameter("@userID", userID);
+            using (SqlDataReader reader = cmd.executeReader())
+            {
+                if (reader.Read())
+                {
+                    if (DBNull.Value.Equals(reader["miles"]))
+                    {
+
+                    }
+                    else
+                    {
+                        oldDistance = (int)reader["miles"];
+                        distance += oldDistance;
+                    }
+                }
+            }
+            cmd.reinitialize("UPDATE dbo.users set miles = @distance Where userID = @userID", conn);
+            cmd.addParameter("@distance", distance);
+            cmd.addParameter("@userID", userID);
+            cmd.execute();
+        }
+
+        public int addUser(string[] args)
         {
             //returns ID of added user, -1 if not successful
 
@@ -220,21 +268,35 @@ public int addUser(string[] args)
             flag = Int32.TryParse(args[10], out num);
             if (flag) { contact = num; } else { contact = -1; }
             int ret = -1;
-
-            cmd.reinitialize("INSERT INTO dbo.users (userType, firstName, lastName, SID, phone, email, shoeSize, harnessSize, mile) " +
-                "output INSERTED.ID VALUES(@userType, @firstName, @lastName, @sid, @phoneNumber, @email, @shoeSize, @harnessSize, @miles)", conn);
+            //
+            cmd.reinitialize("INSERT INTO dbo.users (userType, firstName, lastName, SID, netID, phone, email, shoeSize, harnessSize, miles) " +
+                "output INSERTED.userID VALUES(@userType, @firstName, @lastName, @sid, @netID, @phoneNumber, @email, @shoeSize, @harnessSize, @miles)", conn);
             cmd.addParameter("@userType", utype);
             cmd.addParameter("@firstName", firstName);
             cmd.addParameter("@lastName", lastName);
+
             cmd.addParameter("@sid", sid);
-            cmd.addParameter("@netID", netID);
-            cmd.addParameter("@phone", phone);
-            cmd.addParameter("@email", email);
-            cmd.addParameter("@shoeSize", shoeSize);
-            cmd.addParameter("@harnessSize", harnessSize);
-            if (miles >= 0)
+            if (netID == null) {
+                cmd.addParameter("@netID", DBNull.Value);
+            }
+            else {
+                cmd.addParameter("@netID", netID);
+            }
+
+            if (phone == null) { cmd.addParameter("@phoneNumber", DBNull.Value); }
+            else { cmd.addParameter("@phoneNumber", phone); }
+
+            if (email == null) { cmd.addParameter("@email", DBNull.Value); }
+            else { cmd.addParameter("@email", email); }
+
+            if (shoeSize == null) { cmd.addParameter("@shoeSize", DBNull.Value); }
+            else { cmd.addParameter("@shoeSize", shoeSize); }
+
+            if (harnessSize == null) { cmd.addParameter("@harnessSize", DBNull.Value); }
+            else { cmd.addParameter("@harnessSize", harnessSize); }
+            
                 cmd.addParameter("@miles", miles);
-            if (contact >= 0)
+            
                 cmd.addParameter("@contact", contact);
 
             try
