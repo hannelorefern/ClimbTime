@@ -62,7 +62,7 @@ namespace WebApplication3.Controllers
             int sysID = int.Parse(systemID);
             User toAdd = db.getUser(sysID);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
-            db.addVisit(toAdd, visitType);
+            db.addVisit(toAdd, visitType.Trim());
 
             signedInUsers.Add(toAdd);
 

@@ -362,10 +362,11 @@ public List<User> getStaffUsers()
         {
             //TO DO: IMPLEMENT SEPARATE VISIT TYPES
             bool retFlag = false;
+            DateTime now = DateTime.Now;
             cmd.reinitialize("INSERT INTO dbo.visits(userID, visitTypeID, startDateTime) VALUES(@userID, (SELECT visitTypeID FROM dbo.visittype WHERE title = @visitType), @start)", conn);
             cmd.addParameter("@userID", climber.systemID);
             cmd.addParameter("@visitType", visitTypeName);
-            cmd.addParameter("@start", DateTime.Now);
+            cmd.addParameter("@start", now);
             try
             {
                 cmd.executeScalar();
