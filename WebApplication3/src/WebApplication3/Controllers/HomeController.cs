@@ -54,33 +54,13 @@ namespace WebApplication3.Controllers
         {
             return View();
         }
-        public IActionResult AddClimber(string lastNameToSearch, string firstNameToSearch)
+
+        public IActionResult AddClimberBySystemID(string systemID, string visitTypeTitle)
         {
-            User toAdd = db.getUser(firstNameToSearch, lastNameToSearch);
-            toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
-            db.addVisit(toAdd);
-
-            signedInUsers.Add(toAdd);
-
-
-            return View("HomePage", signedInUsers);
-        }
-        public IActionResult AddClimberBySystemID(string systemID, string courseID)
-        {
-            
-
             int sysID = int.Parse(systemID);
             User toAdd = db.getUser(sysID);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
-            if (courseID.Equals("undefined"))
-            {
-                //no course type
-            }
-            else
-            {
-                //courseID is an int hiding in a string, and is the course they're signing in for
-            }
-            db.addVisit(toAdd);
+            db.addVisit(toAdd, visitTypeTitle);
 
             signedInUsers.Add(toAdd);
 
@@ -457,6 +437,17 @@ namespace WebApplication3.Controllers
             //return the array
             string[][] ret = { name, sysID };
             
+            return ret;
+        }
+
+        public string[] getVisitData()
+        {
+            List<string> visitTypes = db.getVisitTypes();
+            string[] ret = new string[visitTypes.Count];
+            for(int i = 0; i < visitTypes.Count; i++)
+            {
+                ret[i] = visitTypes[i];
+            }
             return ret;
         }
 
