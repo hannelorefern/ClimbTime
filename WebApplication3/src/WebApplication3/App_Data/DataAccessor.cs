@@ -365,6 +365,7 @@ public List<User> getStaffUsers()
             cmd.reinitialize("INSERT INTO dbo.visits(userID, visitTypeID, startDateTime) VALUES(@userID, (SELECT visitTypeID FROM dbo.visittype WHERE title = @visitType), @start)", conn);
             cmd.addParameter("@userID", climber.systemID);
             cmd.addParameter("@visitType", visitTypeName);
+            cmd.addParameter("@start", DateTime.Now);
             try
             {
                 cmd.executeScalar();

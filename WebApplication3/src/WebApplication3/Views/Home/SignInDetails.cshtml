@@ -83,14 +83,14 @@
         var visit = 0;
         var visitList = this.document.getElementsByName("visitListItem");
         var i;
-        for (i = 0; i < visitList.length; i++) {
-            if (visitList[i].checked) {
+        for (i = 0; i < courseList.length; i++) {
+            if (courseList[i].checked) {
                 visit = visitList[i].value;
 
             }
 
         }
-        url += '&visitTypeTitle=' + visit;
+        url += '&visitType=' + visit;
         window.location.href = url;
     }
 
@@ -112,7 +112,6 @@
         window.location.href = url;
     }
 
-    
 
     function checkoutHarness() {
         var url = '@Url.Action("CheckoutHarness")';
@@ -149,8 +148,8 @@
             url: url
         }).done(function (data) {
             var i = 0;
-            for (i = 0; i < data[0].length; i++)
-                visitList.innerHTML += "<li><input type=\"radio\" name=\"visitListItem\" value=\" " + data[1][i] + " \" />" + data[0][i] + "</li>";
+            for (i = 0; i < data.length; i++)
+                visitList.innerHTML += "<li><input type=\"radio\" name=\"visitListItem\" value=\" " + data[i] + " \" />" + data[i] + "</li>";
         });
     });
 </script>

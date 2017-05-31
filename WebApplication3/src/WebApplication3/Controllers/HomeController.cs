@@ -55,14 +55,14 @@ namespace WebApplication3.Controllers
             return View();
         }
 
-        public IActionResult AddClimberBySystemID(string systemID, string visitTypeTitle)
+        public IActionResult AddClimberBySystemID(string systemID, string visitType)
         {
             
 
             int sysID = int.Parse(systemID);
             User toAdd = db.getUser(sysID);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
-            db.addVisit(toAdd, visitTypeTitle);
+            db.addVisit(toAdd, visitType);
 
             signedInUsers.Add(toAdd);
 
