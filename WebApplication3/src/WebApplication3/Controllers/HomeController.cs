@@ -57,6 +57,8 @@ namespace WebApplication3.Controllers
 
         public IActionResult AddClimberBySystemID(string systemID, string visitTypeTitle)
         {
+            
+
             int sysID = int.Parse(systemID);
             User toAdd = db.getUser(sysID);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
