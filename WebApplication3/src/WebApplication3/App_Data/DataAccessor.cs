@@ -832,11 +832,10 @@ public List<User> getStaffUsers()
             return ret;
         }
         //equipmentuse
-        public bool equipCheckout(int visitID, User climber, int equipID)
+        public bool equipCheckout(User climber, int equipID)
         {
             bool retFlag = false;
-            cmd.reinitialize("INSERT INTO dbo.equipmentuse (visitID, userID, equipID, checkoutDateTime) VALUES (@v, @u, @e, @c)", conn);
-            cmd.addParameter("@v", visitID);
+            cmd.reinitialize("INSERT INTO dbo.equipmentuse (userID, equipID, checkoutDateTime) VALUES ( @u, @e, @c)", conn);
             cmd.addParameter("@u", climber.systemID);
             cmd.addParameter("@e", equipID);
             cmd.addParameter("@c", DateTime.Now);
