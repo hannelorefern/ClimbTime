@@ -104,7 +104,7 @@ namespace WebApplication3.Controllers
 
             //visit table
             db.testPrint("ADD VISIT");
-            db.addVisit(testUser);
+            db.addVisit(testUser,"testtype");
 
             db.testPrint("FINSIH VISIT");
             db.finishVisit(testUser);

@@ -358,15 +358,15 @@ public List<User> getStaffUsers()
         }
 
         //visits
-        public bool addVisit(User climber)
+        public bool addVisit(User climber, string visitTypeName)
         {
             //TO DO: IMPLEMENT SEPARATE VISIT TYPES
             bool retFlag = false;
-            cmd.reinitialize("createVisit", conn);
-            cmd.isStoredProcedure();
+            DateTime now = DateTime.Now;
+            cmd.reinitialize("INSERT INTO dbo.visits(userID, visitTypeID, startDateTime) VALUES(@userID, (SELECT visitTypeID FROM dbo.visittype WHERE title = @visitType), @start)", conn);
             cmd.addParameter("@userID", climber.systemID);
-            cmd.addParameter("@visitType", "test type");
-
+            cmd.addParameter("@visitType", visitTypeName);
+            cmd.addParameter("@start", now);
             try
             {
                 cmd.executeScalar();
@@ -382,11 +382,11 @@ public List<User> getStaffUsers()
         public bool finishVisit(User climber)
         {
             bool retFlag = false;
-            cmd.reinitialize("finishVisit", conn);
-            cmd.isStoredProcedure();
+            cmd.reinitialize("UPDATE dbo.visits SET endDateTime = @out, duration = DATEDIFF(n, startDateTime, @out) "+
+                "WHERE userID IN(SELECT userID FROM users WHERE firstName = @firstName AND lastName = @lastName) AND visitTypeID = 1 AND endDateTime IS NULL", conn);
             cmd.addParameter("@firstName", climber.firstName);
             cmd.addParameter("@lastName",  climber.lastName);
-
+            cmd.addParameter("@out", DateTime.Now);
             try
             {
                 cmd.execute();
@@ -886,11 +886,23 @@ public List<User> getStaffUsers()
             {
                 throw new Exception("Exception removing visit type. " + ex.Message);
             }
-
-
-
-
             return retFlag;
+        }
+
+        public List<string> getVisitTypes()
+        {
+            List<string> ret = new List<string>();
+            cmd.reinitialize("SELECT * FROM dbo.visittype", conn);
+            conn.Open();
+            using(SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    ret.Add((string)reader["title"]);
+                }
+            }
+            conn.Close();
+            return ret;
         }
 
         //contacts
