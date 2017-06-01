@@ -363,25 +363,18 @@ namespace WebApplication3.Controllers
             return View("Users");
         }
 
-        public void CheckoutShoes() {
+        public void CheckoutShoes(string userID, string shoeSize) {
             
             //this should log in the data base that the shoes were used, and any assorted data
         }
 
-        public void CheckoutHarness()
+        public void CheckoutHarness(string userID, string harnessSize)
         {   
 
             //this should log in the data base that the harness was used, and any assorted data
         }
 
-        public IActionResult AddCertificationToUser() {
-            //This corresponds to item Homepage-13
-
-            //I assume, but may be wrong that
-            //this should redirect to a page for adding certifications to users, 
-            //configured for the user and certification as chosen 
-            return null;
-        }
+      
 
         public IActionResult AddDistance(string userID, string distance)
         {

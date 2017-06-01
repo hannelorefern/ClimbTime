@@ -34,10 +34,10 @@
 
 
                         }
-                        <button type="button" class="btn btn-primary" onclick="checkoutShoes()">@shoeString</button>
+                        <button type="button" class="btn btn-primary" value="@shoeSize" id="shoeButton" onclick="checkoutShoes()">@shoeString</button>
                     </div>
                     <div class="col-md-4 col-md-offset-1">
-                        <button type="button" class="btn btn-primary" onclick="checkoutHarness()">@harnessString</button>
+                        <button type="button" class="btn btn-primary" value="@harnessSize" id="harnessButton" onclick="checkoutHarness()">@harnessString</button>
                     </div>
                 </div>
 
@@ -115,12 +115,20 @@
 
     function checkoutHarness() {
         var url = '@Url.Action("CheckoutHarness")';
+        var systemID = this.document.getElementById("systemIDField").value;
+        var harnessSize = this.document.getElementById("harnessButton").value;
+        url += '?userID=' + systemID;
+        url += '&harnessSize=' + harnessSize;
         $.ajax({
             url: url
         });
      }
     function checkoutShoes() {
         var url = '@Url.Action("CheckoutShoes")';
+        var systemID = this.document.getElementById("systemIDField").value;
+        var shoeSize = this.document.getElementById("shoeButton").value;
+        url += '?userID=' + systemID;
+        url += '&shoeSize=' + shoeSize;
         $.ajax({
             url: url
         });
