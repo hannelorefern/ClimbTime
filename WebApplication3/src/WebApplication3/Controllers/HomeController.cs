@@ -364,13 +364,27 @@ namespace WebApplication3.Controllers
         }
 
         public void CheckoutShoes(string userID, string shoeSize) {
-            
+            string[] shoeData = db.getInventoryData("Shoes", shoeSize);
+            int equipID = int.Parse(shoeData[0]);
+
+            int sysID = int.Parse(userID);
+
+            User user = db.getUser(sysID);
+
+            db.equipCheckout(user, equipID);
             //this should log in the data base that the shoes were used, and any assorted data
         }
 
         public void CheckoutHarness(string userID, string harnessSize)
-        {   
+        {
+            string[] harnessData = db.getInventoryData("Harness", harnessSize);
+            int equipID = int.Parse(harnessData[0]);
 
+            int sysID = int.Parse(userID);
+
+            User user = db.getUser(sysID);
+
+            db.equipCheckout(user, equipID);
             //this should log in the data base that the harness was used, and any assorted data
         }
 
