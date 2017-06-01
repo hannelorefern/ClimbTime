@@ -636,6 +636,17 @@ namespace WebApplication3.Controllers
             return result;
         }
 
+        public FileResult ClimbTimeReport()
+        {
+            string fileName = "ClimbTimeReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateClimbTimeReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
         public void generateCourseReport(string filename)
          {
              FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
@@ -668,6 +679,23 @@ namespace WebApplication3.Controllers
                  }
              }
          }
+
+        public void generateClimbTimeReport(string filename)
+        {
+            FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
+            using (StreamWriter fout = new StreamWriter(file))
+            {
+                List<string[]> records = db.climbTimeReport();
+                foreach (string[] record in records)
+                {
+                    foreach (string field in record)
+                    {
+                        fout.Write(field + ",");
+                    }
+                    fout.Write("\n");
+                }
+            }
+        }
 
         public void generateCertificationReport(string filename)
          {

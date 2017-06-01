@@ -1221,8 +1221,7 @@ public List<User> getStaffUsers()
                         temp[1] = (string)reader["lastName"];
                         temp[2] = (string)reader["firstName"];
                         temp[3] = (string)reader["title"];
-                        int t = (int)reader["duration"];
-                        temp[4] = t.ToString();
+                        temp[4] = reader["duration"].ToString();
                         ret.Add(temp);
                     }
                 }
@@ -1292,6 +1291,28 @@ public List<User> getStaffUsers()
             {
                 throw new Exception("Exception generating certification report." + ex.Message);
             }
+            return ret;
+        }
+
+        public List<string[]> climbTimeReport()
+        {
+            List<string[]> ret = new List<string[]>();
+            ret.Add(new string[] { "First Name", "Last Name", "SID", "Hours" });
+            cmd.reinitialize("SELECT firstName, lastName, SID, SUM(duration)/60.0 AS time FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID WHERE visitTypeID = 1 GROUP BY u.firstName, u.lastName, u.SID", conn);
+            conn.Open();
+            using(SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    string[] temp = new string[4];
+                    temp[0] = (string)reader["firstName"];
+                    temp[1] = (string)reader["lastName"];
+                    temp[2] = (string)reader["SID"];
+                    temp[3] = reader["time"].ToString();
+                    ret.Add(temp);
+                }
+            }
+            conn.Close();
             return ret;
         }
 

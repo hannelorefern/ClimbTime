@@ -100,7 +100,7 @@ namespace WebApplication3.Controllers
 
             //equipmentuse table
             db.testPrint("CHECKOUT EQUIPMENT");
-            db.equipCheckout(5, testUser, 2);
+            db.equipCheckout(testUser, 2);
 
             //visit table
             db.testPrint("ADD VISIT");
