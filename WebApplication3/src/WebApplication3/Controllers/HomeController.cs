@@ -14,10 +14,9 @@ namespace WebApplication3.Controllers
 {
     public class HomeController : Controller
     {
-        static string connectionString = "Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;";
         static List<User> signedInUsers = new List<User>();
-
-        DataAccessor db = new DataAccessor(connectionString, false);
+        // SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
+        DataAccessor db = new DataAccessor("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
         string path = "./";
 
         public IActionResult HomePage()

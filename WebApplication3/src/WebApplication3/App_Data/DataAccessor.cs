@@ -7,8 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication3.Models;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace WebApplication3.App_Data
 {
@@ -825,10 +823,10 @@ public List<User> getStaffUsers()
             {
                 while (reader.Read())
                 {
-                    ret[0] = reader["equipID"].ToString();
-                    ret[1] = reader["name"].ToString();
-                    ret[2] = reader["size"].ToString();
-                    ret[3] = reader["count"].ToString();
+                    ret[0] = (string)reader["equipID"];
+                    ret[1] = (string)reader["name"];
+                    ret[2] = (string)reader["size"];
+                    ret[3] = (string)reader["count"];
                 }
             }
             conn.Close();
@@ -961,16 +959,9 @@ public List<User> getStaffUsers()
         public bool addSignIn(string userName, string password, User newStaff)
         {
             bool retFlag = false;
-            Rfc2898DeriveBytes rand = new Rfc2898DeriveBytes(DateTime.Now.ToString(), 16);
-            byte[] salt = rand.GetBytes(16);
-            rand = new Rfc2898DeriveBytes(password, salt);
-            byte[] hashed = rand.GetBytes(36);
-            string saveSalt = Convert.ToBase64String(salt);
-            string saveHashed = Convert.ToBase64String(hashed);
-            cmd.reinitialize("INSERT INTO dbo.signin (userName, password, salt, userID) VALUES (@u, @p, @s, @id)", conn);
+            cmd.reinitialize("INSERT INTO dbo.signin (userName, password, userID) VALUES (@u, @p, @id)", conn);
             cmd.addParameter("@u", userName);
-            cmd.addParameter("@p", saveHashed);
-            cmd.addParameter("@s", saveSalt);
+            cmd.addParameter("@p", password);
             cmd.addParameter("@id", newStaff.systemID);
             try
             {
@@ -1004,20 +995,16 @@ public List<User> getStaffUsers()
         public bool isValidSignIn(string userName, string password)
         {
             bool retFlag = false;
-            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u", conn);
+            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u AND password=@p", conn);
             cmd.addParameter("@u", userName);
+            cmd.addParameter("@p", password);
             try
             {
                 conn.Open();
                 using(SqlDataReader reader = cmd.executeReader())
                 {
                     if (reader.Read())
-                    {
-                        byte[] salt = Convert.FromBase64String(reader["salt"].ToString());
-                        Rfc2898DeriveBytes rand = new Rfc2898DeriveBytes(password, salt);
-                        if (reader["password"].ToString().Equals(Convert.ToBase64String(rand.GetBytes(36))))
-                            retFlag = true;
-                    }
+                        retFlag = true;
                 }
                 conn.Close();
             }
