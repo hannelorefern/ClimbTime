@@ -403,7 +403,7 @@ public List<User> getStaffUsers()
         public List<User> getSignedIn()
         {
             List<User> ret = new List<User>();
-            cmd.reinitialize("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
+            cmd.reinitialize("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL AND visitTypeID = 1", conn);
             // this SqlCommand will need to be edited so that it only cares about tracked visit types.
             conn.Open();
             using (SqlDataReader reader = cmd.executeReader())

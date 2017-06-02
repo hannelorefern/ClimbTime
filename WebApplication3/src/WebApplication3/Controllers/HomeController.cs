@@ -64,7 +64,8 @@ namespace WebApplication3.Controllers
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
             db.addVisit(toAdd, visitType.Trim());
 
-            signedInUsers.Add(toAdd);
+            if(visitType.Trim().Equals("Climb Time"))
+                signedInUsers.Add(toAdd);
 
 
             return View("HomePage", signedInUsers);
