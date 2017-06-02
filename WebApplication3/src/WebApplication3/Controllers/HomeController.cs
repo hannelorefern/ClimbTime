@@ -14,9 +14,10 @@ namespace WebApplication3.Controllers
 {
     public class HomeController : Controller
     {
+        static string connectionString = "Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;";
         static List<User> signedInUsers = new List<User>();
-        // SqlConnection conn = new SqlConnection("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;");
-        DataAccessor db = new DataAccessor("Data Source=SQL5019.SmarterASP.NET;Initial Catalog=DB_A16A06_climb;User Id=DB_A16A06_climb_admin;Password=climbdev1;", false);
+
+        DataAccessor db = new DataAccessor(connectionString, false);
         string path = "./";
 
         public IActionResult HomePage()
@@ -666,6 +667,17 @@ namespace WebApplication3.Controllers
             return result;
         }
 
+        public FileResult ClimbTimeReport()
+        {
+            string fileName = "ClimbTimeReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateClimbTimeReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
         public void generateCourseReport(string filename)
          {
              FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
@@ -698,6 +710,23 @@ namespace WebApplication3.Controllers
                  }
              }
          }
+
+        public void generateClimbTimeReport(string filename)
+        {
+            FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
+            using (StreamWriter fout = new StreamWriter(file))
+            {
+                List<string[]> records = db.climbTimeReport();
+                foreach (string[] record in records)
+                {
+                    foreach (string field in record)
+                    {
+                        fout.Write(field + ",");
+                    }
+                    fout.Write("\n");
+                }
+            }
+        }
 
         public void generateCertificationReport(string filename)
          {
