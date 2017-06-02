@@ -10,7 +10,6 @@
 
 <body>
     <div class="container col-md-5 col-md-offset-1 panel panel-default">
-        <form asp-controller="home" asp-action="SaveStaff">
             <div class="input-group">
                 <input type="text" class="form-control " placeholder="Search" name="SearchTerm" id="Text2"><div class="input-group-btn">
                     <div class="btn-group" role="group">
@@ -23,23 +22,66 @@
                     </div>
                 </div>
             </div>
+
+        <form asp-controller="home" asp-action="SaveStaff" id="SaveStaff">
             <!--Information should be added to the admin table. get the information abouthe table from the database teammate-->
             @{ string nameVal;
-                if (Model == null) { nameVal = ""; }
-                else { nameVal = Model.Name(); }
-                 }
+                string idVal;
+                if (Model == null) { nameVal = ""; idVal = ""; }
+                else { nameVal = Model.Name(); idVal = "" + Model.systemID; }
+            }
             <div class="form-group">
                 <div class="form-inline">
+                    <label class="control-label col-md-4">New Staff User Name:</label>
+                    <input type="text" name="newNameField" id="newNameField" value="@nameVal" />
+                    <input type="text" name="newIDField" id="newIDField" value="@idVal" hidden />
+                </div>
+                <div class="form-inline vert-offset-top-20 vert-offset-bottom-20">
                     <label class="control-label col-md-4">User Name:</label>
-                    <input type="text" name="nameField" value="@nameVal" />
+                    <input type="text" name="oldNameField" id="oldNameField" value="" />
                 </div>
                 <div class="form-inline vert-offset-top-20 vert-offset-bottom-20">
                     <label class="control-label col-md-4">Password:</label>
-                    <input type="text" name="passwordField" required/>
+                    <input type="text" name="passwordField" id="passwordField" required />
                 </div>
-                <button class="btn btn-primary">Add </button>
+                <button type="button" class="btn btn-primary" onclick="AddNewStaff()">Add </button>
             </div>
         </form>
     </div>
 
 </body>
+<script>
+    function updateSearchResults() {
+
+        var url = '@Url.Action("GetMatchesForAddStaff")'
+        url += '?searchTerm=' + Text2.value;
+        var partial = $("#partial");
+        partial.load(url);
+    }
+
+    function AddNewStaff() {
+        var url = '@Url.Action("checkSignIn")';
+        var uName = document.getElementById("oldNameField").value;
+        var pWord = document.getElementById("passwordField").value;
+        var newUser = document.getElementById("newNameField").value;
+        var form = document.getElementById("SaveStaff");
+
+        url += '?uName=' + uName;
+        url += '&pWord=' + pWord;
+        $.ajax({
+            url: url
+        }).done(function (data) {
+            if (data) {
+                if (newUser != "") {
+                    form.submit();
+
+                }
+
+
+            }
+        });
+   
+
+    }
+
+</script>

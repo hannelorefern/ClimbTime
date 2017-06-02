@@ -197,13 +197,13 @@ namespace WebApplication3.App_Data
             User temp = new User();
             temp.firstName = (string)reader["firstName"];
             temp.lastName = (string)reader["lastName"];
-            temp.studentID = (string)reader["SID"];
+            temp.studentID = (string)reader["SID"].ToString();
             temp.systemID = (int)reader["userID"];
-            temp.netID = (string)reader["netID"];
-            temp.phoneNumber = (string)reader["phone"];
-            temp.email = (string)reader["email"];
-            temp.HarnessSize = (string)reader["harnessSize"];
-            temp.ShoeSize = (string)reader["shoeSize"];
+            temp.netID = (string)reader["netID"].ToString();
+            temp.phoneNumber = (string)reader["phone"].ToString();
+            temp.email = (string)reader["email"].ToString();
+            temp.HarnessSize = (string)reader["harnessSize"].ToString();
+            temp.ShoeSize = (string)reader["shoeSize"].ToString();
             ret.Add(temp);
         }
     }

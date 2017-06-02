@@ -127,7 +127,24 @@ namespace WebApplication3.Controllers
 
         }
 
-        
+        public async Task<ActionResult> GetMatchesForAddStaff(string searchTerm)
+        {
+            string[] names = new string[] { "" };
+            if (searchTerm != null)
+            {
+                names = searchTerm.Split(' ');
+            }
+            if (names.Length <= 1)
+            {
+                names = new string[] { names[0], names[0] };
+            }
+            List<User> searchResults = db.searchForUsers(names[0], names[1]);
+
+            return PartialView("SettingsSearchResults", searchResults);
+
+        }
+
+
 
 
 
@@ -178,6 +195,13 @@ namespace WebApplication3.Controllers
                 display.email = "Information not found";
             }
             return View("Users", display);
+        }
+
+        public IActionResult NewStaff(string IDToShow)
+        {
+            User ret = db.getUser(IDToShow);
+
+            return View("AddStaff", ret);
         }
 
 
@@ -598,13 +622,12 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
-        public IActionResult SaveStaff(string nameField, string passwordField)
+        public IActionResult SaveStaff(string newNameField, string newIDField, string oldNameField, string passwordField)
         {
-            string[] names = nameField.Split(' ');
-            User user = db.getUser(names[0], names[names.Count() - 1]);
-
+            int sysID = int.Parse(newIDField);
+            User user = db.getUser(sysID);
             db.updateUserType("S", user.systemID);
-            db.addSignIn(nameField, passwordField, user);
+            db.addSignIn(newNameField, passwordField, user);
 
             return View("Settings");
         }
@@ -706,6 +729,12 @@ namespace WebApplication3.Controllers
         {
             return View("Index");
         }
+
+        public Boolean checkSignIn(string uName, string pWord)
+        {
+            return db.isValidSignIn(uName, pWord);
+        }
+
 
     }
 
