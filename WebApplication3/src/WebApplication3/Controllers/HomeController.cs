@@ -623,12 +623,12 @@ namespace WebApplication3.Controllers
             return View("Settings");
         }
 
-        public IActionResult SaveStaff(string newNameField, string newIDField, string oldNameField, string passwordField)
+        public IActionResult SaveStaff(string newNameField, string newIDField, string signInField, string passwordField)
         {
             int sysID = int.Parse(newIDField);
             User user = db.getUser(sysID);
             db.updateUserType("S", user.systemID);
-            db.addSignIn(newNameField, passwordField, user);
+            db.addSignIn(signInField, passwordField, user);
 
             return View("Settings");
         }
