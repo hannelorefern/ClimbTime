@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication3.Models;
@@ -305,7 +306,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception creating user. " + ex.Message);
+                this.AppendToLog("Exeception creating user. " + ex.Message);
             }
             return ret;
         }
@@ -374,7 +375,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Execption creating visit. " + ex.Message);
+                this.AppendToLog("Execption creating visit. " + ex.Message);
             }
             return retFlag;
         }
@@ -394,7 +395,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception completing visit. " + ex.Message);
+                this.AppendToLog("Exeception completing visit. " + ex.Message);
             }
             return retFlag;
         }
@@ -438,7 +439,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding new certification. " + ex.Message);
+                this.AppendToLog("Exeception adding new certification. " + ex.Message);
             }
             return ret;
         }
@@ -474,7 +475,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception deleting certification. " + ex.Message);
+                this.AppendToLog("Exeception deleting certification. " + ex.Message);
             }
             return retFlag;
         }
@@ -517,7 +518,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception certifying user. " + ex.Message);
+                this.AppendToLog("Exeception certifying user. " + ex.Message);
             }
             return retFlag;
         }
@@ -535,7 +536,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception clearing outdated certifications. " + ex.Message);
+                this.AppendToLog("Exeception clearing outdated certifications. " + ex.Message);
             }
             return retFlag;
         }
@@ -555,7 +556,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding new term. " + ex.Message);
+                this.AppendToLog("Exeception adding new term. " + ex.Message);
             }
             return ret;
         }
@@ -573,7 +574,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception removing term. " + ex.Message);
+                this.AppendToLog("Exeception removing term. " + ex.Message);
             }
             return retFlag;
         }
@@ -615,7 +616,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding new course. " + ex.Message);
+                this.AppendToLog("Exeception adding new course. " + ex.Message);
             }
             return ret;
         }
@@ -632,7 +633,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception removing course. " + ex.Message);
+                this.AppendToLog("Exeception removing course. " + ex.Message);
             }
             return retFlag;
         }
@@ -712,7 +713,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception enrolling user in course. " + ex.Message);
+                this.AppendToLog("Exeception enrolling user in course. " + ex.Message);
             }
             return ret;
         }
@@ -730,7 +731,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception unenrolling user from course. " + ex.Message);
+                this.AppendToLog("Exeception unenrolling user from course. " + ex.Message);
             }
             return retFlag;
         }
@@ -749,7 +750,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding equipment type. " + ex.Message);
+                this.AppendToLog("Exeception adding equipment type. " + ex.Message);
             }
             return retFlag;
 
@@ -768,7 +769,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding equipment. " + ex.Message);
+                this.AppendToLog("Exeception adding equipment. " + ex.Message);
             }
             return ret;
         }
@@ -786,7 +787,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception removing equipment type. " + ex.Message);
+                this.AppendToLog("Exception removing equipment type. " + ex.Message);
             }
             return retFlag;
         }
@@ -846,7 +847,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception checking out equipment. " + ex.Message);
+                this.AppendToLog("Exeception checking out equipment. " + ex.Message);
             }
             return retFlag;
         }
@@ -865,7 +866,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception adding visit type. " + ex.Message);
+                this.AppendToLog("Exception adding visit type. " + ex.Message);
             }
 
             return retFlag;
@@ -883,7 +884,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception removing visit type. " + ex.Message);
+                this.AppendToLog("Exception removing visit type. " + ex.Message);
             }
             return retFlag;
         }
@@ -920,7 +921,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception adding contact. " + ex.Message);
+                this.AppendToLog("Exception adding contact. " + ex.Message);
             }
             return retFlag;
         }
@@ -948,7 +949,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception getting user contact. " + ex.Message);
+                this.AppendToLog("Exception getting user contact. " + ex.Message);
             }
         
             return ret;
@@ -969,7 +970,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception adding staff member. " + ex.Message);
+                this.AppendToLog("Exception adding staff member. " + ex.Message);
             }
             return retFlag;
         }
@@ -986,7 +987,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception removing staff member. " + ex.Message);
+                this.AppendToLog("Exception removing staff member. " + ex.Message);
             }
             return retFlag;
         }
@@ -1009,7 +1010,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception looking up staff member. " + ex.Message);
+                this.AppendToLog("Exception looking up staff member. " + ex.Message);
             }
             return retFlag;
         }
@@ -1024,7 +1025,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
         }
         public void updateStudentID(string studentID, int userID)
@@ -1035,7 +1036,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
         }
 
@@ -1047,7 +1048,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
         }
 
@@ -1059,7 +1060,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1072,7 +1073,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1085,7 +1086,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1098,7 +1099,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1110,7 +1111,7 @@ public List<User> getStaffUsers()
             cmd.addParameter("@y", yearsValid);
             cmd.addParameter("@c", sysID);
             try { cmd.execute(); }
-            catch (Exception ex) { throw new Exception("Exception updating certification. " + ex.Message); }
+            catch (Exception ex) { this.AppendToLog("Exception updating certification. " + ex.Message); }
         }
 
         //reports
@@ -1137,7 +1138,7 @@ public List<User> getStaffUsers()
                 conn.Close();
             } catch(Exception ex)
             {
-                throw new Exception("Exception generating course report." + ex.Message);
+                this.AppendToLog("Exception generating course report." + ex.Message);
             }
             return ret;
         }
@@ -1167,7 +1168,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating course report." + ex.Message);
+                this.AppendToLog("Exception generating course report." + ex.Message);
             }
             return ret;
         }
@@ -1199,7 +1200,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating visit report." + ex.Message);
+                this.AppendToLog("Exception generating visit report." + ex.Message);
             }
             return ret;
         }
@@ -1230,7 +1231,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating visit report." + ex.Message);
+                this.AppendToLog("Exception generating visit report." + ex.Message);
             }
             return ret;
         }
@@ -1260,7 +1261,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating certification report." + ex.Message);
+                this.AppendToLog("Exception generating certification report." + ex.Message);
             }
             return ret;
         }
@@ -1290,9 +1291,19 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating certification report." + ex.Message);
+                this.AppendToLog("Exception generating certification report." + ex.Message);
             }
             return ret;
+        }
+
+        private void AppendToLog(string error)
+        {
+            string path = "./Error_Log.txt";
+            FileStream file = new FileStream(path, FileMode.Append);
+            using (StreamWriter fout = new StreamWriter(file))
+            {
+                fout.Write(DateTime.Now.ToString() + ": " + error + "\n");
+            }
         }
 
     }
