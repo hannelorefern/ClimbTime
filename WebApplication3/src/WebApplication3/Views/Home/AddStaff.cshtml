@@ -59,29 +59,4 @@
         partial.load(url);
     }
 
-    function AddNewStaff() {
-        var url = '@Url.Action("checkSignIn")';
-        var uName = document.getElementById("oldNameField").value;
-        var pWord = document.getElementById("passwordField").value;
-        var newUser = document.getElementById("newNameField").value;
-        var form = document.getElementById("SaveStaff");
-
-        url += '?uName=' + uName;
-        url += '&pWord=' + pWord;
-        $.ajax({
-            url: url
-        }).done(function (data) {
-            if (data) {
-                if (newUser != "") {
-                    form.submit();
-
-                }
-
-
-            }
-        });
-   
-
-    }
-
 </script>

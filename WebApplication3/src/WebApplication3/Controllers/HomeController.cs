@@ -617,8 +617,10 @@ namespace WebApplication3.Controllers
 
         public IActionResult RemoveStaff(string staffID)
         {
-            //db.removeCourse();
-            db.updateUserType("G", int.Parse(staffID));
+            int sysID = int.Parse(staffID);
+            User user = db.getUser(sysID);
+            db.updateUserType("G", sysID);
+            db.removeSignIn(user);
 
             return View("Settings");
         }

@@ -14,10 +14,9 @@ namespace WebApplication3.Models
         public TimeSpan start { get; set; }
         public TimeSpan end { get; set; }
         public int termID { get; set; } 
-        public int equipID { get; set; } 
         public int certID { get; set; }
    
-        public Course(int id, string title, string code, string days, TimeSpan start, TimeSpan end, int term, int equip, Certification cert)
+        public Course(int id, string title, string code, string days, TimeSpan start, TimeSpan end, int term, Certification cert)
         {
             ID = id;
             this.title = title;
@@ -26,7 +25,6 @@ namespace WebApplication3.Models
             this.start = start;
             this.end = end;
             this.termID = term;
-            this.equipID = equip;
             this.certID = cert.ID;
         }
 
@@ -39,7 +37,6 @@ namespace WebApplication3.Models
             start = TimeSpan.Zero;
             end = TimeSpan.Zero;
             termID = -1;
-            equipID = -1;
             certID = -1;
         }
     }
