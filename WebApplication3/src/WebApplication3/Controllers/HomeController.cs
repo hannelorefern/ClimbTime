@@ -265,7 +265,7 @@ namespace WebApplication3.Controllers
         }
 
         public IActionResult MoveGroupToWaiver()
-        {
+        {//this used to prepare the group for the waiver page, but now adds the group to the system
 
             string temp = this.Request.Form["firstNameField"];
             string[] firstNames = temp.Split(',');
@@ -285,17 +285,32 @@ namespace WebApplication3.Controllers
                 toAdd.lastName = lastNames[i];
                 toAdd.phoneNumber = phones[i];
                 toAdd.email = addresses[i];
-                toAdd.studentID = cardswipes[i];
+                char firstChar = cardswipes[i][0];
+                if (char.IsLetter(firstChar))
+                {
+                    toAdd.netID = cardswipes[i];
+                }
+                else
+                {
+                    toAdd.studentID = cardswipes[i];
+                }
+                toAdd.userType = "G";
 
 
                 users.Add(toAdd);
             }
+            foreach (User user in users)
+            {
+                //addUser to Database;
+                string[] tempArray = user.convertToStringArray();
+                db.addUser(tempArray);
 
-            return View("Waiver", users);
+            }
+            return View("HomePage", signedInUsers);
         }
 
         public IActionResult FinalizeWaiver()
-        {
+        {//this was called from the now skipped waiver page
 
             string temp = this.Request.Form["firstNameField"];
             string[] firstNames = temp.Split(',');
