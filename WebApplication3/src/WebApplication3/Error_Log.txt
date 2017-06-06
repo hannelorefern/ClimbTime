@@ -1,0 +1,9 @@
+6/5/2017 4:08:22 PM: Exception adding staff member. String or binary data would be truncated.
+The statement has been terminated.
+6/5/2017 4:26:50 PM: Exception adding staff member. String or binary data would be truncated.
+The statement has been terminated.
+6/5/2017 4:31:58 PM: Exception adding staff member. String or binary data would be truncated.
+The statement has been terminated.
+6/5/2017 5:09:36 PM: Exception removing staff member. Incorrect syntax near ')'.
+6/5/2017 10:51:46 PM: Exception removing staff member. Incorrect syntax near ')'.
+6/5/2017 10:55:36 PM: Exception removing staff member. Incorrect syntax near ')'.

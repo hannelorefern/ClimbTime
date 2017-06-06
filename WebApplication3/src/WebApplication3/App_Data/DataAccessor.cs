@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WebApplication3.Models;
 
@@ -196,13 +198,13 @@ namespace WebApplication3.App_Data
             User temp = new User();
             temp.firstName = (string)reader["firstName"];
             temp.lastName = (string)reader["lastName"];
-            temp.studentID = (string)reader["SID"];
+            temp.studentID = (string)reader["SID"].ToString();
             temp.systemID = (int)reader["userID"];
-            temp.netID = (string)reader["netID"];
-            temp.phoneNumber = (string)reader["phone"];
-            temp.email = (string)reader["email"];
-            temp.HarnessSize = (string)reader["harnessSize"];
-            temp.ShoeSize = (string)reader["shoeSize"];
+            temp.netID = (string)reader["netID"].ToString();
+            temp.phoneNumber = (string)reader["phone"].ToString();
+            temp.email = (string)reader["email"].ToString();
+            temp.HarnessSize = (string)reader["harnessSize"].ToString();
+            temp.ShoeSize = (string)reader["shoeSize"].ToString();
             ret.Add(temp);
         }
     }
@@ -305,7 +307,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception creating user. " + ex.Message);
+                this.AppendToLog("Exeception creating user. " + ex.Message);
             }
             return ret;
         }
@@ -362,10 +364,11 @@ public List<User> getStaffUsers()
         {
             //TO DO: IMPLEMENT SEPARATE VISIT TYPES
             bool retFlag = false;
+            DateTime now = DateTime.Now;
             cmd.reinitialize("INSERT INTO dbo.visits(userID, visitTypeID, startDateTime) VALUES(@userID, (SELECT visitTypeID FROM dbo.visittype WHERE title = @visitType), @start)", conn);
             cmd.addParameter("@userID", climber.systemID);
             cmd.addParameter("@visitType", visitTypeName);
-            cmd.addParameter("@start", DateTime.Now);
+            cmd.addParameter("@start", now);
             try
             {
                 cmd.executeScalar();
@@ -373,7 +376,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Execption creating visit. " + ex.Message);
+                this.AppendToLog("Execption creating visit. " + ex.Message);
             }
             return retFlag;
         }
@@ -393,7 +396,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception completing visit. " + ex.Message);
+                this.AppendToLog("Exeception completing visit. " + ex.Message);
             }
             return retFlag;
         }
@@ -401,7 +404,7 @@ public List<User> getStaffUsers()
         public List<User> getSignedIn()
         {
             List<User> ret = new List<User>();
-            cmd.reinitialize("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL", conn);
+            cmd.reinitialize("SELECT * FROM dbo.visits JOIN dbo.users ON dbo.visits.userID = dbo.users.userID WHERE endDateTime IS NULL AND visitTypeID = 1", conn);
             // this SqlCommand will need to be edited so that it only cares about tracked visit types.
             conn.Open();
             using (SqlDataReader reader = cmd.executeReader())
@@ -437,7 +440,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding new certification. " + ex.Message);
+                this.AppendToLog("Exeception adding new certification. " + ex.Message);
             }
             return ret;
         }
@@ -473,7 +476,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception deleting certification. " + ex.Message);
+                this.AppendToLog("Exeception deleting certification. " + ex.Message);
             }
             return retFlag;
         }
@@ -516,7 +519,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception certifying user. " + ex.Message);
+                this.AppendToLog("Exeception certifying user. " + ex.Message);
             }
             return retFlag;
         }
@@ -534,7 +537,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception clearing outdated certifications. " + ex.Message);
+                this.AppendToLog("Exeception clearing outdated certifications. " + ex.Message);
             }
             return retFlag;
         }
@@ -554,7 +557,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding new term. " + ex.Message);
+                this.AppendToLog("Exeception adding new term. " + ex.Message);
             }
             return ret;
         }
@@ -572,7 +575,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception removing term. " + ex.Message);
+                this.AppendToLog("Exeception removing term. " + ex.Message);
             }
             return retFlag;
         }
@@ -585,26 +588,21 @@ public List<User> getStaffUsers()
             string days = args[2]; //a <= 5 character string where each character stands for a day
             TimeSpan start = TimeSpan.Parse(args[3]);
             TimeSpan end = TimeSpan.Parse(args[4]);
-            int equip;
             int cert;
             int num;
             int term = Convert.ToInt32(args[5]);
             bool result = Int32.TryParse(args[6], out num);
-            if (result) { equip = num; } else { equip = -1; }
-            result = Int32.TryParse(args[7], out num);
             if (result) { cert = num; } else { cert = -1; }
             
             int ret = -1;
-            cmd.reinitialize("INSERT INTO dbo.course (title, code, daysOfWeek, startTime, endTime, term, checkout, certification) " +
-                "output INSERTED.ID VALUES (@title, @code, @days, @start, @end, @term, @equip, @cert)", conn);
+            cmd.reinitialize("INSERT INTO dbo.course (title, code, daysOfWeek, startTime, endTime, term, certification) " +
+                "output INSERTED.ID VALUES (@title, @code, @days, @start, @end, @term, @cert)", conn);
             cmd.addParameter("@title", title);
             cmd.addParameter("@code", code);
             cmd.addParameter("@days", days);
             cmd.addParameter("@start", start);
             cmd.addParameter("@end", end);
             cmd.addParameter("@term", term);
-            if(equip >= 0)
-                cmd.addParameter("@equip", equip);
             if(cert >= 0)
                 cmd.addParameter("@cert", cert);
 
@@ -614,7 +612,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding new course. " + ex.Message);
+                this.AppendToLog("Exeception adding new course. " + ex.Message);
             }
             return ret;
         }
@@ -631,7 +629,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception removing course. " + ex.Message);
+                this.AppendToLog("Exeception removing course. " + ex.Message);
             }
             return retFlag;
         }
@@ -657,8 +655,6 @@ public List<User> getStaffUsers()
                     {
                         temp.certID = (int)reader["certification"];
                     }
-                    if (!DBNull.Value.Equals(reader["checkout"]))
-                    { temp.equipID = (int)reader["checkout"]; }
                     
                 }
             }
@@ -688,8 +684,6 @@ public List<User> getStaffUsers()
                     {
                         temp.certID = (int)reader["certification"];
                     }
-                    if (!DBNull.Value.Equals(reader["checkout"]))
-                    { temp.equipID = (int)reader["checkout"]; }
                     ret.Add(temp);
                 }
             }
@@ -711,7 +705,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception enrolling user in course. " + ex.Message);
+                this.AppendToLog("Exeception enrolling user in course. " + ex.Message);
             }
             return ret;
         }
@@ -729,7 +723,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception unenrolling user from course. " + ex.Message);
+                this.AppendToLog("Exeception unenrolling user from course. " + ex.Message);
             }
             return retFlag;
         }
@@ -748,7 +742,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding equipment type. " + ex.Message);
+                this.AppendToLog("Exeception adding equipment type. " + ex.Message);
             }
             return retFlag;
 
@@ -767,7 +761,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception adding equipment. " + ex.Message);
+                this.AppendToLog("Exeception adding equipment. " + ex.Message);
             }
             return ret;
         }
@@ -785,7 +779,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception removing equipment type. " + ex.Message);
+                this.AppendToLog("Exception removing equipment type. " + ex.Message);
             }
             return retFlag;
         }
@@ -831,11 +825,10 @@ public List<User> getStaffUsers()
             return ret;
         }
         //equipmentuse
-        public bool equipCheckout(int visitID, User climber, int equipID)
+        public bool equipCheckout(User climber, int equipID)
         {
             bool retFlag = false;
-            cmd.reinitialize("INSERT INTO dbo.equipmentuse (visitID, userID, equipID, checkoutDateTime) VALUES (@v, @u, @e, @c)", conn);
-            cmd.addParameter("@v", visitID);
+            cmd.reinitialize("INSERT INTO dbo.equipmentuse (userID, equipID, checkoutDateTime) VALUES ( @u, @e, @c)", conn);
             cmd.addParameter("@u", climber.systemID);
             cmd.addParameter("@e", equipID);
             cmd.addParameter("@c", DateTime.Now);
@@ -846,7 +839,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exeception checking out equipment. " + ex.Message);
+                this.AppendToLog("Exeception checking out equipment. " + ex.Message);
             }
             return retFlag;
         }
@@ -865,7 +858,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception adding visit type. " + ex.Message);
+                this.AppendToLog("Exception adding visit type. " + ex.Message);
             }
 
             return retFlag;
@@ -883,7 +876,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception removing visit type. " + ex.Message);
+                this.AppendToLog("Exception removing visit type. " + ex.Message);
             }
             return retFlag;
         }
@@ -920,7 +913,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception adding contact. " + ex.Message);
+                this.AppendToLog("Exception adding contact. " + ex.Message);
             }
             return retFlag;
         }
@@ -948,19 +941,59 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception getting user contact. " + ex.Message);
+                this.AppendToLog("Exception getting user contact. " + ex.Message);
             }
         
             return ret;
         }
 
         //sign in
+
+        const int SALT_LENGTH = 10;
+        private byte[] GenerateSalt()
+        {
+            RandomNumberGenerator random = RandomNumberGenerator.Create();
+            byte[] salt = new byte[SALT_LENGTH];
+            random.GetBytes(salt);
+            return salt;
+
+        }
+
+        private byte[] GenerateSaltedHash(string password, byte[] salt)
+        {
+            byte[] plainText = System.Text.Encoding.ASCII.GetBytes(password);
+            HashAlgorithm algorithm = new HMACSHA256(new byte[] {0xDE, 0xAD, 0xBE, 0xEF});
+            byte[] plainTextWithSaltBytes =
+              new byte[plainText.Length + salt.Length];
+
+            for (int i = 0; i < plainText.Length; i++)
+            {
+                plainTextWithSaltBytes[i] = plainText[i];
+            }
+            for (int i = 0; i < salt.Length; i++)
+            {
+                plainTextWithSaltBytes[plainText.Length + i] = salt[i];
+            }
+
+            return algorithm.ComputeHash(plainTextWithSaltBytes);
+        }
+
+        private bool ConfirmPassword(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            byte[] passwordHash = GenerateSaltedHash(password, storedSalt);
+
+            return storedHash.SequenceEqual(passwordHash);
+        }
+
         public bool addSignIn(string userName, string password, User newStaff)
         {
             bool retFlag = false;
-            cmd.reinitialize("INSERT INTO dbo.signin (userName, password, userID) VALUES (@u, @p, @id)", conn);
+            byte[] salt = GenerateSalt();
+            byte[] saltedHash = GenerateSaltedHash(password, salt);
+            cmd.reinitialize("INSERT INTO dbo.signin (userName, password, salt, userID) VALUES (@u, @p, @s, @id)", conn);
             cmd.addParameter("@u", userName);
-            cmd.addParameter("@p", password);
+            cmd.addParameter("@p", saltedHash);
+            cmd.addParameter("@s", salt);
             cmd.addParameter("@id", newStaff.systemID);
             try
             {
@@ -969,7 +1002,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception adding staff member. " + ex.Message);
+                this.AppendToLog("Exception adding staff member. " + ex.Message);
             }
             return retFlag;
         }
@@ -977,7 +1010,7 @@ public List<User> getStaffUsers()
         public bool removeSignIn(User climber)
         {
             bool retFlag = false;
-            cmd.reinitialize("DELETE FROM dbo.signin WHERE userID = @u)", conn);
+            cmd.reinitialize("DELETE FROM dbo.signin WHERE userID = @u", conn);
             cmd.addParameter("@u", climber.systemID);
             try
             {
@@ -986,7 +1019,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception removing staff member. " + ex.Message);
+                this.AppendToLog("Exception removing staff member. " + ex.Message);
             }
             return retFlag;
         }
@@ -994,22 +1027,22 @@ public List<User> getStaffUsers()
         public bool isValidSignIn(string userName, string password)
         {
             bool retFlag = false;
-            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u AND password=@p", conn);
+            cmd.reinitialize("SELECT * FROM dbo.signin WHERE userName=@u", conn);
             cmd.addParameter("@u", userName);
-            cmd.addParameter("@p", password);
             try
             {
                 conn.Open();
                 using(SqlDataReader reader = cmd.executeReader())
                 {
                     if (reader.Read())
-                        retFlag = true;
+                        if (ConfirmPassword(password, (byte[])reader["password"], (byte[])reader["salt"]))
+                            retFlag = true;
                 }
                 conn.Close();
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception looking up staff member. " + ex.Message);
+                this.AppendToLog("Exception looking up staff member. " + ex.Message);
             }
             return retFlag;
         }
@@ -1024,7 +1057,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
         }
         public void updateStudentID(string studentID, int userID)
@@ -1035,7 +1068,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
         }
 
@@ -1047,7 +1080,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
         }
 
@@ -1059,7 +1092,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1072,7 +1105,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1085,7 +1118,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1098,7 +1131,7 @@ public List<User> getStaffUsers()
             try { cmd.execute(); }
             catch (Exception ex)
             {
-                throw new Exception("Exception updating user. " + ex.Message);
+                this.AppendToLog("Exception updating user. " + ex.Message);
             }
 
         }
@@ -1110,7 +1143,7 @@ public List<User> getStaffUsers()
             cmd.addParameter("@y", yearsValid);
             cmd.addParameter("@c", sysID);
             try { cmd.execute(); }
-            catch (Exception ex) { throw new Exception("Exception updating certification. " + ex.Message); }
+            catch (Exception ex) { this.AppendToLog("Exception updating certification. " + ex.Message); }
         }
 
         //reports
@@ -1137,7 +1170,7 @@ public List<User> getStaffUsers()
                 conn.Close();
             } catch(Exception ex)
             {
-                throw new Exception("Exception generating course report." + ex.Message);
+                this.AppendToLog("Exception generating course report." + ex.Message);
             }
             return ret;
         }
@@ -1167,7 +1200,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating course report." + ex.Message);
+                this.AppendToLog("Exception generating course report." + ex.Message);
             }
             return ret;
         }
@@ -1199,7 +1232,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating visit report." + ex.Message);
+                this.AppendToLog("Exception generating visit report." + ex.Message);
             }
             return ret;
         }
@@ -1221,8 +1254,7 @@ public List<User> getStaffUsers()
                         temp[1] = (string)reader["lastName"];
                         temp[2] = (string)reader["firstName"];
                         temp[3] = (string)reader["title"];
-                        int t = (int)reader["duration"];
-                        temp[4] = t.ToString();
+                        temp[4] = reader["duration"].ToString();
                         ret.Add(temp);
                     }
                 }
@@ -1230,7 +1262,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating visit report." + ex.Message);
+                this.AppendToLog("Exception generating visit report." + ex.Message);
             }
             return ret;
         }
@@ -1260,7 +1292,7 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating certification report." + ex.Message);
+                this.AppendToLog("Exception generating certification report." + ex.Message);
             }
             return ret;
         }
@@ -1290,9 +1322,41 @@ public List<User> getStaffUsers()
             }
             catch (Exception ex)
             {
-                throw new Exception("Exception generating certification report." + ex.Message);
+                this.AppendToLog("Exception generating certification report." + ex.Message);
             }
             return ret;
+        }
+
+        public List<string[]> climbTimeReport()
+        {
+            List<string[]> ret = new List<string[]>();
+            ret.Add(new string[] { "First Name", "Last Name", "SID", "Hours" });
+            cmd.reinitialize("SELECT firstName, lastName, SID, SUM(duration)/60.0 AS time FROM dbo.visits AS v INNER JOIN dbo.users AS u ON v.userID = u.userID WHERE visitTypeID = 1 GROUP BY u.firstName, u.lastName, u.SID", conn);
+            conn.Open();
+            using(SqlDataReader reader = cmd.executeReader())
+            {
+                while (reader.Read())
+                {
+                    string[] temp = new string[4];
+                    temp[0] = (string)reader["firstName"];
+                    temp[1] = (string)reader["lastName"];
+                    temp[2] = (string)reader["SID"];
+                    temp[3] = reader["time"].ToString();
+                    ret.Add(temp);
+                }
+            }
+            conn.Close();
+            return ret;
+        }
+
+        private void AppendToLog(string error)
+        {
+            string path = "./Error_Log.txt";
+            FileStream file = new FileStream(path, FileMode.Append);
+            using (StreamWriter fout = new StreamWriter(file))
+            {
+                fout.Write(DateTime.Now.ToString() + ": " + error + "\n");
+            }
         }
 
     }

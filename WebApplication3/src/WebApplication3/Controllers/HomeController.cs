@@ -62,9 +62,10 @@ namespace WebApplication3.Controllers
             int sysID = int.Parse(systemID);
             User toAdd = db.getUser(sysID);
             toAdd.time = DateTime.Now.ToString("MMM d, yyyy H:mm:ss");
-            db.addVisit(toAdd, visitType);
+            db.addVisit(toAdd, visitType.Trim());
 
-            signedInUsers.Add(toAdd);
+            if(visitType.Trim().Equals("Climb Time"))
+                signedInUsers.Add(toAdd);
 
 
             return View("HomePage", signedInUsers);
@@ -127,7 +128,24 @@ namespace WebApplication3.Controllers
 
         }
 
-        
+        public async Task<ActionResult> GetMatchesForAddStaff(string searchTerm)
+        {
+            string[] names = new string[] { "" };
+            if (searchTerm != null)
+            {
+                names = searchTerm.Split(' ');
+            }
+            if (names.Length <= 1)
+            {
+                names = new string[] { names[0], names[0] };
+            }
+            List<User> searchResults = db.searchForUsers(names[0], names[1]);
+
+            return PartialView("SettingsSearchResults", searchResults);
+
+        }
+
+
 
 
 
@@ -178,6 +196,13 @@ namespace WebApplication3.Controllers
                 display.email = "Information not found";
             }
             return View("Users", display);
+        }
+
+        public IActionResult NewStaff(string IDToShow)
+        {
+            User ret = db.getUser(IDToShow);
+
+            return View("AddStaff", ret);
         }
 
 
@@ -378,25 +403,32 @@ namespace WebApplication3.Controllers
             return View("Users");
         }
 
-        public void CheckoutShoes() {
-            
+        public void CheckoutShoes(string userID, string shoeSize) {
+            string[] shoeData = db.getInventoryData("Shoes", shoeSize);
+            int equipID = int.Parse(shoeData[0]);
+
+            int sysID = int.Parse(userID);
+
+            User user = db.getUser(sysID);
+
+            db.equipCheckout(user, equipID);
             //this should log in the data base that the shoes were used, and any assorted data
         }
 
-        public void CheckoutHarness()
-        {   
+        public void CheckoutHarness(string userID, string harnessSize)
+        {
+            string[] harnessData = db.getInventoryData("Harness", harnessSize);
+            int equipID = int.Parse(harnessData[0]);
 
+            int sysID = int.Parse(userID);
+
+            User user = db.getUser(sysID);
+
+            db.equipCheckout(user, equipID);
             //this should log in the data base that the harness was used, and any assorted data
         }
 
-        public IActionResult AddCertificationToUser() {
-            //This corresponds to item Homepage-13
-
-            //I assume, but may be wrong that
-            //this should redirect to a page for adding certifications to users, 
-            //configured for the user and certification as chosen 
-            return null;
-        }
+      
 
         public IActionResult AddDistance(string userID, string distance)
         {
@@ -600,19 +632,20 @@ namespace WebApplication3.Controllers
 
         public IActionResult RemoveStaff(string staffID)
         {
-            //db.removeCourse();
-            db.updateUserType("G", int.Parse(staffID));
+            int sysID = int.Parse(staffID);
+            User user = db.getUser(sysID);
+            db.updateUserType("G", sysID);
+            db.removeSignIn(user);
 
             return View("Settings");
         }
 
-        public IActionResult SaveStaff(string nameField, string passwordField)
+        public IActionResult SaveStaff(string newNameField, string newIDField, string signInField, string passwordField)
         {
-            string[] names = nameField.Split(' ');
-            User user = db.getUser(names[0], names[names.Count() - 1]);
-
+            int sysID = int.Parse(newIDField);
+            User user = db.getUser(sysID);
             db.updateUserType("S", user.systemID);
-            db.addSignIn(nameField, passwordField, user);
+            db.addSignIn(signInField, passwordField, user);
 
             return View("Settings");
         }
@@ -644,6 +677,17 @@ namespace WebApplication3.Controllers
         {
             string fileName = "VisitReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
             generateVisitReport(fileName);
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
+            {
+                FileDownloadName = fileName
+            };
+            return result;
+        }
+
+        public FileResult ClimbTimeReport()
+        {
+            string fileName = "ClimbTimeReport" + DateTime.Today.ToString("dd-MM-yyyy") + ".csv";
+            generateClimbTimeReport(fileName);
             FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)), "application/csv")
             {
                 FileDownloadName = fileName
@@ -684,6 +728,23 @@ namespace WebApplication3.Controllers
              }
          }
 
+        public void generateClimbTimeReport(string filename)
+        {
+            FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
+            using (StreamWriter fout = new StreamWriter(file))
+            {
+                List<string[]> records = db.climbTimeReport();
+                foreach (string[] record in records)
+                {
+                    foreach (string field in record)
+                    {
+                        fout.Write(field + ",");
+                    }
+                    fout.Write("\n");
+                }
+            }
+        }
+
         public void generateCertificationReport(string filename)
          {
              FileStream file = new FileStream(Path.Combine(path, filename), FileMode.Create);
@@ -714,6 +775,12 @@ namespace WebApplication3.Controllers
         {
             return View("Index");
         }
+
+        public Boolean checkSignIn(string uName, string pWord)
+        {
+            return db.isValidSignIn(uName, pWord);
+        }
+
 
     }
 

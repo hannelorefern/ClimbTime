@@ -55,6 +55,7 @@ namespace WebApplication3.App_Data
         public void reinitialize(string newCommand, SqlConnection con)
         {
             cmd = new SqlCommand(newCommand, con);
+            this.con = con;
         }
 
         public void isStoredProcedure()
