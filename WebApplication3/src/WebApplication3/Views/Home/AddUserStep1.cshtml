@@ -81,7 +81,7 @@
         var phone = this.document.getElementById("phoneField");
         var address = this.document.getElementById("addressField");
         var cardSwipe = this.document.getElementById("cardSwipeField");
-        if (isValidName(name) && isValidEmail(address.value) && isValidPhone(phone.value) && isValidCardSwipe(cardSwipe.value) ){
+        if (isValidName(name) && isValidEmail(address.value) && isValidPhone(phone.value) ){
             var count = @Model.Count();
             var scrollView = this.document.getElementById("scrollview");
             scrollView.innerHTML+="<div>"+name.value+"</div>"+

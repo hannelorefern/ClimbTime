@@ -285,14 +285,17 @@ namespace WebApplication3.Controllers
                 toAdd.lastName = lastNames[i];
                 toAdd.phoneNumber = phones[i];
                 toAdd.email = addresses[i];
-                char firstChar = cardswipes[i][0];
-                if (char.IsLetter(firstChar))
+                if (!cardswipes[i].Equals(""))
                 {
-                    toAdd.netID = cardswipes[i];
-                }
-                else
-                {
-                    toAdd.studentID = cardswipes[i];
+                    char firstChar = cardswipes[i][0];
+                    if (char.IsLetter(firstChar))
+                    {
+                        toAdd.netID = cardswipes[i];
+                    }
+                    else
+                    {
+                        toAdd.studentID = cardswipes[i];
+                    }
                 }
                 toAdd.userType = "G";
 
